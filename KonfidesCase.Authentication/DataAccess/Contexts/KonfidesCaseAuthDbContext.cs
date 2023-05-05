@@ -1,5 +1,4 @@
-﻿using KonfidesCase.Authentication.Entities;
-using KonfidesCase.Authentication.Entities.Configurations;
+﻿using KonfidesCase.Authentication.Entities.Configurations;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace KonfidesCase.Authentication.DataAccess.Contexts

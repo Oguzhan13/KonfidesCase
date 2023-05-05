@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace KonfidesCase.Authentication.Entities.Configurations
+﻿namespace KonfidesCase.Authentication.Entities.Configurations
 {
     public class AuthRoleConfiguration : IEntityTypeConfiguration<AuthRole>
     {
@@ -33,7 +31,7 @@ namespace KonfidesCase.Authentication.Entities.Configurations
             builder.Property(r => r.Name).IsRequired()
                 .HasColumnOrder(2);
                         
-            builder.HasData(adminRole);
+            builder.HasData(adminRole,userRole);
         }
         #endregion
     }

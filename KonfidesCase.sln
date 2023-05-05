@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KonfidesCase.API", "KonfidesCase.API\KonfidesCase.API.csproj", "{1BA4384B-84DF-47A7-B2E9-97E53F643FB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KonfidesCase.API", "KonfidesCase.API\KonfidesCase.API.csproj", "{1BA4384B-84DF-47A7-B2E9-97E53F643FB4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KonfidesCase.Authentication", "KonfidesCase.Authentication\KonfidesCase.Authentication.csproj", "{4C6D7B9F-3E5C-4BD1-8D17-E3A92CACB474}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KonfidesCase.Authentication", "KonfidesCase.Authentication\KonfidesCase.Authentication.csproj", "{4C6D7B9F-3E5C-4BD1-8D17-E3A92CACB474}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KonfidesCase.Entity", "KonfidesCase.Entity\KonfidesCase.Entity.csproj", "{49AA4DD6-0400-4ABB-B6B9-9320F24785CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{4C6D7B9F-3E5C-4BD1-8D17-E3A92CACB474}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C6D7B9F-3E5C-4BD1-8D17-E3A92CACB474}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C6D7B9F-3E5C-4BD1-8D17-E3A92CACB474}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49AA4DD6-0400-4ABB-B6B9-9320F24785CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49AA4DD6-0400-4ABB-B6B9-9320F24785CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49AA4DD6-0400-4ABB-B6B9-9320F24785CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49AA4DD6-0400-4ABB-B6B9-9320F24785CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

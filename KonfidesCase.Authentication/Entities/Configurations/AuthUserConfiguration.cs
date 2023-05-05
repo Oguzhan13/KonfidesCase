@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace KonfidesCase.Authentication.Entities.Configurations
+﻿namespace KonfidesCase.Authentication.Entities.Configurations
 {
     public class AuthUserConfiguration : IEntityTypeConfiguration<AuthUser>
     {
