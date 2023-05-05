@@ -14,6 +14,13 @@
         public void Configure(EntityTypeBuilder<IdentityUserRole<Guid>> builder)
         {
             builder.HasData(adminUserRole);
+
+            builder.Property(iur => iur.UserId)
+                .HasColumnOrder(1)
+                .HasColumnName("Kullanıcı Id");
+            builder.Property(iur => iur.RoleId)
+                .HasColumnOrder(2)
+                .HasColumnName("Rol Id");
         }
         #endregion
     }

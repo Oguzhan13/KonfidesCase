@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\KonfidesCase.Authentication\KonfidesCase.Authentication.csproj" />
+    <ProjectReference Include="..\KonfidesCase.DAL\KonfidesCase.DAL.csproj" />
   </ItemGroup>
 
 </Project>

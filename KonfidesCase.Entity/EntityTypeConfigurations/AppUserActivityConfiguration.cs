@@ -1,0 +1,28 @@
+﻿using KonfidesCase.Entity.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace KonfidesCase.Entity.EntityTypeConfigurations
+{
+    public class AppUserActivityConfiguration : IEntityTypeConfiguration<AppUserActivity>
+    {
+        #region Fluent API
+        public void Configure(EntityTypeBuilder<AppUserActivity> builder)
+        {
+            builder.ToTable("Kullanıcı-Etkinlik");
+
+            builder.HasKey(ua => ua.Id);
+
+            builder.Property(ua => ua.UserId).IsRequired(false)
+                .HasColumnOrder(1)
+                .HasColumnName("Kullanıcı Id");
+            builder.Property(ua => ua.ActivityId).IsRequired(false)
+                .HasColumnOrder(2)
+                .HasColumnName("Etkinlik Id");
+
+            builder.HasOne(ua => ua.Activity).WithMany(a => a.AttendedUsers).HasForeignKey(ua => ua.ActivityId).OnDelete(DeleteBehavior.SetNull);
+            builder.HasOne(ua => ua.User).WithMany(a => a.Activities).HasForeignKey(ua => ua.UserId).OnDelete(DeleteBehavior.SetNull);
+        }
+        #endregion
+    }
+}

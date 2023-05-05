@@ -1,0 +1,52 @@
+﻿using KonfidesCase.Entity.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace KonfidesCase.Entity.EntityTypeConfigurations
+{
+    public class ActivityConfiguration : IEntityTypeConfiguration<Activity>
+    {
+        #region Fluetn API
+        public void Configure(EntityTypeBuilder<Activity> builder)
+        {
+            builder.ToTable("Etkinlikler");
+
+            builder.HasKey(a => a.Id);
+
+            builder.Property(a => a.Id).IsRequired()
+                .HasColumnOrder(1);
+            builder.Property(a => a.Organizer).IsRequired()
+                .HasColumnOrder(2)
+                .HasColumnName("Organizatör");
+            builder.Property(a => a.Name).IsRequired()
+                .HasColumnOrder(3)
+                .HasColumnName("Ad");
+            builder.Property(a => a.Description).IsRequired()
+                .HasColumnOrder(4)
+                .HasColumnName("Açıklama");
+            builder.Property(a => a.ActivityDate).IsRequired()
+                .HasColumnOrder(5)
+                .HasColumnName("Etkinlik Tarihi");
+            builder.Property(a => a.Quota).IsRequired()
+                .HasColumnOrder(6)
+                .HasColumnName("Kontenjan");
+            builder.Property(a => a.Address).IsRequired()
+                .HasColumnOrder(7)
+                .HasColumnName("Adres");
+            builder.Property(a => a.IsConfirm).IsRequired(false)
+                .HasColumnOrder(8)
+                .HasColumnName("Onay");
+            builder.Property(a => a.CategoryId).IsRequired()
+                .HasColumnOrder(9)
+                .HasColumnName("Kategori Id");
+            builder.Property(a => a.CityId).IsRequired()
+                .HasColumnOrder(10)
+                .HasColumnName("Şehir Id");
+
+            builder.HasOne(a => a.Category).WithMany(c => c.Activities).HasForeignKey(a => a.CategoryId).OnDelete(DeleteBehavior.SetNull);
+            builder.HasOne(a => a.City).WithMany(c => c.Activities).HasForeignKey(a => a.CityId).OnDelete(DeleteBehavior.SetNull);
+            builder.HasMany(a => a.Tickets).WithOne(t => t.Activity).HasForeignKey(t => t.ActivityId).OnDelete(DeleteBehavior.SetNull);
+        }
+        #endregion
+    }
+}

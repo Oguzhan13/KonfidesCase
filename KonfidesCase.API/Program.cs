@@ -1,10 +1,11 @@
 using KonfidesCase.Authentication.Extensions;
+using KonfidesCase.DAL.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddKonfidesAuthServices(builder.Configuration);
-//builder.Services.AddKonfidesDalServices(builder.Configuration);
+builder.Services.AddKonfidesDalServices(builder.Configuration);
 //builder.Services.AddKonfidesBllServices();
 
 
