@@ -4,10 +4,7 @@
     {
         #region Constructor
         public AuthUserConfiguration()
-        {            
-            admin.NormalizedEmail = admin.Email!.ToUpper(CultureInfo.GetCultureInfo("en-US"));
-            admin.UserName = admin.Email;
-            admin.NormalizedUserName = admin.NormalizedEmail;
+        {
             admin.PasswordHash = new PasswordHasher<AuthUser>().HashPassword(admin, "Admin.123");
         }
         #endregion
@@ -15,9 +12,15 @@
         #region Seed Data
         public static AuthUser admin = new()
         {
+            Id = Guid.Parse("6e7fe5c6-1444-474b-9b43-d078cd892237"),
             Email = "admin@example.com",
             FirstName = "Admin",
             LastName = "Manager",
+            UserName = "admin@example.com",
+            NormalizedEmail = "admin@example.com".ToUpper(CultureInfo.GetCultureInfo("en-US")),
+            NormalizedUserName = "admin@example.com".ToUpper(CultureInfo.GetCultureInfo("en-US")),
+            //NormalizedEmail = "ADMIN@EXAMPLE.COM",
+            //NormalizedUserName = "ADMIN@EXAMPLE.COM",
         };
         #endregion
 

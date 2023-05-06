@@ -2,22 +2,18 @@
 {
     public class AuthRoleConfiguration : IEntityTypeConfiguration<AuthRole>
     {
-        #region Constructor
-        public AuthRoleConfiguration()
-        {
-            adminRole.NormalizedName = adminRole.Name!.ToUpper(CultureInfo.GetCultureInfo("en-US"));
-            userRole.NormalizedName = userRole.Name!.ToUpper(CultureInfo.GetCultureInfo("en-US"));
-        }
-        #endregion
-
         #region Seed Datas
         public static AuthRole adminRole = new()
         {
+            Id = Guid.Parse("a6ef0654-a9c5-4085-8581-673e702c0ad4"),
             Name = "admin",
-        };
+            NormalizedName = "admin".ToUpper(CultureInfo.GetCultureInfo("en-US"))
+    };
         public static AuthRole userRole = new()
         {
+            Id = Guid.Parse("ffbaa166-158e-4254-83df-ee7d13db3749"),
             Name = "user",
+            NormalizedName = "user".ToUpper(CultureInfo.GetCultureInfo("en-US")),            
         };
         #endregion
 

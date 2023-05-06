@@ -165,19 +165,19 @@ namespace KonfidesCase.Authentication.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("a7d8b88f-b65a-4feb-9506-e5cdc2f1773f"), "a2636fdf-3796-4d9a-a9d8-745d40100eca", "admin", "ADMIN" },
-                    { new Guid("df98301f-3c4b-4471-abde-d5922d541652"), "2cc20d72-e4c7-481d-85ac-4f90c5854d9b", "user", "USER" }
+                    { new Guid("a6ef0654-a9c5-4085-8581-673e702c0ad4"), "d2ad484a-7587-4530-ab0f-69c1b8c021ed", "admin", "ADMIN" },
+                    { new Guid("ffbaa166-158e-4254-83df-ee7d13db3749"), "d57ae8d7-40af-471a-b402-55bc57d6e83b", "user", "USER" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Mail Adresi", "Onaylanmış Email", "Ad", "Soyad", "LockoutEnabled", "LockoutEnd", "Standart Mail Adresi", "Stadart Kullanıcı Adı", "Kriptolanmış Şifre", "Telefon Numarası", "Onaylanmış Telefon Numarası", "SecurityStamp", "TwoFactorEnabled", "Kullanıcı Adı" },
-                values: new object[] { new Guid("6e7fe5c6-1444-474b-9b43-d078cd892237"), 0, "13e24ada-c291-4c8e-9199-052a235e2572", "admin@example.com", true, "Admin", "Manager", true, new DateTimeOffset(new DateTime(2023, 5, 5, 23, 55, 6, 661, DateTimeKind.Unspecified).AddTicks(8170), new TimeSpan(0, 3, 0, 0, 0)), "ADMIN@EXAMPLE.COM", "ADMIN@EXAMPLE.COM", "AQAAAAIAAYagAAAAEKercQqw789KN10OmDyt+42AvhFsh80EFL0vJqR4ZFzC+13Ai/dPzss921hksXZn/A==", null, false, "ab4bb062-da1f-4139-8040-d4175363228c", false, "admin@example.com" });
+                values: new object[] { new Guid("6e7fe5c6-1444-474b-9b43-d078cd892237"), 0, "aec35f00-7ca6-4447-8ac9-a9ac44de1b8b", "admin@example.com", true, "Admin", "Manager", true, new DateTimeOffset(new DateTime(2023, 5, 6, 22, 21, 9, 923, DateTimeKind.Unspecified).AddTicks(9775), new TimeSpan(0, 3, 0, 0, 0)), "ADMIN@EXAMPLE.COM", "ADMIN@EXAMPLE.COM", "AQAAAAIAAYagAAAAEHPMoeCsm2skWv6Oh8H/uS6pO9BpXDTunAmbbSVwCOuBYkSsfRJjFbXK0frfTvmusw==", null, false, "435084b1-04d3-4fa6-87f6-d434cab7b02c", false, "admin@example.com" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "Rol Id", "Kullanıcı Id" },
-                values: new object[] { new Guid("a7d8b88f-b65a-4feb-9506-e5cdc2f1773f"), new Guid("6e7fe5c6-1444-474b-9b43-d078cd892237") });
+                values: new object[] { new Guid("a6ef0654-a9c5-4085-8581-673e702c0ad4"), new Guid("6e7fe5c6-1444-474b-9b43-d078cd892237") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

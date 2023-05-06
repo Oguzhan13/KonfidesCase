@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KonfidesCase.Authentication.Migrations
 {
     [DbContext(typeof(KonfidesCaseAuthDbContext))]
-    [Migration("20230505205008_init-auth")]
+    [Migration("20230506191611_init-auth")]
     partial class initauth
     {
         /// <inheritdoc />
@@ -58,15 +58,15 @@ namespace KonfidesCase.Authentication.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a7d8b88f-b65a-4feb-9506-e5cdc2f1773f"),
-                            ConcurrencyStamp = "a2636fdf-3796-4d9a-a9d8-745d40100eca",
+                            Id = new Guid("a6ef0654-a9c5-4085-8581-673e702c0ad4"),
+                            ConcurrencyStamp = "d2ad484a-7587-4530-ab0f-69c1b8c021ed",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("df98301f-3c4b-4471-abde-d5922d541652"),
-                            ConcurrencyStamp = "2cc20d72-e4c7-481d-85ac-4f90c5854d9b",
+                            Id = new Guid("ffbaa166-158e-4254-83df-ee7d13db3749"),
+                            ConcurrencyStamp = "d57ae8d7-40af-471a-b402-55bc57d6e83b",
                             Name = "user",
                             NormalizedName = "USER"
                         });
@@ -182,18 +182,18 @@ namespace KonfidesCase.Authentication.Migrations
                         {
                             Id = new Guid("6e7fe5c6-1444-474b-9b43-d078cd892237"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "13e24ada-c291-4c8e-9199-052a235e2572",
+                            ConcurrencyStamp = "aec35f00-7ca6-4447-8ac9-a9ac44de1b8b",
                             Email = "admin@example.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
                             LastName = "Manager",
                             LockoutEnabled = true,
-                            LockoutEnd = new DateTimeOffset(new DateTime(2023, 5, 5, 23, 55, 6, 661, DateTimeKind.Unspecified).AddTicks(8170), new TimeSpan(0, 3, 0, 0, 0)),
+                            LockoutEnd = new DateTimeOffset(new DateTime(2023, 5, 6, 22, 21, 9, 923, DateTimeKind.Unspecified).AddTicks(9775), new TimeSpan(0, 3, 0, 0, 0)),
                             NormalizedEmail = "ADMIN@EXAMPLE.COM",
                             NormalizedUserName = "ADMIN@EXAMPLE.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKercQqw789KN10OmDyt+42AvhFsh80EFL0vJqR4ZFzC+13Ai/dPzss921hksXZn/A==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHPMoeCsm2skWv6Oh8H/uS6pO9BpXDTunAmbbSVwCOuBYkSsfRJjFbXK0frfTvmusw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "ab4bb062-da1f-4139-8040-d4175363228c",
+                            SecurityStamp = "435084b1-04d3-4fa6-87f6-d434cab7b02c",
                             TwoFactorEnabled = false,
                             UserName = "admin@example.com"
                         });
@@ -290,7 +290,7 @@ namespace KonfidesCase.Authentication.Migrations
                         new
                         {
                             UserId = new Guid("6e7fe5c6-1444-474b-9b43-d078cd892237"),
-                            RoleId = new Guid("a7d8b88f-b65a-4feb-9506-e5cdc2f1773f")
+                            RoleId = new Guid("a6ef0654-a9c5-4085-8581-673e702c0ad4")
                         });
                 });
 

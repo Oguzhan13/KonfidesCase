@@ -10,9 +10,7 @@
                 user.NormalizedEmail = register.Email.ToUpper(CultureInfo.GetCultureInfo("en-US"));
                 user.UserName = user.Email;
                 user.NormalizedUserName = user.NormalizedEmail;
-            });
-
-            CreateMap<AuthUser, RegisterDto>();
+            });            
         }
         #endregion
     }

@@ -1,13 +1,15 @@
 using KonfidesCase.Authentication.Extensions;
+using KonfidesCase.BLL.Extensions;
 using KonfidesCase.DAL.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+#region Custom Services
 builder.Services.AddKonfidesAuthServices(builder.Configuration);
 builder.Services.AddKonfidesDalServices(builder.Configuration);
-//builder.Services.AddKonfidesBllServices();
-
+builder.Services.AddKonfidesBllServices();
+#endregion
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -25,8 +27,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+#region Middlewares for Custom Services
 app.UseCors("myCors");
 app.UseAuthentication();
+#endregion
+
 app.UseAuthorization();
 
 app.MapControllers();

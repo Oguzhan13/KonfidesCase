@@ -1,5 +1,6 @@
 ﻿using KonfidesCase.Authentication.BusinessLogic.Services;
 using KonfidesCase.Authentication.Dtos;
+using KonfidesCase.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KonfidesCase.API.Controllers
@@ -10,9 +11,11 @@ namespace KonfidesCase.API.Controllers
     {
         #region Fields & Constructor
         private readonly IAuthService _authService;
-        public HomeController(IAuthService authService)
+        private readonly IUserService _userService;          
+        public HomeController(IAuthService authService, IUserService userService)
         {
             _authService = authService;
+            _userService = userService;            
         }
         #endregion
 
@@ -35,7 +38,8 @@ namespace KonfidesCase.API.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var response = await _authService.Register(registerDto);
+            var response = await _authService.Register(registerDto);            
+            await _userService.CreateAppUser(response.Data!);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
 

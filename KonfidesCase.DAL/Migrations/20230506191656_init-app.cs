@@ -138,7 +138,7 @@ namespace KonfidesCase.DAL.Migrations
             migrationBuilder.InsertData(
                 table: "Kullanıcılar",
                 columns: new[] { "Id", "Mail Adresi", "Ad", "Soyad", "Rol" },
-                values: new object[] { new Guid("084d5fda-b7c7-40a2-bade-7db631a70009"), "admin@example.com", "Admin", "Manager", "admin" });
+                values: new object[] { new Guid("6e7fe5c6-1444-474b-9b43-d078cd892237"), "admin@example.com", "Admin", "Manager", "admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Biletler_ActivityId",

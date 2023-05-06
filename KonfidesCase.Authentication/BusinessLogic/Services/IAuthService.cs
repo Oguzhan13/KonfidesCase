@@ -2,10 +2,10 @@
 {
     public interface IAuthService
     {
-        #region Methods
-        Task<AuthDataResult<RegisterDto>> Login(LoginDto loginDto);        
-        Task<AuthDataResult<AuthUser>> Register(RegisterDto registerDto);
-        Task<AuthDataResult<RegisterDto>> ChangePassword(ChangePasswordDto changePasswordDto);
+        #region Methods for Actions
+        Task<AuthDataResult<UserInfoDto>> Login(LoginDto loginDto);        
+        Task<AuthDataResult<UserInfoDto>> Register(RegisterDto registerDto);
+        Task<AuthDataResult<UserInfoDto>> ChangePassword(ChangePasswordDto changePasswordDto);
         Task Logout();
         #endregion
     }

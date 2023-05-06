@@ -14,7 +14,7 @@ namespace KonfidesCase.Entity.EntityTypeConfigurations
             FirstName = AuthUserConfiguration.admin.FirstName,
             LastName = AuthUserConfiguration.admin.LastName,
             Email = AuthUserConfiguration.admin.Email!,
-            Role = AuthRoleConfiguration.adminRole.Name!
+            RoleNames = AuthRoleConfiguration.adminRole.Name!
         };
         #endregion
 
@@ -27,7 +27,7 @@ namespace KonfidesCase.Entity.EntityTypeConfigurations
 
             builder.Property(u => u.Id).IsRequired()
                 .HasColumnOrder(1);
-            builder.Property(u => u.Role).IsRequired()
+            builder.Property(u => u.RoleNames).IsRequired()
                 .HasColumnOrder(2)
                 .HasColumnName("Rol");
             builder.Property(u => u.FirstName).IsRequired()

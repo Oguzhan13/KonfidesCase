@@ -113,7 +113,7 @@ namespace KonfidesCase.DAL.Migrations
                         .HasColumnName("Soyad")
                         .HasColumnOrder(4);
 
-                    b.Property<string>("Role")
+                    b.Property<string>("RoleNames")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Rol")
@@ -126,11 +126,11 @@ namespace KonfidesCase.DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("084d5fda-b7c7-40a2-bade-7db631a70009"),
+                            Id = new Guid("6e7fe5c6-1444-474b-9b43-d078cd892237"),
                             Email = "admin@example.com",
                             FirstName = "Admin",
                             LastName = "Manager",
-                            Role = "admin"
+                            RoleNames = "admin"
                         });
                 });
 
