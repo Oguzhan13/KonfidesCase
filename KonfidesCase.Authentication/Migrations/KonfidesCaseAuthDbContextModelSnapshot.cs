@@ -56,14 +56,14 @@ namespace KonfidesCase.Authentication.Migrations
                         new
                         {
                             Id = new Guid("a6ef0654-a9c5-4085-8581-673e702c0ad4"),
-                            ConcurrencyStamp = "d2ad484a-7587-4530-ab0f-69c1b8c021ed",
+                            ConcurrencyStamp = "3cf3c867-487d-4100-a085-3adb79c7bef3",
                             Name = "admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = new Guid("ffbaa166-158e-4254-83df-ee7d13db3749"),
-                            ConcurrencyStamp = "d57ae8d7-40af-471a-b402-55bc57d6e83b",
+                            ConcurrencyStamp = "9a1c9a8e-fa74-471b-a62a-89d872c7164d",
                             Name = "user",
                             NormalizedName = "USER"
                         });
@@ -179,18 +179,18 @@ namespace KonfidesCase.Authentication.Migrations
                         {
                             Id = new Guid("6e7fe5c6-1444-474b-9b43-d078cd892237"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "aec35f00-7ca6-4447-8ac9-a9ac44de1b8b",
+                            ConcurrencyStamp = "aea5abf0-b069-4324-8c8b-bb2119479f51",
                             Email = "admin@example.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
                             LastName = "Manager",
                             LockoutEnabled = true,
-                            LockoutEnd = new DateTimeOffset(new DateTime(2023, 5, 6, 22, 21, 9, 923, DateTimeKind.Unspecified).AddTicks(9775), new TimeSpan(0, 3, 0, 0, 0)),
+                            LockoutEnd = new DateTimeOffset(new DateTime(2023, 5, 6, 22, 45, 13, 812, DateTimeKind.Unspecified).AddTicks(5842), new TimeSpan(0, 3, 0, 0, 0)),
                             NormalizedEmail = "ADMIN@EXAMPLE.COM",
                             NormalizedUserName = "ADMIN@EXAMPLE.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEHPMoeCsm2skWv6Oh8H/uS6pO9BpXDTunAmbbSVwCOuBYkSsfRJjFbXK0frfTvmusw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMZWZ50fXBiH9X9zyXxJfL2LcasLdXP6oLRQFhw+38C09cKtrwcCy5lDMCjuSgJBcg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "435084b1-04d3-4fa6-87f6-d434cab7b02c",
+                            SecurityStamp = "110e0c60-d99a-4919-b3a5-7bd7d063a6dc",
                             TwoFactorEnabled = false,
                             UserName = "admin@example.com"
                         });

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using KonfidesCase.Authentication.Dtos;
-using KonfidesCase.Authentication.Entities;
 using KonfidesCase.BLL.Services.Interfaces;
 using KonfidesCase.DAL.Contexts;
 using KonfidesCase.Entity.Entities;
@@ -24,24 +23,20 @@ namespace KonfidesCase.BLL.Services.Concretes
         }
         #endregion
 
+        #region Methods
         public async Task CreateAppUser(UserInfoDto userInfo)
         {
-            //AppUser newUser = new()
-            //{
-            //    Id = authUser.Id,
-            //    FirstName = authUser.FirstName,
-            //    LastName = authUser.LastName,
-            //    Email = authUser.Email!,
-            //    RoleName = "user", 
-            //};
             AppUser newUser = _mapper.Map(userInfo, new AppUser());
             await _context.AddAsync(newUser);            
             await _context.SaveChangesAsync();            
         }
+        #endregion
 
+        #region Methods for Actions
         public Task UpdateActivity()
         {
             throw new NotImplementedException();
         }
+        #endregion
     }
 }

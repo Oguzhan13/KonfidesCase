@@ -1,6 +1,5 @@
 ﻿using KonfidesCase.MVC.Models;
 using KonfidesCase.ViewModel;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -32,12 +31,12 @@ namespace KonfidesCase.MVC.Controllers
             var response = await client.PostAsync("Home/login", data);
             var result = await response.Content.ReadAsStringAsync();
             DataResult<UserInfo> responseLogin = JsonConvert.DeserializeObject<DataResult<UserInfo>>(result)!;
-            bool isAdmin = responseLogin.Data!.RoleNames.Equals("admin");            
+            bool isAdmin = responseLogin.Data!.RoleName.Equals("admin");            
             return isAdmin ? RedirectToAction(nameof(Index), responseLogin.Data) : RedirectToAction(nameof(Privacy), responseLogin.Data);
         }
 
         [HttpGet]
-        public IActionResult Index(UserLoginInfo userInfo)
+        public IActionResult Index(UserInfo userInfo)
         {
             return View(userInfo);
         }

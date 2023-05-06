@@ -24,7 +24,8 @@ namespace KonfidesCase.Authentication.BusinessLogic.Services
         public async Task<UserInfoDto> CreateUserInfo(AuthUser user, string password)
         {
             IList<string> roleNames = await _userManager.GetRolesAsync(user!);
-            if (roleNames is null)
+            string roleName = roleNames.First();
+            if (roleName is null)
             {
                 return new UserInfoDto();
             }
@@ -34,7 +35,7 @@ namespace KonfidesCase.Authentication.BusinessLogic.Services
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email!,
-                RoleNames = roleNames,
+                RoleName = roleName,
                 Password = password,
             };
         }

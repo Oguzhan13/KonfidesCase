@@ -113,7 +113,7 @@ namespace KonfidesCase.DAL.Migrations
                         .HasColumnName("Soyad")
                         .HasColumnOrder(4);
 
-                    b.Property<string>("RoleNames")
+                    b.Property<string>("RoleName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Rol")
@@ -130,7 +130,7 @@ namespace KonfidesCase.DAL.Migrations
                             Email = "admin@example.com",
                             FirstName = "Admin",
                             LastName = "Manager",
-                            RoleNames = "admin"
+                            RoleName = "admin"
                         });
                 });
 

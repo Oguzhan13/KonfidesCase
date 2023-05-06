@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KonfidesCase.DAL.Migrations
 {
     [DbContext(typeof(KonfidesCaseDbContext))]
-    [Migration("20230506191656_init-app")]
+    [Migration("20230506194033_init-app")]
     partial class initapp
     {
         /// <inheritdoc />
@@ -116,7 +116,7 @@ namespace KonfidesCase.DAL.Migrations
                         .HasColumnName("Soyad")
                         .HasColumnOrder(4);
 
-                    b.Property<string>("RoleNames")
+                    b.Property<string>("RoleName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Rol")
@@ -133,7 +133,7 @@ namespace KonfidesCase.DAL.Migrations
                             Email = "admin@example.com",
                             FirstName = "Admin",
                             LastName = "Manager",
-                            RoleNames = "admin"
+                            RoleName = "admin"
                         });
                 });
 
