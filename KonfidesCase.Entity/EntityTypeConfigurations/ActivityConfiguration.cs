@@ -36,16 +36,16 @@ namespace KonfidesCase.Entity.EntityTypeConfigurations
             builder.Property(a => a.IsConfirm).IsRequired(false)
                 .HasColumnOrder(8)
                 .HasColumnName("Onay");
-            builder.Property(a => a.CategoryId).IsRequired()
+            builder.Property(a => a.CategoryId).IsRequired(false)
                 .HasColumnOrder(9)
                 .HasColumnName("Kategori Id");
-            builder.Property(a => a.CityId).IsRequired()
+            builder.Property(a => a.CityId).IsRequired(false)
                 .HasColumnOrder(10)
                 .HasColumnName("Şehir Id");
 
-            builder.HasOne(a => a.Category).WithMany(c => c.Activities).HasForeignKey(a => a.CategoryId).OnDelete(DeleteBehavior.SetNull);
-            builder.HasOne(a => a.City).WithMany(c => c.Activities).HasForeignKey(a => a.CityId).OnDelete(DeleteBehavior.SetNull);
-            builder.HasMany(a => a.Tickets).WithOne(t => t.Activity).HasForeignKey(t => t.ActivityId).OnDelete(DeleteBehavior.SetNull);
+            builder.HasOne(a => a.Category).WithMany(c => c.Activities).HasForeignKey(a => a.CategoryId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasOne(a => a.City).WithMany(c => c.Activities).HasForeignKey(a => a.CityId).OnDelete(DeleteBehavior.Restrict);
+            builder.HasMany(a => a.Tickets).WithOne(t => t.Activity).HasForeignKey(t => t.ActivityId).OnDelete(DeleteBehavior.Restrict);
         }
         #endregion
     }

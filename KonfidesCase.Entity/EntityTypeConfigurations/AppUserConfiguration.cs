@@ -40,7 +40,7 @@ namespace KonfidesCase.Entity.EntityTypeConfigurations
                 .HasColumnOrder(5)
                 .HasColumnName("Mail Adresi");
 
-            builder.HasMany(u => u.Tickets).WithOne(t => t.User).HasForeignKey(t => t.UserId).OnDelete(DeleteBehavior.SetNull);
+            builder.HasMany(u => u.Tickets).WithOne(t => t.User).HasForeignKey(t => t.UserId).OnDelete(DeleteBehavior.Restrict);
 
             builder.HasData(admin);
         }

@@ -55,7 +55,7 @@
             builder.Property(u => u.PhoneNumber).IsRequired(false)
                 .HasColumnOrder(10)
                 .HasColumnName("Telefon Numarası");
-            builder.Property(u => u.PhoneNumberConfirmed).IsRequired(false)
+            builder.Property(u => u.PhoneNumberConfirmed).IsRequired()
                 .HasColumnOrder(11)
                 .HasColumnName("Onaylanmış Telefon Numarası");
             builder.Property(u => u.LockoutEnabled)
