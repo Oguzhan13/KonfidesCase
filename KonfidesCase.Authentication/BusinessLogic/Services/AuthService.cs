@@ -1,6 +1,4 @@
-﻿using KonfidesCase.Authentication.Dtos;
-using Microsoft.AspNetCore.Http;
-using System.Data;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace KonfidesCase.Authentication.BusinessLogic.Services
 {

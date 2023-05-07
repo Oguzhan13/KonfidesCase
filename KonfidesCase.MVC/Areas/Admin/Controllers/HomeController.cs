@@ -1,5 +1,7 @@
 ﻿using KonfidesCase.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using NuGet.Protocol;
 
 namespace KonfidesCase.MVC.Areas.Admin.Controllers
 {
@@ -7,9 +9,15 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
     [Route("admin/[controller]")]
     public class HomeController : Controller
     {
-        public IActionResult Index(UserInfo userInfo)
+        public IActionResult Index()
         {            
-            return View(userInfo);
+            var tempData = TempData["loginModel"];            
+            if (tempData != null)
+            {
+                UserInfo userInfo = JsonConvert.DeserializeObject<UserInfo>((string)tempData);
+                return View(userInfo);
+            }
+            return View();
         }
         
     }

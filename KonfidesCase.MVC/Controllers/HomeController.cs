@@ -31,25 +31,62 @@ namespace KonfidesCase.MVC.Controllers
             var response = await client.PostAsync("Home/login", data);
             var result = await response.Content.ReadAsStringAsync();
             DataResult<UserInfo> responseLogin = JsonConvert.DeserializeObject<DataResult<UserInfo>>(result)!;
-            bool isAdmin = responseLogin.Data!.RoleName.Equals("admin");
-            return isAdmin ? View("~/Areas/Admin/Views/Home/Index.cshtml", responseLogin.Data) : View("~/Areas/User/Views/Home/Index.cshtml", responseLogin.Data);
+            if (!responseLogin.IsSuccess)
+            {
+                return View();
+            }
+            //return View($"~/Areas/{responseLogin.Data!.RoleName}/Views/Home/Index.cshtml", responseLogin.Data);
+
             //return isAdmin ? RedirectToAction(nameof(Index), responseLogin.Data) : RedirectToAction(nameof(Privacy), responseLogin.Data);
-            //return RedirectToAction("Index", "Home", new { area = "admin" });
+            TempData["loginModel"] = JsonConvert.SerializeObject(responseLogin.Data);
+            return RedirectToAction("Index", "Home", new { area = "admin" });
         }
 
-
-        // Silinecek -----------------------------------------------------------------------------
         [HttpGet]
-        public IActionResult Index(UserInfo userInfo)
-        {
-            return View(userInfo);
-        }
-
-        public IActionResult Privacy()
+        public IActionResult Register()
         {
             return View();
         }
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterVM registerVM)
+        {
+            var jsonUser = JsonConvert.SerializeObject(registerVM);
+            HttpClient client = _httpClientFactory.CreateClient("url");
+            var data = new StringContent(jsonUser, Encoding.UTF8, "application/json");
+            var response = await client.PostAsync("Home/register", data);
+            var result = await response.Content.ReadAsStringAsync();
+            DataResult<UserInfo> responseRegister = JsonConvert.DeserializeObject<DataResult<UserInfo>>(result)!;            
+            return RedirectToAction(nameof(Login), responseRegister.Data);            
+        }
 
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            HttpClient client = _httpClientFactory.CreateClient("url");
+            var result = await client.GetAsync("Home/Logout");
+            return RedirectToAction(nameof(Login));
+        }
+
+        [HttpGet]
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordVM changePasswordVM)
+        {
+            var jsonPassword = JsonConvert.SerializeObject(changePasswordVM);
+            HttpClient client = _httpClientFactory.CreateClient("url");
+            var data = new StringContent(jsonPassword, Encoding.UTF8, "application/json");
+            var response = await client.PutAsync("Home/change-password", data);
+            var result = await response.Content.ReadAsStringAsync();
+            DataResult<UserInfo> responseChangePassword = JsonConvert.DeserializeObject<DataResult<UserInfo>>(result)!;
+
+            return View($"~/Areas/{responseChangePassword.Data!.RoleName}/Views/Home/Index.cshtml", responseChangePassword.Data);
+            //return RedirectToAction(nameof(Index), responseChangePassword.Data);
+        }
+
+                        
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
