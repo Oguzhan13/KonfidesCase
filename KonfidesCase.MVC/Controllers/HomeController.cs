@@ -35,10 +35,7 @@ namespace KonfidesCase.MVC.Controllers
             {
                 return View();
             }
-            //return View($"~/Areas/{responseLogin.Data!.RoleName}/Views/Home/Index.cshtml", responseLogin.Data);
-
-            //return isAdmin ? RedirectToAction(nameof(Index), responseLogin.Data) : RedirectToAction(nameof(Privacy), responseLogin.Data);
-            TempData["loginModel"] = JsonConvert.SerializeObject(responseLogin.Data);
+            TempData["IndexData"] = JsonConvert.SerializeObject(responseLogin.Data);
             return RedirectToAction("Index", "Home", new { area = "admin" });
         }
 
@@ -66,26 +63,7 @@ namespace KonfidesCase.MVC.Controllers
             var result = await client.GetAsync("Home/Logout");
             return RedirectToAction(nameof(Login));
         }
-
-        [HttpGet]
-        public IActionResult ChangePassword()
-        {
-            return View();
-        }
-        [HttpPost]
-        public async Task<IActionResult> ChangePassword(ChangePasswordVM changePasswordVM)
-        {
-            var jsonPassword = JsonConvert.SerializeObject(changePasswordVM);
-            HttpClient client = _httpClientFactory.CreateClient("url");
-            var data = new StringContent(jsonPassword, Encoding.UTF8, "application/json");
-            var response = await client.PutAsync("Home/change-password", data);
-            var result = await response.Content.ReadAsStringAsync();
-            DataResult<UserInfo> responseChangePassword = JsonConvert.DeserializeObject<DataResult<UserInfo>>(result)!;
-
-            return View($"~/Areas/{responseChangePassword.Data!.RoleName}/Views/Home/Index.cshtml", responseChangePassword.Data);
-            //return RedirectToAction(nameof(Index), responseChangePassword.Data);
-        }
-
+        
                         
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
