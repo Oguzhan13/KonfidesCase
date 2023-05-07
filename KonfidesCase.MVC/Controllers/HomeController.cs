@@ -31,10 +31,14 @@ namespace KonfidesCase.MVC.Controllers
             var response = await client.PostAsync("Home/login", data);
             var result = await response.Content.ReadAsStringAsync();
             DataResult<UserInfo> responseLogin = JsonConvert.DeserializeObject<DataResult<UserInfo>>(result)!;
-            bool isAdmin = responseLogin.Data!.RoleName.Equals("admin");            
-            return isAdmin ? RedirectToAction(nameof(Index), responseLogin.Data) : RedirectToAction(nameof(Privacy), responseLogin.Data);
+            bool isAdmin = responseLogin.Data!.RoleName.Equals("admin");
+            return isAdmin ? View("~/Areas/Admin/Views/Home/Index.cshtml", responseLogin.Data) : View("~/Areas/User/Views/Home/Index.cshtml", responseLogin.Data);
+            //return isAdmin ? RedirectToAction(nameof(Index), responseLogin.Data) : RedirectToAction(nameof(Privacy), responseLogin.Data);
+            //return RedirectToAction("Index", "Home", new { area = "admin" });
         }
 
+
+        // Silinecek -----------------------------------------------------------------------------
         [HttpGet]
         public IActionResult Index(UserInfo userInfo)
         {
