@@ -9,7 +9,7 @@ namespace KonfidesCase.BLL.Extensions
     {
         public static IServiceCollection AddKonfidesBllServices(this IServiceCollection services)
         {
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IHomeService, HomeService>();
             services.AddScoped<IAdminService, AdminService>();
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());

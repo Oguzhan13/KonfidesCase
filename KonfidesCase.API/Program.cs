@@ -11,6 +11,8 @@ builder.Services.AddKonfidesDalServices(builder.Configuration);
 builder.Services.AddKonfidesBllServices();
 #endregion
 
+builder.Services.AddCors(options => options.AddPolicy("myCors", options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -27,10 +29,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-#region Middlewares for Custom Services
 app.UseCors("myCors");
 app.UseAuthentication();
-#endregion
 
 app.UseAuthorization();
 

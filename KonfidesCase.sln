@@ -11,13 +11,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KonfidesCase.Entity", "Konf
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KonfidesCase.DAL", "KonfidesCase.DAL\KonfidesCase.DAL.csproj", "{764F1F1F-7508-40DE-BBFB-6DB0C2DA0240}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KonfidesCase.DTO", "KonfidesCase.DTO\KonfidesCase.DTO.csproj", "{094544C9-9D8B-41AF-ADC8-847564C49B59}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KonfidesCase.DTO", "KonfidesCase.DTO\KonfidesCase.DTO.csproj", "{094544C9-9D8B-41AF-ADC8-847564C49B59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KonfidesCase.BLL", "KonfidesCase.BLL\KonfidesCase.BLL.csproj", "{800BD6D1-219C-47EB-9F96-614EFE24ACB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KonfidesCase.BLL", "KonfidesCase.BLL\KonfidesCase.BLL.csproj", "{800BD6D1-219C-47EB-9F96-614EFE24ACB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KonfidesCase.MVC", "KonfidesCase.MVC\KonfidesCase.MVC.csproj", "{30FCFC01-078C-4454-8874-FF4F179402C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KonfidesCase.MVC", "KonfidesCase.MVC\KonfidesCase.MVC.csproj", "{30FCFC01-078C-4454-8874-FF4F179402C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KonfidesCase.ViewModel", "KonfidesCase.ViewModel\KonfidesCase.ViewModel.csproj", "{362F57DF-06D1-4D7B-A6CE-92907D804B02}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KonfidesCase.ViewModel", "KonfidesCase.ViewModel\KonfidesCase.ViewModel.csproj", "{362F57DF-06D1-4D7B-A6CE-92907D804B02}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -13,7 +13,7 @@ namespace KonfidesCase.DAL.Migrations
 {
     [DbContext(typeof(KonfidesCaseDbContext))]
     [Migration("20230506194033_init-app")]
-    partial class initapp
+    partial class Initapp
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

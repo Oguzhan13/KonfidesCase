@@ -13,7 +13,7 @@ namespace KonfidesCase.Authentication.Migrations
 {
     [DbContext(typeof(KonfidesCaseAuthDbContext))]
     [Migration("20230506194015_init-auth")]
-    partial class initauth
+    partial class Initauth
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

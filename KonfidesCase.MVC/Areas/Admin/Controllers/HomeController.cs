@@ -1,9 +1,8 @@
 ﻿using KonfidesCase.MVC.Models;
 using KonfidesCase.ViewModel;
+using KonfidesCase.ViewModel.Admin;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using NuGet.Protocol;
-using System.Net.Http;
 using System.Text;
 
 namespace KonfidesCase.MVC.Areas.Admin.Controllers
@@ -12,13 +11,16 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
     [Route("admin/[controller]")]
     public class HomeController : Controller
     {
+        #region Fields & Constructor
         private readonly IHttpClientFactory _httpClientFactory;
         public HomeController(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
         }
+        #endregion
 
-        [HttpGet]
+        #region Actions
+        [HttpGet("index")]
         public IActionResult Index(UserInfo userInfo)
         {
             if (string.IsNullOrEmpty(userInfo.Email))
@@ -50,5 +52,31 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index), responseChangePassword.Data);
         }
+
+        [HttpGet("create-category")]
+        public IActionResult CreateCategory()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateCategory(NewCategoryVM newCategoryVM)
+        {
+            var jsonPassword = JsonConvert.SerializeObject(newCategoryVM);
+            HttpClient client = _httpClientFactory.CreateClient("admin-url");
+            var data = new StringContent(jsonPassword, Encoding.UTF8, "application/json");
+            var response = await client.PostAsync("Admin/create-category", data);
+            var result = await response.Content.ReadAsStringAsync();
+            return RedirectToAction(nameof(Index), "Home");
+        }
+        [HttpGet("get-categories")]
+        public async Task<IActionResult> GetCategories()
+        {
+            HttpClient client = _httpClientFactory.CreateClient("url");
+            var response = await client.GetAsync("Home/get-categories");
+            var result = await response.Content.ReadAsStringAsync();
+            DataResult<IList<CategoriesVM>> responseGetCategories = JsonConvert.DeserializeObject<DataResult<IList<CategoriesVM>>>(result)!;            
+            return View(responseGetCategories.Data);
+        }
+        #endregion
     }
 }

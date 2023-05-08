@@ -1,13 +1,13 @@
 ﻿using KonfidesCase.Authentication.Dtos;
-using KonfidesCase.Authentication.Entities;
+using KonfidesCase.BLL.Utilities;
 using KonfidesCase.Entity.Entities;
 
 namespace KonfidesCase.BLL.Services.Interfaces
 {
-    public interface IUserService
+    public interface IHomeService
     {
         Task CreateAppUser(UserInfoDto userInfo);
-        Task CreateActivity();
-        Task UpdateActivity();        
+        Task<DataResult<ICollection<Category>>> GetCategories();
+        Task<DataResult<ICollection<City>>> GetCities();
     }
 }

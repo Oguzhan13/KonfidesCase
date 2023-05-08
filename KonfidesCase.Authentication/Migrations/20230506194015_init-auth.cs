@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace KonfidesCase.Authentication.Migrations
 {
     /// <inheritdoc />
-    public partial class initauth : Migration
+    public partial class Initauth : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

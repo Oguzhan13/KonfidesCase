@@ -26,7 +26,7 @@ namespace KonfidesCase.Authentication.Extensions
             })
                 .AddEntityFrameworkStores<KonfidesCaseAuthDbContext>()
                 .AddDefaultTokenProviders();
-            services.AddCors(options => options.AddPolicy("myCors", options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+            //services.AddCors(options => options.AddPolicy("myCors", options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
             services.AddScoped<IAuthService, AuthService>();
 
