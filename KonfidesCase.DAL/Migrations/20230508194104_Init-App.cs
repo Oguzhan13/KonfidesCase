@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace KonfidesCase.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class Initapp : Migration
+    public partial class InitApp : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -61,7 +61,7 @@ namespace KonfidesCase.DAL.Migrations
                     Ad = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Açıklama = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EtkinlikTarihi = table.Column<DateTime>(name: "Etkinlik Tarihi", type: "datetime2", nullable: false),
-                    Kontenjan = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Kontenjan = table.Column<int>(type: "int", nullable: false),
                     Adres = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Onay = table.Column<bool>(type: "bit", nullable: true),
                     KategoriId = table.Column<int>(name: "Kategori Id", type: "int", nullable: true),

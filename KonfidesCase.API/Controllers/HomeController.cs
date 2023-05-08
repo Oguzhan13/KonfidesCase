@@ -3,6 +3,7 @@ using KonfidesCase.Authentication.Dtos;
 using KonfidesCase.Authentication.Entities;
 using KonfidesCase.Authentication.Utilities;
 using KonfidesCase.BLL.Services.Interfaces;
+using KonfidesCase.DTO.Activity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,8 +41,7 @@ namespace KonfidesCase.API.Controllers
             {
                 return BadRequest(result);
             }
-            await _signInManager.SignInAsync(result.Data!, true);
-            var x = _httpContextAccessor.HttpContext!.User.Identity!.Name!;
+            await _signInManager.SignInAsync(result.Data!, true);                                
             var response = await _authService.LoginResponse(result.Data!, loginDto.Password);
             return response.IsSuccess ? Ok(response) : BadRequest(response);            
         }
@@ -54,7 +54,12 @@ namespace KonfidesCase.API.Controllers
                 return BadRequest(ModelState);
             }
             var response = await _authService.Register(registerDto);            
-            await _homeService.CreateAppUser(response.Data!);
+            var createAppUser = await _homeService.CreateAppUser(response.Data!);
+            if (!createAppUser.IsSuccess)
+            {
+                response.Message = createAppUser.Message;
+                return BadRequest(response);
+            }
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
 
@@ -79,10 +84,11 @@ namespace KonfidesCase.API.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            var currentUserName = _httpContextAccessor.HttpContext!.User.Identity!.Name;            
-            return string.IsNullOrEmpty(currentUserName) ? 
-                Ok(new AuthDataResult<string>() { IsSuccess = true, Message = "Çıkış işlemi başarılı" }) : 
-                BadRequest(new AuthDataResult<string>() { IsSuccess = true, Message = "Çıkış işlemi başarısız!", Data = currentUserName });
+            return Ok(new AuthDataResult<string>() { IsSuccess = true, Message = "Çıkış işlemi başarılı" });
+            //var currentUserName = _httpContextAccessor.HttpContext!.User.Identity!.Name;
+            //return string.IsNullOrEmpty(currentUserName) ?
+            //    Ok(new AuthDataResult<string>() { IsSuccess = true, Message = "Çıkış işlemi başarılı" }) :
+            //    BadRequest(new AuthDataResult<string>() { IsSuccess = true, Message = "Çıkış işlemi başarısız!", Data = currentUserName });
         }
 
         [HttpGet("get-categories")]
@@ -97,6 +103,66 @@ namespace KonfidesCase.API.Controllers
         {
             var response = await _homeService.GetCities();
             return response.IsSuccess ? Ok(response) : NotFound(response);
+        }
+
+        [HttpPost("create-activity")]
+        public async Task<IActionResult> CreateActivity(CreateActivityDto createActivityDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var response = await _homeService.CreateActivity(createActivityDto);
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
+        }
+        [HttpGet("get-activities")]
+        public async Task<IActionResult> GetActivities()
+        {
+            var response = await _homeService.GetActivities();
+            return response.IsSuccess ? Ok(response) : NotFound(response);
+        }
+        [HttpPut("update-activity")]
+        public async Task<IActionResult> UpdateActivity(UpdateActivityDto updateActivityDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var response = await _homeService.UpdateActivity(updateActivityDto);
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
+        }
+        [HttpPost("cancel-activity")]
+        public async Task<IActionResult> CancelActivity(Guid activityId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var response = await _homeService.CancelActivity(activityId);
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
+        }
+        [HttpGet("created-activities")]
+        public async Task<IActionResult> GetMyCreatedActivities()
+        {
+            var response = await _homeService.GetMyCreatedActivities();
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
+        }
+        [HttpGet("attended-activities")]
+        public async Task<IActionResult> GetAttendedActivities()
+        {
+            var response = await _homeService.GetAttendedActivities();
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
+        }
+
+        [HttpPost("buy-ticket")]
+        public async Task<IActionResult> BuyTicket(Guid activityId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var response = await _homeService.BuyTicket(activityId);
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
 
         #endregion

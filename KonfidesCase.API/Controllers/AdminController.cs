@@ -1,4 +1,5 @@
-﻿using KonfidesCase.BLL.Services.Interfaces;
+﻿using Azure;
+using KonfidesCase.BLL.Services.Interfaces;
 using KonfidesCase.DTO.Category;
 using KonfidesCase.DTO.City;
 using Microsoft.AspNetCore.Mvc;
@@ -55,6 +56,17 @@ namespace KonfidesCase.API.Controllers
                 return BadRequest(ModelState);
             }
             var response = await _adminService.UpdateCity(updateCityDto);
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
+        }
+
+        [HttpPut("confirm-activity")]
+        public async Task<IActionResult> ConfirmActivity(Guid activityId, bool confirmActivity)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var response = await _adminService.ConfirmActivity(activityId, confirmActivity);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
     }

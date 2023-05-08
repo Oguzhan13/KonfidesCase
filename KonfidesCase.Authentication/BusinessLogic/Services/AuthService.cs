@@ -20,7 +20,7 @@ namespace KonfidesCase.Authentication.BusinessLogic.Services
         {            
             var currentUser = await _userManager.FindByNameAsync(currentUserName);
             if (currentUser is null)
-            {
+            {                
                 return new AuthDataResult<UserInfoDto>() { IsSuccess = false, Message = "Kullanıcı bilgileri getirilirken bir hata oluştu..." };
             }
             var result = await _userManager.ChangePasswordAsync(currentUser!, changePasswordDto.CurrentPassword, changePasswordDto.NewPassword);

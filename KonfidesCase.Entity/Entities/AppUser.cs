@@ -12,7 +12,7 @@
 
         #region Navigation Properties
         public ICollection<AppUserActivity>? Activities { get; set; }
-        public ICollection<Ticket> Tickets { get; set; } = new HashSet<Ticket>();
+        public ICollection<Ticket>? Tickets { get; set; }
         #endregion
     }
 }

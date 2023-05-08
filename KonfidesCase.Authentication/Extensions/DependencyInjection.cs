@@ -12,10 +12,11 @@ namespace KonfidesCase.Authentication.Extensions
         {
             services.AddDbContext<KonfidesCaseAuthDbContext>(options => options.UseSqlServer(configuration.GetConnectionString(KonfidesCaseAuthDbContext.ConnectionName)));
 
-            services.AddAuthentication();            
-
+            services.AddAuthentication();                       
+            
             services.AddIdentity<AuthUser, AuthRole>(options =>
             {
+                options.SignIn.RequireConfirmedAccount = true;
                 options.User.RequireUniqueEmail = true;                
                 options.Password.RequireDigit = true;
                 options.Password.RequireLowercase = true;
@@ -25,7 +26,17 @@ namespace KonfidesCase.Authentication.Extensions
                 options.Lockout.MaxFailedAccessAttempts = 5;
             })
                 .AddEntityFrameworkStores<KonfidesCaseAuthDbContext>()
-                .AddDefaultTokenProviders();            
+                .AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+
+                options.LoginPath = "/Identity/Account/Login";
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                options.SlidingExpiration = true;
+            });
 
             services.AddScoped<IAuthService, AuthService>();
 

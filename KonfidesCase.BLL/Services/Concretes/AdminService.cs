@@ -2,6 +2,7 @@
 using KonfidesCase.BLL.Services.Interfaces;
 using KonfidesCase.BLL.Utilities;
 using KonfidesCase.DAL.Contexts;
+using KonfidesCase.DTO.Activity;
 using KonfidesCase.DTO.Category;
 using KonfidesCase.DTO.City;
 using KonfidesCase.Entity.Entities;
@@ -44,6 +45,11 @@ namespace KonfidesCase.BLL.Services.Concretes
         #region Methods for Actions
         public async Task<DataResult<Category>> CreateCategory(CreateCategoryDto createCategoryDto)
         {
+            bool isCategoryExists = await _context.Categories.AnyAsync(c => c.Name == createCategoryDto.Name);
+            if (isCategoryExists)
+            {
+                return new DataResult<Category>() { IsSuccess = false, Message = "Kategori sistemde kayıtlı" };
+            }
             bool isAuthorize = await IsAdmin();
             if (!isAuthorize)
             {
@@ -56,12 +62,18 @@ namespace KonfidesCase.BLL.Services.Concretes
         }        
         public async Task<DataResult<Category>> UpdateCategory(UpdateCategoryDto updateCategoryDto)
         {
+            bool isCategoryExists = await _context.Categories.AnyAsync(c => c.Name == updateCategoryDto.Name);
+            if (isCategoryExists)
+            {
+                return new DataResult<Category>() { IsSuccess = false, Message = "Kategori sistemde kayıtlı" };
+            }
             bool isAuthorize = await IsAdmin();
             if (!isAuthorize)
             {
                 return new DataResult<Category>() { IsSuccess = false, Message = "Yetkili değilsiniz" };
             }
-            Category updateCategory = _mapper.Map(updateCategoryDto, new Category());
+            Category updateCategory = await _context.Categories.FirstAsync(c => c.Id ==  updateCategoryDto.Id);
+            _mapper.Map(updateCategoryDto, updateCategory);
             _context.Categories.Update(updateCategory);
             await _context.SaveChangesAsync();
             return new DataResult<Category>() { IsSuccess = true, Message = "Kategori güncellendi", Data = updateCategory };
@@ -69,6 +81,11 @@ namespace KonfidesCase.BLL.Services.Concretes
 
         public async Task<DataResult<City>> CreateCity(CreateCityDto createCityDto)
         {
+            bool isCityExists = await _context.Cities.AnyAsync(c => c.Name == createCityDto.Name);
+            if (isCityExists)
+            {
+                return new DataResult<City>() { IsSuccess = false, Message = "Şehir sistemde kayıtlı" };
+            }
             bool isAuthorize = await IsAdmin();
             if (!isAuthorize)
             {
@@ -81,19 +98,39 @@ namespace KonfidesCase.BLL.Services.Concretes
         }
         public async Task<DataResult<City>> UpdateCity(UpdateCityDto updateCityDto)
         {
+            bool isCityExists = await _context.Cities.AnyAsync(c => c.Name == updateCityDto.Name);
+            if (isCityExists)
+            {
+                return new DataResult<City>() { IsSuccess = false, Message = "Şehir sistemde kayıtlı" };
+            }
             bool isAuthorize = await IsAdmin();
             if (!isAuthorize)
             {
                 return new DataResult<City>() { IsSuccess = false, Message = "Yetkili değilsiniz" };
             }
-            City updateCity = _mapper.Map(updateCityDto, new City());
+            City updateCity = await _context.Cities.FirstAsync(c => c.Id ==  updateCityDto.Id);
+            _mapper.Map(updateCityDto, updateCity);
             _context.Cities.Update(updateCity);
             await _context.SaveChangesAsync();
-            return new DataResult<City>() { IsSuccess = true, Message = "Şehir ekleme işlemi başarılı", Data = updateCity };
+            return new DataResult<City>() { IsSuccess = true, Message = "Şehir güncellendi", Data = updateCity };
+        }        
+        public async Task<DataResult<Activity>> ConfirmActivity(Guid activityId, bool confirmActivity)
+        {
+            bool isAuthorize = await IsAdmin();
+            if (!isAuthorize)
+            {
+                return new DataResult<Activity>() { IsSuccess = false, Message = "Yetkili değilsiniz" };
+            }
+            Activity activity = await _context.Activities.FirstAsync(a => a.Id == activityId);
+            if (activity is null)
+            {
+                return new DataResult<Activity>() { IsSuccess = false, Message = "Etkinik bulunamadı!" };
+            }
+            activity!.IsConfirm = confirmActivity;
+            _context.Activities.Update(activity);
+            await _context.SaveChangesAsync();
+            return new DataResult<Activity>() { IsSuccess = true, Message = "Etkinlik onaylama işlemi başarılı", Data = activity };
         }
-
-
-
         #endregion        
     }
 }

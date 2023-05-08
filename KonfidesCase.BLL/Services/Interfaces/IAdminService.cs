@@ -10,6 +10,7 @@ namespace KonfidesCase.BLL.Services.Interfaces
         Task<DataResult<Category>> CreateCategory(CreateCategoryDto createCategoryDto);
         Task<DataResult<Category>> UpdateCategory(UpdateCategoryDto updateCategoryDto);
         Task<DataResult<City>> CreateCity(CreateCityDto createCityDto);
-        Task<DataResult<City>> UpdateCity(UpdateCityDto updateCityDto);
+        Task<DataResult<City>> UpdateCity(UpdateCityDto updateCityDto);        
+        Task<DataResult<Activity>> ConfirmActivity(Guid activityId, bool confirmActivity);
     }
 }

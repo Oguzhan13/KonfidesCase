@@ -8,7 +8,7 @@
         #endregion
 
         #region Navigation Property
-        public ICollection<Activity> Activities { get; set; } = new HashSet<Activity>();
+        public ICollection<Activity>? Activities { get; set; }
         #endregion
     }
 }

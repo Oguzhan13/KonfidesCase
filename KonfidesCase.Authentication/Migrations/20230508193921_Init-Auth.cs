@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace KonfidesCase.Authentication.Migrations
 {
     /// <inheritdoc />
-    public partial class Initauth : Migration
+    public partial class InitAuth : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -165,14 +165,14 @@ namespace KonfidesCase.Authentication.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("a6ef0654-a9c5-4085-8581-673e702c0ad4"), "3cf3c867-487d-4100-a085-3adb79c7bef3", "admin", "ADMIN" },
-                    { new Guid("ffbaa166-158e-4254-83df-ee7d13db3749"), "9a1c9a8e-fa74-471b-a62a-89d872c7164d", "user", "USER" }
+                    { new Guid("a6ef0654-a9c5-4085-8581-673e702c0ad4"), "ea3f5eae-2d51-47e6-ae5d-1fd003c4e8a7", "admin", "ADMIN" },
+                    { new Guid("ffbaa166-158e-4254-83df-ee7d13db3749"), "fa6b4164-e79e-4868-a2f0-38b9de977787", "user", "USER" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Mail Adresi", "Onaylanmış Email", "Ad", "Soyad", "LockoutEnabled", "LockoutEnd", "Standart Mail Adresi", "Stadart Kullanıcı Adı", "Kriptolanmış Şifre", "Telefon Numarası", "Onaylanmış Telefon Numarası", "SecurityStamp", "TwoFactorEnabled", "Kullanıcı Adı" },
-                values: new object[] { new Guid("6e7fe5c6-1444-474b-9b43-d078cd892237"), 0, "aea5abf0-b069-4324-8c8b-bb2119479f51", "admin@example.com", true, "Admin", "Manager", true, new DateTimeOffset(new DateTime(2023, 5, 6, 22, 45, 13, 812, DateTimeKind.Unspecified).AddTicks(5842), new TimeSpan(0, 3, 0, 0, 0)), "ADMIN@EXAMPLE.COM", "ADMIN@EXAMPLE.COM", "AQAAAAIAAYagAAAAEMZWZ50fXBiH9X9zyXxJfL2LcasLdXP6oLRQFhw+38C09cKtrwcCy5lDMCjuSgJBcg==", null, false, "110e0c60-d99a-4919-b3a5-7bd7d063a6dc", false, "admin@example.com" });
+                values: new object[] { new Guid("6e7fe5c6-1444-474b-9b43-d078cd892237"), 0, "b5b48425-0f04-421d-ad72-0f4dcd90e359", "admin@example.com", true, "Admin", "Manager", true, new DateTimeOffset(new DateTime(2023, 5, 8, 22, 44, 20, 104, DateTimeKind.Unspecified).AddTicks(6801), new TimeSpan(0, 3, 0, 0, 0)), "ADMIN@EXAMPLE.COM", "ADMIN@EXAMPLE.COM", "AQAAAAIAAYagAAAAELntYjIB1gZxiAWwAnVwaXyjXSWUawFAE1P7psmbi2s62pVrfLWQCNB05xo9Np+GRQ==", null, false, "3a15b3ca-18e8-497b-af8e-d10db8a372e1", false, "admin@example.com" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",

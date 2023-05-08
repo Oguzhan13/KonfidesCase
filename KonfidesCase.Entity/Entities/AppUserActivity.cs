@@ -2,6 +2,13 @@
 {
     public class AppUserActivity
     {
+        #region Constructor
+        public AppUserActivity()
+        {
+            Id = Guid.NewGuid();
+        }
+        #endregion
+
         #region Properties
         public Guid Id { get; set; }
         public Guid? UserId { get; set; }
@@ -9,8 +16,8 @@
         #endregion
 
         #region Navigation Properties
-        public AppUser User { get; set; } = new AppUser();
-        public Activity Activity { get; set; } = new Activity();
+        public AppUser? User { get; set; }
+        public Activity? Activity { get; set; }
         #endregion
     }
 }

@@ -73,9 +73,8 @@ namespace KonfidesCase.DAL.Migrations
                         .HasColumnName("Organizatör")
                         .HasColumnOrder(2);
 
-                    b.Property<string>("Quota")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                    b.Property<int>("Quota")
+                        .HasColumnType("int")
                         .HasColumnName("Kontenjan")
                         .HasColumnOrder(6);
 
@@ -236,14 +235,12 @@ namespace KonfidesCase.DAL.Migrations
                     b.HasOne("KonfidesCase.Entity.Entities.Category", "Category")
                         .WithMany("Activities")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("KonfidesCase.Entity.Entities.City", "City")
                         .WithMany("Activities")
                         .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Category");
 
@@ -255,14 +252,12 @@ namespace KonfidesCase.DAL.Migrations
                     b.HasOne("KonfidesCase.Entity.Entities.Activity", "Activity")
                         .WithMany("AttendedUsers")
                         .HasForeignKey("ActivityId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("KonfidesCase.Entity.Entities.AppUser", "User")
                         .WithMany("Activities")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Activity");
 

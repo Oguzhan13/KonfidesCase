@@ -53,6 +53,7 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index), responseChangePassword.Data);
         }
 
+
         [HttpGet("create-category")]
         public IActionResult CreateCategory()
         {
