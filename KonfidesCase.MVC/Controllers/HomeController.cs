@@ -1,5 +1,6 @@
-﻿using KonfidesCase.MVC.Models;
-using KonfidesCase.ViewModel;
+﻿using KonfidesCase.MVC.BusinessLogic.Services;
+using KonfidesCase.MVC.Models;
+using KonfidesCase.MVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -12,14 +13,16 @@ namespace KonfidesCase.MVC.Controllers
         #region Fields & Constructor
         private readonly ILogger<HomeController> _logger;
         private readonly IHttpClientFactory _httpClientFactory;
-        public HomeController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory)
+        private readonly IApiService _apiService;
+        public HomeController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory, IApiService apiService)
         {
             _logger = logger;
             _httpClientFactory = httpClientFactory;
+            _apiService = apiService;
         }
         #endregion
 
-
+        #region Actions
         [HttpGet]
         public IActionResult Login()
         {
@@ -27,20 +30,16 @@ namespace KonfidesCase.MVC.Controllers
         }
         [HttpPost]
         public async Task<IActionResult> Login(LoginVM loginVM)
-        {
-            var jsonUser = JsonConvert.SerializeObject(loginVM);
-            HttpClient client = _httpClientFactory.CreateClient("url");
-            var data = new StringContent(jsonUser, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync("Home/login", data);            
-            var result = await response.Content.ReadAsStringAsync();
-            DataResult<UserInfo> responseLogin = JsonConvert.DeserializeObject<DataResult<UserInfo>>(result)!;
-            if (!responseLogin.IsSuccess)
+        {            
+            var resultApi = await _apiService.ApiPostResponse<LoginVM>(loginVM, "url", "Home", "login");
+            _apiService.ApiDeserializeResult(resultApi, out DataResult<UserInfo> responseData);            
+            if (!responseData.IsSuccess)
             {
-                ViewData["LoginMessage"] = responseLogin.Message;
+                ViewData["LoginMessage"] = responseData.Message;
                 return View();
-            }
-            TempData["IndexData"] = JsonConvert.SerializeObject(responseLogin.Data);
-            return RedirectToAction("Index", "Home", new { area = "admin" });
+            }            
+            TempData["IndexData"] = JsonConvert.SerializeObject(responseData);
+            return RedirectToAction("Index", "Home", new { area = responseData.Data!.RoleName });
         }
 
         [HttpGet]
@@ -73,8 +72,9 @@ namespace KonfidesCase.MVC.Controllers
             }
             return RedirectToAction(nameof(Login));
         }
-        
-                        
+
+        #endregion
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

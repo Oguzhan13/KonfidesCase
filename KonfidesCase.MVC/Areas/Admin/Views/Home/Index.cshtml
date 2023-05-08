@@ -1,44 +1,44 @@
-﻿@model KonfidesCase.MVC.Models.UserInfo
+﻿@model KonfidesCase.MVC.Models.DataResult<UserInfo>
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">    
-<h1 class="display-4">Hoşgeldiniz Efendim</h1>
-    <p> @Model.Email </p>
+<h1 class="display-4">Hoşgeldiniz @Model.Data!.Email</h1>
+    <p> @Model.Message </p>
 </div>
 
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.FirstName)
+                @Html.DisplayNameFor(model => model.Data!.FirstName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastName)
+                @Html.DisplayNameFor(model => model.Data!.LastName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
+                @Html.DisplayNameFor(model => model.Data!.Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Password)
+                @Html.DisplayNameFor(model => model.Data!.Password)
             </th>
         </tr>
     </thead>
     <tbody>
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => Model.FirstName)
+                @Html.DisplayFor(modelItem => Model.Data.FirstName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => Model.LastName)
+                @Html.DisplayFor(modelItem => Model.Data.LastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => Model.Email)
+                @Html.DisplayFor(modelItem => Model.Data.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => Model.Password)
+                @Html.DisplayFor(modelItem => Model.Data.Password)
             </td>
         </tr>
     </tbody>
