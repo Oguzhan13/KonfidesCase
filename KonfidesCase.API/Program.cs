@@ -11,6 +11,7 @@ builder.Services.AddKonfidesDalServices(builder.Configuration);
 builder.Services.AddKonfidesBllServices();
 #endregion
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddCors(options => options.AddPolicy("myCors", options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
 builder.Services.AddControllers();

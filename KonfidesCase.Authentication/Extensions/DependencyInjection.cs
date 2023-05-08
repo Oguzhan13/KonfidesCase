@@ -1,4 +1,5 @@
 ﻿using KonfidesCase.Authentication.DataAccess.Contexts;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -11,9 +12,8 @@ namespace KonfidesCase.Authentication.Extensions
         {
             services.AddDbContext<KonfidesCaseAuthDbContext>(options => options.UseSqlServer(configuration.GetConnectionString(KonfidesCaseAuthDbContext.ConnectionName)));
 
-            services.AddHttpContextAccessor();
+            services.AddAuthentication();            
 
-            services.AddAuthentication();
             services.AddIdentity<AuthUser, AuthRole>(options =>
             {
                 options.User.RequireUniqueEmail = true;                
@@ -25,8 +25,7 @@ namespace KonfidesCase.Authentication.Extensions
                 options.Lockout.MaxFailedAccessAttempts = 5;
             })
                 .AddEntityFrameworkStores<KonfidesCaseAuthDbContext>()
-                .AddDefaultTokenProviders();
-            //services.AddCors(options => options.AddPolicy("myCors", options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+                .AddDefaultTokenProviders();            
 
             services.AddScoped<IAuthService, AuthService>();
 

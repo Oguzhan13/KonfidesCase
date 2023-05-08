@@ -1,8 +1,9 @@
 ﻿using KonfidesCase.Authentication.BusinessLogic.Services;
 using KonfidesCase.Authentication.Dtos;
+using KonfidesCase.Authentication.Entities;
+using KonfidesCase.Authentication.Utilities;
 using KonfidesCase.BLL.Services.Interfaces;
-using KonfidesCase.DTO.Category;
-using KonfidesCase.DTO.City;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KonfidesCase.API.Controllers
@@ -13,19 +14,20 @@ namespace KonfidesCase.API.Controllers
     {
         #region Fields & Constructor
         private readonly IAuthService _authService;
-        private readonly IHomeService _homeService; 
-        private readonly IAdminService _adminService;
-        public HomeController(IAuthService authService, IHomeService homeService, IAdminService adminService)
+        private readonly IHomeService _homeService;         
+        private readonly SignInManager<AuthUser> _signInManager;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public HomeController(IAuthService authService, IHomeService homeService, SignInManager<AuthUser> signInManager, IHttpContextAccessor httpContextAccessor)
         {
             _authService = authService;
-            _homeService = homeService;
-            _adminService = adminService;
+            _homeService = homeService;            
+            _signInManager = signInManager;            
+            _httpContextAccessor = httpContextAccessor;
         }
         #endregion
 
         #region Actions
-
-        #region Actions for All Users
+                
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
@@ -33,8 +35,15 @@ namespace KonfidesCase.API.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var response = await _authService.Login(loginDto);
-            return response.IsSuccess ? Ok(response) : BadRequest(response);
+            var result = await _authService.LoginCheck(loginDto);
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result);
+            }
+            await _signInManager.SignInAsync(result.Data!, true);
+            var x = _httpContextAccessor.HttpContext!.User.Identity!.Name!;
+            var response = await _authService.LoginResponse(result.Data!, loginDto.Password);
+            return response.IsSuccess ? Ok(response) : BadRequest(response);            
         }
 
         [HttpPost("register")]
@@ -49,18 +58,31 @@ namespace KonfidesCase.API.Controllers
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
 
-        [HttpGet("logout")]
-        public async Task<IActionResult> Logout()
-        {
-            await _authService.Logout();
-            return Ok();
-        }
-
         [HttpPut("change-password")]
         public async Task<IActionResult> ChangePassword(ChangePasswordDto changePasswordDto)
         {
-            var response = await _authService.ChangePassword(changePasswordDto);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            string currentUserName = _httpContextAccessor.HttpContext!.User.Identity!.Name!;
+            if (string.IsNullOrEmpty(currentUserName))
+            {
+                AuthDataResult<UserInfoDto> errorResponse = new() { IsSuccess = false, Message = "Aktif kullanıcı bulunamadı" };
+                return BadRequest(errorResponse);
+            }
+            var response = await _authService.ChangePassword(currentUserName, changePasswordDto);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
+        }
+
+        [HttpGet("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            var currentUserName = _httpContextAccessor.HttpContext!.User.Identity!.Name;            
+            return string.IsNullOrEmpty(currentUserName) ? 
+                Ok(new AuthDataResult<string>() { IsSuccess = true, Message = "Çıkış işlemi başarılı" }) : 
+                BadRequest(new AuthDataResult<string>() { IsSuccess = true, Message = "Çıkış işlemi başarısız!", Data = currentUserName });
         }
 
         [HttpGet("get-categories")]
@@ -76,51 +98,6 @@ namespace KonfidesCase.API.Controllers
             var response = await _homeService.GetCities();
             return response.IsSuccess ? Ok(response) : NotFound(response);
         }
-        #endregion
-
-        #region Actions for Admin role
-        //[HttpPost("create-category")]
-        //public async Task<IActionResult> CreateCategory(CreateCategoryDto createCategoryDto)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-        //    var response = await _adminService.CreateCategory(createCategoryDto);
-        //    return response.IsSuccess ? Ok(response) : BadRequest(response);
-        //}
-        //[HttpPut("update-category")]
-        //public async Task<IActionResult> UpdateCategory(UpdateCategoryDto updateCategoryDto)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-        //    var response = await _adminService.UpdateCategory(updateCategoryDto);
-        //    return response.IsSuccess ? Ok(response) : BadRequest(response);
-        //}
-
-        //[HttpPost("create-city")]
-        //public async Task<IActionResult> CreateCity(CreateCityDto createCityDto)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-        //    var response = await _adminService.CreateCity(createCityDto);
-        //    return response.IsSuccess ? Ok(response) : BadRequest(response);
-        //}
-        //[HttpPut("update-city")]
-        //public async Task<IActionResult> UpdateCity(UpdateCityDto updateCityDto)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-        //    var response = await _adminService.UpdateCity(updateCityDto);
-        //    return response.IsSuccess ? Ok(response) : BadRequest(response);
-        //}
-        #endregion
 
         #endregion
     }

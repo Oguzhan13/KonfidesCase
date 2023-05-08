@@ -27,7 +27,7 @@ namespace KonfidesCase.BLL.Services.Concretes
         #region Methods
         public async Task<bool> IsAdmin()
         {
-            string currentUserName = _contextAccessor.HttpContext!.User.Identity!.Name!;
+            var currentUserName = _contextAccessor.HttpContext!.User.Identity!.Name!;
             if (string.IsNullOrEmpty(currentUserName))
             {
                 return false;

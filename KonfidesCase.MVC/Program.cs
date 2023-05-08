@@ -3,6 +3,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddHttpClient("url", url => url.BaseAddress = new Uri("https://localhost:7230/api/"));
 builder.Services.AddHttpClient("admin-url", url => url.BaseAddress = new Uri("https://localhost:7230/admin/"));
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddControllersWithViews();
 
@@ -21,7 +22,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
+
+//app.MapRazorPages();
+//app.MapDefaultControllerRoute();
 
 app.MapControllerRoute(
     name: "default",
@@ -29,13 +34,6 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "areas",
     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-//app.MapAreaControllerRoute(
-//    name: "areas",
-//    areaName: "Admin",
-//    pattern: "{area:exists}-{controller=Home}/{action=Index}/{id?}");
-//app.MapAreaControllerRoute(
-//    name: "areas",
-//    areaName: "User",
-//    pattern: "{area:exists}-{controller=Home}/{action=Index}/{id?}");
+
 
 app.Run();

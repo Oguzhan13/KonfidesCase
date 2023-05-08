@@ -40,7 +40,7 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
         {
             return View();
         }
-        [HttpPost]
+        [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassword(ChangePasswordVM changePasswordVM)
         {
             var jsonPassword = JsonConvert.SerializeObject(changePasswordVM);
@@ -58,7 +58,7 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
         {
             return View();
         }
-        [HttpPost]
+        [HttpPost("create-category")]
         public async Task<IActionResult> CreateCategory(NewCategoryVM newCategoryVM)
         {
             var jsonPassword = JsonConvert.SerializeObject(newCategoryVM);

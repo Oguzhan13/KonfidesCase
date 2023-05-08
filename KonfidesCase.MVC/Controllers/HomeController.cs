@@ -9,6 +9,7 @@ namespace KonfidesCase.MVC.Controllers
 {
     public class HomeController : Controller
     {
+        #region Fields & Constructor
         private readonly ILogger<HomeController> _logger;
         private readonly IHttpClientFactory _httpClientFactory;
         public HomeController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory)
@@ -16,7 +17,9 @@ namespace KonfidesCase.MVC.Controllers
             _logger = logger;
             _httpClientFactory = httpClientFactory;
         }
-        
+        #endregion
+
+
         [HttpGet]
         public IActionResult Login()
         {
@@ -28,11 +31,12 @@ namespace KonfidesCase.MVC.Controllers
             var jsonUser = JsonConvert.SerializeObject(loginVM);
             HttpClient client = _httpClientFactory.CreateClient("url");
             var data = new StringContent(jsonUser, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync("Home/login", data);
+            var response = await client.PostAsync("Home/login", data);            
             var result = await response.Content.ReadAsStringAsync();
             DataResult<UserInfo> responseLogin = JsonConvert.DeserializeObject<DataResult<UserInfo>>(result)!;
             if (!responseLogin.IsSuccess)
             {
+                ViewData["LoginMessage"] = responseLogin.Message;
                 return View();
             }
             TempData["IndexData"] = JsonConvert.SerializeObject(responseLogin.Data);
@@ -60,7 +64,13 @@ namespace KonfidesCase.MVC.Controllers
         public async Task<IActionResult> Logout()
         {
             HttpClient client = _httpClientFactory.CreateClient("url");
-            var result = await client.GetAsync("Home/Logout");
+            var response = await client.GetAsync("Home/Logout");
+            var result = await response.Content.ReadAsStringAsync();
+            DataResult<string> responseLogin = JsonConvert.DeserializeObject<DataResult<string>>(result)!;
+            if (!responseLogin.IsSuccess)
+            {
+                return RedirectToAction("Index", "");
+            }
             return RedirectToAction(nameof(Login));
         }
         
