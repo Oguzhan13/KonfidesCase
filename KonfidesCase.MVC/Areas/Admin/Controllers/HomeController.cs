@@ -5,6 +5,7 @@ using KonfidesCase.MVC.BusinessLogic.Services;
 using KonfidesCase.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Net;
 
 namespace KonfidesCase.MVC.Areas.Admin.Controllers
 {
@@ -17,27 +18,36 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IApiService _apiService;
         private readonly IMapper _mapper;
-        public HomeController(IHttpClientFactory httpClientFactory, ILogger<HomeController> logger, IApiService apiService, IMapper mapper)
+        private readonly IHttpContextAccessor _contextAccessor;
+        public HomeController(IHttpClientFactory httpClientFactory, ILogger<HomeController> logger, IApiService apiService, IMapper mapper, IHttpContextAccessor contextAccessor)
         {
             _httpClientFactory = httpClientFactory;
             _logger = logger;
             _apiService = apiService;
             _mapper = mapper;
+            _contextAccessor = contextAccessor;
         }
         #endregion
-
-        internal static object indexData = new();
-
+        
         #region Index Action       
         [HttpGet("Index")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            indexData = TempData["IndexData"] != null ? TempData["IndexData"]! : indexData!;
-            if (indexData is null)
+            //indexData = TempData["IndexData"] != null ? TempData["IndexData"]! : indexData!;
+            var tempData = TempData["IndexData"];
+            if (tempData is null)
             {
-                return RedirectToAction("Login", "Home", new { area = "" });
+                var resultApi = await _apiService.ApiGetResponse("url", "Home", "get-current-user");
+                if (string.IsNullOrEmpty(resultApi))
+                {
+                    return RedirectToAction("Login", "Home", new { area = "" });
+                }
+                //string responseData = JsonConvert.DeserializeObject<string>(resultApi)!;
+                var sessionData = _contextAccessor.HttpContext!.Session.GetString(resultApi);
+                DataResult<UserInfo> userInfoSession = JsonConvert.DeserializeObject<DataResult<UserInfo>>(sessionData!)!;
+                return View(userInfoSession);
             }
-            DataResult<UserInfo> userInfo = JsonConvert.DeserializeObject<DataResult<UserInfo>>((string)indexData)!;
+            DataResult<UserInfo> userInfo = JsonConvert.DeserializeObject<DataResult<UserInfo>>((string)tempData!)!;
             return View(userInfo);
         }
         #endregion

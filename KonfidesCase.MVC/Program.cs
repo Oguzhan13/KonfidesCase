@@ -9,6 +9,7 @@ builder.Services.AddHttpClient("admin-url", url => url.BaseAddress = new Uri("ht
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IApiService, ApiService>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+builder.Services.AddSession();
 
 builder.Services.AddControllersWithViews();
 
@@ -40,5 +41,6 @@ app.MapControllerRoute(
     name: "areas",
     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
+app.UseSession();
 
 app.Run();

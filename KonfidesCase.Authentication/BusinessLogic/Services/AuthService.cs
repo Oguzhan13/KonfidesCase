@@ -50,7 +50,7 @@ namespace KonfidesCase.Authentication.BusinessLogic.Services
                 Password = password,
             };
         }
-
+                
         public async Task<AuthDataResult<AuthUser>> LoginCheck(LoginDto loginDto)
         {
             var user = await _userManager.FindByEmailAsync(loginDto.Email);

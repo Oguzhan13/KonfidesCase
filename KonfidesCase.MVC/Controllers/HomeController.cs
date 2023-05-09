@@ -13,11 +13,13 @@ namespace KonfidesCase.MVC.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IApiService _apiService;
-        public HomeController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory, IApiService apiService)
+        private readonly IHttpContextAccessor _contextAccessor;
+        public HomeController(ILogger<HomeController> logger, IHttpClientFactory httpClientFactory, IApiService apiService, IHttpContextAccessor contextAccessor)
         {
             _logger = logger;
             _httpClientFactory = httpClientFactory;
             _apiService = apiService;
+            _contextAccessor = contextAccessor;
         }
         #endregion
 
@@ -38,13 +40,16 @@ namespace KonfidesCase.MVC.Controllers
         {
             ViewData["LogoutMessage"] = null;
             var resultApi = await _apiService.ApiPostResponse(loginVM, "url", "Home", "login");            
-            DataResult<UserInfo> responseData =  JsonConvert.DeserializeObject<DataResult<UserInfo>>(resultApi)!;
+            DataResult<UserInfo> responseData =  JsonConvert.DeserializeObject<DataResult<UserInfo>>(resultApi)!;            
             if (!responseData.IsSuccess)
             {
                 ViewData["LoginMessage"] = responseData.Message;
                 return View();
-            }            
+            }
             TempData["IndexData"] = JsonConvert.SerializeObject(responseData);
+            string currentUserEmail = responseData.Data!.Email;
+            string userInfo = JsonConvert.SerializeObject(responseData);
+            _contextAccessor.HttpContext!.Session.SetString(currentUserEmail, userInfo);
             return RedirectToAction("Index", "Home", new { area = responseData.Data!.RoleName });
         }
 

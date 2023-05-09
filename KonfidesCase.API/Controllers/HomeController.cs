@@ -46,6 +46,16 @@ namespace KonfidesCase.API.Controllers
         }
         #endregion
 
+        #region GetCurrentUser Action
+        [HttpGet("get-current-user")]
+        public IActionResult GetCurrentUser()
+        {
+            string currentUserName = _httpContextAccessor.HttpContext!.User.Identity!.Name!;            
+            return string.IsNullOrEmpty(currentUserName) ? BadRequest("Aktif kullanıcı bulunamadı") : Ok(currentUserName);
+
+        }
+        #endregion
+
         #region Register Action
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDto registerDto)
