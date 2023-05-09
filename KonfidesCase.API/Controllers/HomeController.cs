@@ -27,8 +27,7 @@ namespace KonfidesCase.API.Controllers
         }
         #endregion
 
-        #region Actions
-                
+        #region Login Action                
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
@@ -45,7 +44,9 @@ namespace KonfidesCase.API.Controllers
             var response = await _authService.LoginResponse(result.Data!, loginDto.Password);
             return response.IsSuccess ? Ok(response) : BadRequest(response);            
         }
+        #endregion
 
+        #region Register Action
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDto registerDto)
         {
@@ -62,7 +63,18 @@ namespace KonfidesCase.API.Controllers
             }
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
+        #endregion
 
+        #region Logout Method        
+        [HttpGet("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return Ok(new AuthDataResult<string>() { IsSuccess = true, Message = "Çıkış işlemi başarılı" });            
+        }
+        #endregion
+
+        #region ChangePassword Action
         [HttpPut("change-password")]
         public async Task<IActionResult> ChangePassword(ChangePasswordDto changePasswordDto)
         {
@@ -79,28 +91,27 @@ namespace KonfidesCase.API.Controllers
             var response = await _authService.ChangePassword(currentUserName, changePasswordDto);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
+        #endregion
 
-        [HttpGet("logout")]
-        public async Task<IActionResult> Logout()
-        {
-            await _signInManager.SignOutAsync();
-            return Ok(new AuthDataResult<string>() { IsSuccess = true, Message = "Çıkış işlemi başarılı" });            
-        }
-
+        #region Category Action
         [HttpGet("get-categories")]
         public async Task<IActionResult> GetCategories()
         {
             var response = await _homeService.GetCategories();
             return response.IsSuccess ? Ok(response) : NotFound(response);
-        }
+        }        
+        #endregion
 
+        #region City Action
         [HttpGet("get-cities")]
         public async Task<IActionResult> GetCities()
         {
             var response = await _homeService.GetCities();
             return response.IsSuccess ? Ok(response) : NotFound(response);
         }
+        #endregion
 
+        #region Activity Actions
         [HttpPost("create-activity")]
         public async Task<IActionResult> CreateActivity(CreateActivityDto createActivityDto)
         {
@@ -149,7 +160,9 @@ namespace KonfidesCase.API.Controllers
             var response = await _homeService.GetAttendedActivities();
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
+        #endregion
 
+        #region Ticket Action
         [HttpPost("buy-ticket")]
         public async Task<IActionResult> BuyTicket(Guid activityId)
         {
@@ -160,7 +173,6 @@ namespace KonfidesCase.API.Controllers
             var response = await _homeService.BuyTicket(activityId);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
-
         #endregion
     }
 }

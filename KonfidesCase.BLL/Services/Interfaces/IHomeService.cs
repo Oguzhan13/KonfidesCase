@@ -12,10 +12,10 @@ namespace KonfidesCase.BLL.Services.Interfaces
         Task<DataResult<ICollection<City>>> GetCities();
         Task<DataResult<Activity>> CreateActivity(CreateActivityDto createActivityDto);
         Task<DataResult<ICollection<Activity>>> GetActivities();
-        Task<DataResult<Activity>> UpdateActivity(UpdateActivityDto updateActivityDto);
-        Task<DataResult<Activity>> CancelActivity(Guid activityId);
         Task<DataResult<ICollection<Activity>>> GetMyCreatedActivities();
         Task<DataResult<ICollection<Activity>>> GetAttendedActivities();
+        Task<DataResult<Activity>> UpdateActivity(UpdateActivityDto updateActivityDto);
+        Task<DataResult<Activity>> CancelActivity(Guid activityId);
         Task<DataResult<Ticket>> BuyTicket(Guid activityId);
     }
 }

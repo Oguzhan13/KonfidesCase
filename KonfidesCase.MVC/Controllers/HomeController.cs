@@ -4,7 +4,6 @@ using KonfidesCase.MVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
-using System.Text;
 
 namespace KonfidesCase.MVC.Controllers
 {

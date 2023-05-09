@@ -1,9 +1,8 @@
-﻿using KonfidesCase.MVC.BusinessLogic.Services;
+﻿using KonfidesCase.MVC.Areas.User.Models;
+using KonfidesCase.MVC.BusinessLogic.Services;
 using KonfidesCase.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Diagnostics;
-using System.Text;
 
 namespace KonfidesCase.MVC.Areas.Admin.Controllers
 {
@@ -23,8 +22,8 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
         }
         #endregion
 
-        #region Actions
-        [HttpGet("index")]
+        #region Index Action
+        [HttpGet("Index")]
         public IActionResult Index(DataResult<UserInfo> userInfo)
         {
             if (userInfo.Data is null)
@@ -38,8 +37,10 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
             }
             return View(userInfo);
         }
+        #endregion
 
-        [HttpGet("logout")]
+        #region Logout Action
+        [HttpGet("Logout")]
         public async Task<IActionResult> Logout()
         {
             var resultApi = await _apiService.ApiGetResponse("url", "Home", "logout");
@@ -47,7 +48,62 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
             TempData["LogoutData"] = JsonConvert.SerializeObject(responseData);
             return RedirectToAction("Login", "Home");
         }
+        #endregion
 
+        #region Category Actions
+        [HttpGet("CreateCategory")]
+        public IActionResult CreateCategory()
+        {
+            return View();
+        }
+        [HttpPost("CreateCategory")]
+        public async Task<IActionResult> CreateCategory(string categoryName)
+        {
+            ViewData["CreateCategoryMessage"] = null;
+            var resultApi = await _apiService.ApiPostResponse(categoryName, "admin-url", "Home", "create-category");
+            DataResult<Category> responseData = JsonConvert.DeserializeObject<DataResult<Category>>(resultApi)!;
+            if (!responseData.IsSuccess)
+            {
+                ViewData["CreateCategoryMessage"] = responseData.Message;
+                return View();
+            }
+            return RedirectToAction("Index", "Home", new { area = "admin" });
+        }
+
+        //[HttpGet("UpdateCategory")]
+        //public async Task<IActionResult> UpdateCategory()
+        //{
+        //    return View();
+        //}
+        //[HttpPut("UpdateCategory")]
+        //public async Task<IActionResult> UpdateCategory()
+        //{
+
+        //    return RedirectToAction("Index", "Home", new { area = "admin" });
+        //}
+        #endregion
+
+        #region City Actions
+        [HttpGet("CreateCity")]
+        public IActionResult CreateCity()
+        {
+            return View();
+        }
+        [HttpPost("CreateCity")]
+        public async Task<IActionResult> CreateCity(string categoryName)
+        {
+            ViewData["CreateCityMessage"] = null;
+            var resultApi = await _apiService.ApiPostResponse(categoryName, "admin-url", "Home", "create-city");
+            DataResult<Category> responseData = JsonConvert.DeserializeObject<DataResult<Category>>(resultApi)!;
+            if (!responseData.IsSuccess)
+            {
+                ViewData["CreateCityMessage"] = responseData.Message;
+                return View();
+            }
+            return RedirectToAction("Index", "Home", new { area = "admin" });
+        }
+
+        #endregion
         //[HttpGet("change-password")]
         //public IActionResult ChangePassword()
         //{
@@ -91,12 +147,11 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
         //    DataResult<IList<CategoriesVM>> responseGetCategories = JsonConvert.DeserializeObject<DataResult<IList<CategoriesVM>>>(result)!;            
         //    return View(responseGetCategories.Data);
         //}
-        #endregion
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(new ErrorViewModel { RequestId = System.Diagnostics.Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

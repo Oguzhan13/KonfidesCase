@@ -24,8 +24,7 @@ namespace KonfidesCase.BLL.Services.Concretes
             _mapper = mapper;
         }
         #endregion
-
-        #region Methods
+                
         public async Task<bool> IsAdmin()
         {
             var currentUserName = _contextAccessor.HttpContext!.User.Identity!.Name!;
@@ -40,9 +39,8 @@ namespace KonfidesCase.BLL.Services.Concretes
             }
             return currentUser.RoleName.Equals("admin") ? true : false;
         }
-        #endregion
 
-        #region Methods for Actions
+        #region Category Methods
         public async Task<DataResult<Category>> CreateCategory(CreateCategoryDto createCategoryDto)
         {
             bool isCategoryExists = await _context.Categories.AnyAsync(c => c.Name == createCategoryDto.Name);
@@ -59,7 +57,21 @@ namespace KonfidesCase.BLL.Services.Concretes
             await _context.Categories.AddAsync(newCategory);            
             await _context.SaveChangesAsync();
             return new DataResult<Category>() { IsSuccess = true, Message = "Kategori ekleme işlemi başarılı", Data = newCategory };
-        }        
+        }
+        public async Task<DataResult<Category>> GetCategory(int categoryId)
+        {
+            bool isAuthorize = await IsAdmin();
+            if (!isAuthorize)
+            {
+                return new DataResult<Category>() { IsSuccess = false, Message = "Yetkili değilsiniz" };
+            }
+            Category category = await _context.Categories.FirstAsync(c => c.Id == categoryId);
+            if (category is null)
+            {
+                return new DataResult<Category>() { IsSuccess = true, Message = "Kategori bilgileri bulunamadı!" };
+            }
+            return new DataResult<Category>() { IsSuccess = true, Message = "Kategori bilgileri getirildi", Data = category };
+        }
         public async Task<DataResult<Category>> UpdateCategory(UpdateCategoryDto updateCategoryDto)
         {
             bool isCategoryExists = await _context.Categories.AnyAsync(c => c.Name == updateCategoryDto.Name);
@@ -78,7 +90,9 @@ namespace KonfidesCase.BLL.Services.Concretes
             await _context.SaveChangesAsync();
             return new DataResult<Category>() { IsSuccess = true, Message = "Kategori güncellendi", Data = updateCategory };
         }
+        #endregion
 
+        #region City Methods
         public async Task<DataResult<City>> CreateCity(CreateCityDto createCityDto)
         {
             bool isCityExists = await _context.Cities.AnyAsync(c => c.Name == createCityDto.Name);
@@ -95,6 +109,20 @@ namespace KonfidesCase.BLL.Services.Concretes
             await _context.Cities.AddAsync(newCity);
             await _context.SaveChangesAsync();
             return new DataResult<City>() { IsSuccess = true, Message = "Şehir ekleme işlemi başarılı", Data = newCity };
+        }
+        public async Task<DataResult<City>> GetCity(int cityId)
+        {
+            bool isAuthorize = await IsAdmin();
+            if (!isAuthorize)
+            {
+                return new DataResult<City>() { IsSuccess = false, Message = "Yetkili değilsiniz" };
+            }
+            City city = await _context.Cities.FirstAsync(c => c.Id == cityId);
+            if (city is null)
+            {
+                return new DataResult<City>() { IsSuccess = true, Message = "Şehir bilgileri bulunamadı!" };
+            }
+            return new DataResult<City>() { IsSuccess = true, Message = "Şehir bilgileri getirildi", Data = city };
         }
         public async Task<DataResult<City>> UpdateCity(UpdateCityDto updateCityDto)
         {
@@ -113,7 +141,10 @@ namespace KonfidesCase.BLL.Services.Concretes
             _context.Cities.Update(updateCity);
             await _context.SaveChangesAsync();
             return new DataResult<City>() { IsSuccess = true, Message = "Şehir güncellendi", Data = updateCity };
-        }        
+        }
+        #endregion
+
+        #region Activity Method
         public async Task<DataResult<Activity>> ConfirmActivity(Guid activityId, bool confirmActivity)
         {
             bool isAuthorize = await IsAdmin();
@@ -131,6 +162,7 @@ namespace KonfidesCase.BLL.Services.Concretes
             await _context.SaveChangesAsync();
             return new DataResult<Activity>() { IsSuccess = true, Message = "Etkinlik onaylama işlemi başarılı", Data = activity };
         }
-        #endregion        
+        #endregion
+
     }
 }

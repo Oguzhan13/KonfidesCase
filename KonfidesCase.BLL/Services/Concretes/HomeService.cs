@@ -23,8 +23,7 @@ namespace KonfidesCase.BLL.Services.Concretes
             _mapper = mapper;
         }
         #endregion
-
-        #region Methods
+                
         public bool IsAuthorize()
         {
             string currentUserName = _contextAccessor.HttpContext!.User.Identity!.Name!;
@@ -35,6 +34,7 @@ namespace KonfidesCase.BLL.Services.Concretes
             return true;
         }
 
+        #region AppUser Methods
         public async Task<DataResult<AppUser>> CreateAppUser(UserInfoDto userInfo)
         {
             bool isUserExists = await _context.Users.AnyAsync(u => u.Email == userInfo.Email);
@@ -47,7 +47,9 @@ namespace KonfidesCase.BLL.Services.Concretes
             await _context.SaveChangesAsync();
             return new DataResult<AppUser>() { IsSuccess = true, Message = "Kullanıcı oluşturuldu", Data = newUser };
         }
+        #endregion
 
+        #region Category Method
         public async Task<DataResult<ICollection<Category>>> GetCategories()
         {
             bool isAuthorize = IsAuthorize();
@@ -58,7 +60,9 @@ namespace KonfidesCase.BLL.Services.Concretes
             ICollection<Category> categories = await _context.Categories.ToListAsync();
             return new DataResult<ICollection<Category>>() { IsSuccess = true, Message = "Kategorileri listeleme işlemi başarılı", Data = categories };
         }
+        #endregion
 
+        #region City Method
         public async Task<DataResult<ICollection<City>>> GetCities()
         {
             bool isAuthorize = IsAuthorize();
@@ -69,7 +73,9 @@ namespace KonfidesCase.BLL.Services.Concretes
             ICollection<City> cities = await _context.Cities.ToListAsync();
             return new DataResult<ICollection<City>>() { IsSuccess = true, Message = "Şeirleri listeleme işlemi başarılı", Data = cities };
         }
+        #endregion
 
+        #region Activity Methods
         public async Task<DataResult<Activity>> CreateActivity(CreateActivityDto createActivityDto)
         {
             bool isActivityExists = await _context.Activities.AnyAsync(a => a.Name == createActivityDto.Name);
@@ -102,6 +108,35 @@ namespace KonfidesCase.BLL.Services.Concretes
             }
             ICollection<Activity> activities = await _context.Activities.ToListAsync();
             return new DataResult<ICollection<Activity>>() { IsSuccess = true, Message = "Etkinlikleri listeleme işlemi başarılı", Data = activities };
+        }
+        public async Task<DataResult<ICollection<Activity>>> GetMyCreatedActivities()
+        {
+            bool isAuthorize = IsAuthorize();
+            if (!isAuthorize)
+            {
+                return new DataResult<ICollection<Activity>>() { IsSuccess = false, Message = "Yetkili değilsiniz" };
+            }
+            string currentUserName = _contextAccessor.HttpContext!.User.Identity!.Name!;
+            var myCreatedActivities = await _context.Activities.Where(a => a.Organizer == currentUserName).ToListAsync();
+            return new DataResult<ICollection<Activity>>() { IsSuccess = true, Message = "Oluşturduğunuz etkinlikler listelendi", Data = myCreatedActivities };
+        }
+        public async Task<DataResult<ICollection<Activity>>> GetAttendedActivities()
+        {
+            bool isAuthorize = IsAuthorize();
+            if (!isAuthorize)
+            {
+                return new DataResult<ICollection<Activity>>() { IsSuccess = false, Message = "Yetkili değilsiniz" };
+            }
+            string currentUserName = _contextAccessor.HttpContext!.User.Identity!.Name!;
+            var currentUser = await _context.Users.FirstAsync(u => u.Email == currentUserName);
+            var userActivityList = await _context.UserActivity.Where(a => a.UserId == currentUser.Id).ToListAsync();
+            List<Activity> attendedActivities = new();
+            foreach (var item in userActivityList)
+            {
+                var activity = await _context.Activities.FirstAsync(a => a.Id == item.ActivityId);
+                attendedActivities.Add(activity);
+            }
+            return new DataResult<ICollection<Activity>>() { IsSuccess = true, Message = "Katıldığınız etkinlikler listelendi", Data = attendedActivities };
         }
         public async Task<DataResult<Activity>> UpdateActivity(UpdateActivityDto updateActivityDto)
         {            
@@ -136,36 +171,9 @@ namespace KonfidesCase.BLL.Services.Concretes
             await _context.SaveChangesAsync();
             return new DataResult<Activity>() { IsSuccess = true, Message = "Etkinlik iptal edildi", Data = cancelActivity };
         }
-        public async Task<DataResult<ICollection<Activity>>> GetMyCreatedActivities()
-        {
-            bool isAuthorize = IsAuthorize();
-            if (!isAuthorize)
-            {
-                return new DataResult<ICollection<Activity>>() { IsSuccess = false, Message = "Yetkili değilsiniz" };
-            }
-            string currentUserName = _contextAccessor.HttpContext!.User.Identity!.Name!;
-            var myCreatedActivities = await _context.Activities.Where(a => a.Organizer == currentUserName).ToListAsync();
-            return new DataResult<ICollection<Activity>>() { IsSuccess = true, Message = "Oluşturduğunuz etkinlikler listelendi", Data = myCreatedActivities };
-        }
-        public async Task<DataResult<ICollection<Activity>>> GetAttendedActivities()
-        {
-            bool isAuthorize = IsAuthorize();
-            if (!isAuthorize)
-            {
-                return new DataResult<ICollection<Activity>>() { IsSuccess = false, Message = "Yetkili değilsiniz" };
-            }
-            string currentUserName = _contextAccessor.HttpContext!.User.Identity!.Name!;
-            var currentUser = await _context.Users.FirstAsync(u => u.Email == currentUserName);
-            var userActivityList = await _context.UserActivity.Where(a => a.UserId == currentUser.Id).ToListAsync();
-            List<Activity> attendedActivities = new();
-            foreach (var item in userActivityList)
-            {
-                var activity = await _context.Activities.FirstAsync(a => a.Id == item.ActivityId);
-                attendedActivities.Add(activity);
-            }
-            return new DataResult<ICollection<Activity>>() { IsSuccess = true, Message = "Katıldığınız etkinlikler listelendi", Data = attendedActivities };
-        }
+        #endregion
 
+        #region Ticket Method
         public async Task<DataResult<Ticket>> BuyTicket(Guid activityId)
         {
             bool isAuthorize = IsAuthorize();
@@ -197,7 +205,7 @@ namespace KonfidesCase.BLL.Services.Concretes
             await _context.SaveChangesAsync();
             return new DataResult<Ticket>() { IsSuccess = true, Message = "Bilet alma işlemi başarılı", Data = newTicket };
         }
-
         #endregion
+        
     }
 }
