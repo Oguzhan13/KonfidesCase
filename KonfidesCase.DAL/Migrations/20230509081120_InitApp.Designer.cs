@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KonfidesCase.DAL.Migrations
 {
     [DbContext(typeof(KonfidesCaseDbContext))]
-    [Migration("20230508194104_Init-App")]
+    [Migration("20230509081120_InitApp")]
     partial class InitApp
     {
         /// <inheritdoc />
@@ -43,12 +43,12 @@ namespace KonfidesCase.DAL.Migrations
                         .HasColumnName("Adres")
                         .HasColumnOrder(7);
 
-                    b.Property<int?>("CategoryId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int")
                         .HasColumnName("Kategori Id")
                         .HasColumnOrder(9);
 
-                    b.Property<int?>("CityId")
+                    b.Property<int>("CityId")
                         .HasColumnType("int")
                         .HasColumnName("Şehir Id")
                         .HasColumnOrder(10);
@@ -142,12 +142,12 @@ namespace KonfidesCase.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ActivityId")
+                    b.Property<Guid>("ActivityId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("Etkinlik Id")
                         .HasColumnOrder(2);
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("Kullanıcı Id")
                         .HasColumnOrder(1);
@@ -208,8 +208,7 @@ namespace KonfidesCase.DAL.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(1);
 
-                    b.Property<Guid?>("ActivityId")
-                        .IsRequired()
+                    b.Property<Guid>("ActivityId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(4);
 
@@ -219,8 +218,7 @@ namespace KonfidesCase.DAL.Migrations
                         .HasColumnName("Bilet Numarası")
                         .HasColumnOrder(2);
 
-                    b.Property<Guid?>("UserId")
-                        .IsRequired()
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnOrder(3);
 
@@ -238,12 +236,14 @@ namespace KonfidesCase.DAL.Migrations
                     b.HasOne("KonfidesCase.Entity.Entities.Category", "Category")
                         .WithMany("Activities")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("KonfidesCase.Entity.Entities.City", "City")
                         .WithMany("Activities")
                         .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Category");
 
@@ -255,12 +255,14 @@ namespace KonfidesCase.DAL.Migrations
                     b.HasOne("KonfidesCase.Entity.Entities.Activity", "Activity")
                         .WithMany("AttendedUsers")
                         .HasForeignKey("ActivityId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("KonfidesCase.Entity.Entities.AppUser", "User")
                         .WithMany("Activities")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Activity");
 

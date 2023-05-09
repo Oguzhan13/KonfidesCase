@@ -75,7 +75,7 @@ namespace KonfidesCase.MVC.Controllers
             DataResult<string> responseLogin = JsonConvert.DeserializeObject<DataResult<string>>(result)!;
             if (!responseLogin.IsSuccess)
             {
-                return RedirectToAction("Index", "");
+                return RedirectToAction(nameof(Register), "Home", response);
             }
             return RedirectToAction(nameof(Login));
         }

@@ -13,10 +13,10 @@ namespace KonfidesCase.Entity.EntityTypeConfigurations
 
             builder.HasKey(ua => ua.Id);
 
-            builder.Property(ua => ua.UserId).IsRequired(false)
+            builder.Property(ua => ua.UserId).IsRequired()
                 .HasColumnOrder(1)
                 .HasColumnName("Kullanıcı Id");
-            builder.Property(ua => ua.ActivityId).IsRequired(false)
+            builder.Property(ua => ua.ActivityId).IsRequired()
                 .HasColumnOrder(2)
                 .HasColumnName("Etkinlik Id");
 

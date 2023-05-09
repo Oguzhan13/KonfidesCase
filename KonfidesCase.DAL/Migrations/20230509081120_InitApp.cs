@@ -64,8 +64,8 @@ namespace KonfidesCase.DAL.Migrations
                     Kontenjan = table.Column<int>(type: "int", nullable: false),
                     Adres = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Onay = table.Column<bool>(type: "bit", nullable: true),
-                    KategoriId = table.Column<int>(name: "Kategori Id", type: "int", nullable: true),
-                    ŞehirId = table.Column<int>(name: "Şehir Id", type: "int", nullable: true)
+                    KategoriId = table.Column<int>(name: "Kategori Id", type: "int", nullable: false),
+                    ŞehirId = table.Column<int>(name: "Şehir Id", type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -114,8 +114,8 @@ namespace KonfidesCase.DAL.Migrations
                 name: "Kullanıcı-Etkinlik",
                 columns: table => new
                 {
-                    KullanıcıId = table.Column<Guid>(name: "Kullanıcı Id", type: "uniqueidentifier", nullable: true),
-                    EtkinlikId = table.Column<Guid>(name: "Etkinlik Id", type: "uniqueidentifier", nullable: true),
+                    KullanıcıId = table.Column<Guid>(name: "Kullanıcı Id", type: "uniqueidentifier", nullable: false),
+                    EtkinlikId = table.Column<Guid>(name: "Etkinlik Id", type: "uniqueidentifier", nullable: false),
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>

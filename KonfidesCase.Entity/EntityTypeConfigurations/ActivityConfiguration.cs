@@ -36,10 +36,10 @@ namespace KonfidesCase.Entity.EntityTypeConfigurations
             builder.Property(a => a.IsConfirm).IsRequired(false)
                 .HasColumnOrder(8)
                 .HasColumnName("Onay");
-            builder.Property(a => a.CategoryId).IsRequired(false)
+            builder.Property(a => a.CategoryId).IsRequired()
                 .HasColumnOrder(9)
                 .HasColumnName("Kategori Id");
-            builder.Property(a => a.CityId).IsRequired(false)
+            builder.Property(a => a.CityId).IsRequired()
                 .HasColumnOrder(10)
                 .HasColumnName("Şehir Id");
 
