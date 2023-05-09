@@ -1,0 +1,49 @@
+﻿@model KonfidesCase.MVC.Models.DataResult<UserInfo>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Hoşgeldiniz @Model.Data!.FirstName @Model.Data!.LastName</h1>
+    <p> @Model.Message </p>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Data!.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Data!.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Data!.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Data!.Password)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Data.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Data.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Data.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Data.Password)
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div>
+    <a class="link-dark" asp-area="User" asp-controller="Home" asp-action="CreateActivity">Etkinlik Oluştur</a>
+</div>
+

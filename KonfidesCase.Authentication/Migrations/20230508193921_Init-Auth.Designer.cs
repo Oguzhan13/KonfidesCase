@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KonfidesCase.Authentication.Migrations
 {
     [DbContext(typeof(KonfidesCaseAuthDbContext))]
-    [Migration("20230505143338_init-authentication")]
-    partial class initauthentication
+    [Migration("20230508193921_Init-Auth")]
+    partial class InitAuth
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,10 +58,17 @@ namespace KonfidesCase.Authentication.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("8f2d6793-5abb-477f-8476-31a44b6fb37d"),
-                            ConcurrencyStamp = "ff0facc4-164f-421e-a53a-0169260334c5",
+                            Id = new Guid("a6ef0654-a9c5-4085-8581-673e702c0ad4"),
+                            ConcurrencyStamp = "ea3f5eae-2d51-47e6-ae5d-1fd003c4e8a7",
                             Name = "admin",
                             NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = new Guid("ffbaa166-158e-4254-83df-ee7d13db3749"),
+                            ConcurrencyStamp = "fa6b4164-e79e-4868-a2f0-38b9de977787",
+                            Name = "user",
+                            NormalizedName = "USER"
                         });
                 });
 
@@ -73,101 +80,120 @@ namespace KonfidesCase.Authentication.Migrations
                         .HasColumnOrder(1);
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnOrder(17);
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(14);
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)")
                         .HasColumnName("Mail Adresi")
-                        .HasColumnOrder(2);
+                        .HasColumnOrder(4);
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("Onaylanmış Email")
+                        .HasColumnOrder(6);
 
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Ad")
-                        .HasColumnOrder(3);
+                        .HasColumnOrder(7);
 
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("Soyad")
-                        .HasColumnOrder(4);
+                        .HasColumnOrder(8);
 
                     b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnOrder(12);
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
+                        .HasColumnType("datetimeoffset")
+                        .HasColumnOrder(13);
 
                     b.Property<string>("NormalizedEmail")
+                        .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("Standart Mail Adresi")
+                        .HasColumnOrder(5);
 
                     b.Property<string>("NormalizedUserName")
+                        .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("Stadart Kullanıcı Adı")
+                        .HasColumnOrder(3);
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Şifrelenmiş Şifre")
-                        .HasColumnOrder(5);
+                        .HasColumnName("Kriptolanmış Şifre")
+                        .HasColumnOrder(9);
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Telefon Numarası")
+                        .HasColumnOrder(10);
 
                     b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("Onaylanmış Telefon Numarası")
+                        .HasColumnOrder(11);
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnOrder(15);
 
                     b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnOrder(16);
 
                     b.Property<string>("UserName")
+                        .IsRequired()
                         .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(256)")
+                        .HasColumnName("Kullanıcı Adı")
+                        .HasColumnOrder(2);
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
                         .IsUnique()
-                        .HasDatabaseName("EmailIndex")
-                        .HasFilter("[NormalizedEmail] IS NOT NULL");
+                        .HasDatabaseName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+                        .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
 
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a27eefbf-f5ef-4a3a-96cf-f410be702dbf"),
+                            Id = new Guid("6e7fe5c6-1444-474b-9b43-d078cd892237"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "af5b5f48-925f-475a-9981-536ff1d1f9d8",
+                            ConcurrencyStamp = "b5b48425-0f04-421d-ad72-0f4dcd90e359",
                             Email = "admin@example.com",
                             EmailConfirmed = true,
                             FirstName = "Admin",
                             LastName = "Manager",
                             LockoutEnabled = true,
-                            LockoutEnd = new DateTimeOffset(new DateTime(2023, 5, 5, 17, 38, 37, 423, DateTimeKind.Unspecified).AddTicks(7033), new TimeSpan(0, 3, 0, 0, 0)),
+                            LockoutEnd = new DateTimeOffset(new DateTime(2023, 5, 8, 22, 44, 20, 104, DateTimeKind.Unspecified).AddTicks(6801), new TimeSpan(0, 3, 0, 0, 0)),
                             NormalizedEmail = "ADMIN@EXAMPLE.COM",
                             NormalizedUserName = "ADMIN@EXAMPLE.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEBmLgEws4DmF2wjY9hvdKL3kJ/BcuLjxkt9UaA6E+ctW4y9Wp4s1kzIE2+iwn2bgw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELntYjIB1gZxiAWwAnVwaXyjXSWUawFAE1P7psmbi2s62pVrfLWQCNB05xo9Np+GRQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "511a8b16-271a-4508-b464-132695d149ce",
+                            SecurityStamp = "3a15b3ca-18e8-497b-af8e-d10db8a372e1",
                             TwoFactorEnabled = false,
                             UserName = "admin@example.com"
                         });
@@ -245,10 +271,14 @@ namespace KonfidesCase.Authentication.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
                     b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Kullanıcı Id")
+                        .HasColumnOrder(1);
 
                     b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Rol Id")
+                        .HasColumnOrder(2);
 
                     b.HasKey("UserId", "RoleId");
 
@@ -259,8 +289,8 @@ namespace KonfidesCase.Authentication.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = new Guid("a27eefbf-f5ef-4a3a-96cf-f410be702dbf"),
-                            RoleId = new Guid("8f2d6793-5abb-477f-8476-31a44b6fb37d")
+                            UserId = new Guid("6e7fe5c6-1444-474b-9b43-d078cd892237"),
+                            RoleId = new Guid("a6ef0654-a9c5-4085-8581-673e702c0ad4")
                         });
                 });
 

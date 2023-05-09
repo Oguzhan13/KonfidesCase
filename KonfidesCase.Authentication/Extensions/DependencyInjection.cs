@@ -1,7 +1,8 @@
 ﻿using KonfidesCase.Authentication.DataAccess.Contexts;
-using KonfidesCase.Authentication.Entities;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace KonfidesCase.Authentication.Extensions
 {
@@ -10,11 +11,12 @@ namespace KonfidesCase.Authentication.Extensions
         public static IServiceCollection AddKonfidesAuthServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<KonfidesCaseAuthDbContext>(options => options.UseSqlServer(configuration.GetConnectionString(KonfidesCaseAuthDbContext.ConnectionName)));
-            services.AddHttpContextAccessor();
-            services.AddAuthentication();
 
+            services.AddAuthentication();                       
+            
             services.AddIdentity<AuthUser, AuthRole>(options =>
             {
+                options.SignIn.RequireConfirmedAccount = true;
                 options.User.RequireUniqueEmail = true;                
                 options.Password.RequireDigit = true;
                 options.Password.RequireLowercase = true;
@@ -25,7 +27,20 @@ namespace KonfidesCase.Authentication.Extensions
             })
                 .AddEntityFrameworkStores<KonfidesCaseAuthDbContext>()
                 .AddDefaultTokenProviders();
-            services.AddCors(options => options.AddPolicy("myCors", options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+
+                options.LoginPath = "/Identity/Account/Login";
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                options.SlidingExpiration = true;
+            });
+
+            services.AddScoped<IAuthService, AuthService>();
+
+            services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             return services;
         }

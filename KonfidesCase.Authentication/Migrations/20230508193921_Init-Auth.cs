@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace KonfidesCase.Authentication.Migrations
 {
     /// <inheritdoc />
-    public partial class initauthentication : Migration
+    public partial class InitAuth : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,21 +32,21 @@ namespace KonfidesCase.Authentication.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    KullanıcıAdı = table.Column<string>(name: "Kullanıcı Adı", type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    StadartKullanıcıAdı = table.Column<string>(name: "Stadart Kullanıcı Adı", type: "nvarchar(256)", maxLength: 256, nullable: false),
                     MailAdresi = table.Column<string>(name: "Mail Adresi", type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    StandartMailAdresi = table.Column<string>(name: "Standart Mail Adresi", type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    OnaylanmışEmail = table.Column<bool>(name: "Onaylanmış Email", type: "bit", nullable: false),
                     Ad = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Soyad = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ŞifrelenmişŞifre = table.Column<string>(name: "Şifrelenmiş Şifre", type: "nvarchar(max)", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    KriptolanmışŞifre = table.Column<string>(name: "Kriptolanmış Şifre", type: "nvarchar(max)", nullable: false),
+                    TelefonNumarası = table.Column<string>(name: "Telefon Numarası", type: "nvarchar(max)", nullable: true),
+                    OnaylanmışTelefonNumarası = table.Column<bool>(name: "Onaylanmış Telefon Numarası", type: "bit", nullable: false),
                     LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
                     AccessFailedCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -118,21 +120,21 @@ namespace KonfidesCase.Authentication.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    RoleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    KullanıcıId = table.Column<Guid>(name: "Kullanıcı Id", type: "uniqueidentifier", nullable: false),
+                    RolId = table.Column<Guid>(name: "Rol Id", type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.KullanıcıId, x.RolId });
                     table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
-                        column: x => x.RoleId,
+                        name: "FK_AspNetUserRoles_AspNetRoles_Rol Id",
+                        column: x => x.RolId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_AspNetUserRoles_AspNetUsers_Kullanıcı Id",
+                        column: x => x.KullanıcıId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -161,17 +163,21 @@ namespace KonfidesCase.Authentication.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { new Guid("8f2d6793-5abb-477f-8476-31a44b6fb37d"), "ff0facc4-164f-421e-a53a-0169260334c5", "admin", "ADMIN" });
+                values: new object[,]
+                {
+                    { new Guid("a6ef0654-a9c5-4085-8581-673e702c0ad4"), "ea3f5eae-2d51-47e6-ae5d-1fd003c4e8a7", "admin", "ADMIN" },
+                    { new Guid("ffbaa166-158e-4254-83df-ee7d13db3749"), "fa6b4164-e79e-4868-a2f0-38b9de977787", "user", "USER" }
+                });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Mail Adresi", "EmailConfirmed", "Ad", "Soyad", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "Şifrelenmiş Şifre", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { new Guid("a27eefbf-f5ef-4a3a-96cf-f410be702dbf"), 0, "af5b5f48-925f-475a-9981-536ff1d1f9d8", "admin@example.com", true, "Admin", "Manager", true, new DateTimeOffset(new DateTime(2023, 5, 5, 17, 38, 37, 423, DateTimeKind.Unspecified).AddTicks(7033), new TimeSpan(0, 3, 0, 0, 0)), "ADMIN@EXAMPLE.COM", "ADMIN@EXAMPLE.COM", "AQAAAAIAAYagAAAAEEBmLgEws4DmF2wjY9hvdKL3kJ/BcuLjxkt9UaA6E+ctW4y9Wp4s1kzIE2+iwn2bgw==", null, false, "511a8b16-271a-4508-b464-132695d149ce", false, "admin@example.com" });
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Mail Adresi", "Onaylanmış Email", "Ad", "Soyad", "LockoutEnabled", "LockoutEnd", "Standart Mail Adresi", "Stadart Kullanıcı Adı", "Kriptolanmış Şifre", "Telefon Numarası", "Onaylanmış Telefon Numarası", "SecurityStamp", "TwoFactorEnabled", "Kullanıcı Adı" },
+                values: new object[] { new Guid("6e7fe5c6-1444-474b-9b43-d078cd892237"), 0, "b5b48425-0f04-421d-ad72-0f4dcd90e359", "admin@example.com", true, "Admin", "Manager", true, new DateTimeOffset(new DateTime(2023, 5, 8, 22, 44, 20, 104, DateTimeKind.Unspecified).AddTicks(6801), new TimeSpan(0, 3, 0, 0, 0)), "ADMIN@EXAMPLE.COM", "ADMIN@EXAMPLE.COM", "AQAAAAIAAYagAAAAELntYjIB1gZxiAWwAnVwaXyjXSWUawFAE1P7psmbi2s62pVrfLWQCNB05xo9Np+GRQ==", null, false, "3a15b3ca-18e8-497b-af8e-d10db8a372e1", false, "admin@example.com" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
-                columns: new[] { "RoleId", "UserId" },
-                values: new object[] { new Guid("8f2d6793-5abb-477f-8476-31a44b6fb37d"), new Guid("a27eefbf-f5ef-4a3a-96cf-f410be702dbf") });
+                columns: new[] { "Rol Id", "Kullanıcı Id" },
+                values: new object[] { new Guid("a6ef0654-a9c5-4085-8581-673e702c0ad4"), new Guid("6e7fe5c6-1444-474b-9b43-d078cd892237") });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -196,23 +202,21 @@ namespace KonfidesCase.Authentication.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserRoles_RoleId",
+                name: "IX_AspNetUserRoles_Rol Id",
                 table: "AspNetUserRoles",
-                column: "RoleId");
+                column: "Rol Id");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
                 table: "AspNetUsers",
-                column: "NormalizedEmail",
-                unique: true,
-                filter: "[NormalizedEmail] IS NOT NULL");
+                column: "Standart Mail Adresi",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
-                column: "NormalizedUserName",
-                unique: true,
-                filter: "[NormalizedUserName] IS NOT NULL");
+                column: "Stadart Kullanıcı Adı",
+                unique: true);
         }
 
         /// <inheritdoc />
