@@ -4,6 +4,7 @@ using KonfidesCase.Authentication.Entities;
 using KonfidesCase.Authentication.Utilities;
 using KonfidesCase.BLL.Services.Interfaces;
 using KonfidesCase.DTO.Activity;
+using KonfidesCase.DTO.Ticket;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,7 +41,7 @@ namespace KonfidesCase.API.Controllers
             {
                 return BadRequest(result);
             }
-            await _signInManager.SignInAsync(result.Data!, true);                                
+            await _signInManager.SignInAsync(result.Data!, true);            
             var response = await _authService.LoginResponse(result.Data!, loginDto.Password);
             return response.IsSuccess ? Ok(response) : BadRequest(response);            
         }
@@ -75,11 +76,12 @@ namespace KonfidesCase.API.Controllers
         }
         #endregion
 
-        #region Logout Method        
+        #region Logout Method
         [HttpGet("logout")]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
+            string currentUserName = _httpContextAccessor.HttpContext!.User.Identity!.Name!;            
             return Ok(new AuthDataResult<string>() { IsSuccess = true, Message = "Çıkış işlemi başarılı" });            
         }
         #endregion
@@ -149,13 +151,13 @@ namespace KonfidesCase.API.Controllers
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
         [HttpPost("cancel-activity")]
-        public async Task<IActionResult> CancelActivity(Guid activityId)
+        public async Task<IActionResult> CancelActivity(CancelActivityDto cancelActivityDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var response = await _homeService.CancelActivity(activityId);
+            var response = await _homeService.CancelActivity(cancelActivityDto);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
         [HttpGet("created-activities")]
@@ -174,13 +176,13 @@ namespace KonfidesCase.API.Controllers
 
         #region Ticket Action
         [HttpPost("buy-ticket")]
-        public async Task<IActionResult> BuyTicket(Guid activityId)
+        public async Task<IActionResult> BuyTicket(CreateTicketDto createTicketDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var response = await _homeService.BuyTicket(activityId);
+            var response = await _homeService.BuyTicket(createTicketDto);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
         #endregion

@@ -4,6 +4,7 @@ using KonfidesCase.BLL.Services.Interfaces;
 using KonfidesCase.BLL.Utilities;
 using KonfidesCase.DAL.Contexts;
 using KonfidesCase.DTO.Activity;
+using KonfidesCase.DTO.Ticket;
 using KonfidesCase.Entity.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -26,12 +27,16 @@ namespace KonfidesCase.BLL.Services.Concretes
                 
         public bool IsAuthorize()
         {
-            string currentUserName = _contextAccessor.HttpContext!.User.Identity!.Name!;
-            if (string.IsNullOrEmpty(currentUserName))
-            {
-                return false;
-            }           
+            //string currentUserName = _contextAccessor.HttpContext!.User.Identity!.Name!;
+            //if (string.IsNullOrEmpty(currentUserName))
+            //{
+            //    return false;
+            //}           
             return true;
+        }
+        public AppUser FindAppUser()
+        {
+            return new AppUser(); 
         }
 
         #region AppUser Methods
@@ -155,14 +160,14 @@ namespace KonfidesCase.BLL.Services.Concretes
             await _context.SaveChangesAsync();
             return new DataResult<Activity>() { IsSuccess = true, Message = "Etkinlik güncellendi", Data = updateActivity };
         }
-        public async Task<DataResult<Activity>> CancelActivity(Guid activityId)
+        public async Task<DataResult<Activity>> CancelActivity(CancelActivityDto cancelActivityDto)
         {
             bool isAuthorize = IsAuthorize();
             if (!isAuthorize)
             {
                 return new DataResult<Activity>() { IsSuccess = false, Message = "Yetkili değilsiniz" };
             }
-            Activity cancelActivity = await _context.Activities.FirstAsync(a => a.Id == activityId);
+            Activity cancelActivity = await _context.Activities.FirstAsync(a => a.Id == cancelActivityDto.Id);
             if (cancelActivity.ActivityDate <= DateTime.Now.AddDays(5))
             {                
                 return new DataResult<Activity>() { IsSuccess = false, Message = "Etkinliğe 5 gün kala iptal edemezsiniz!" };
@@ -174,20 +179,20 @@ namespace KonfidesCase.BLL.Services.Concretes
         #endregion
 
         #region Ticket Method
-        public async Task<DataResult<Ticket>> BuyTicket(Guid activityId)
+        public async Task<DataResult<Ticket>> BuyTicket(CreateTicketDto createTicketDto)
         {
             bool isAuthorize = IsAuthorize();
             if (!isAuthorize)
             {
                 return new DataResult<Ticket>() { IsSuccess = false, Message = "Yetkili değilsiniz" };
-            }
+            }            
             string currentUserName = _contextAccessor.HttpContext!.User.Identity!.Name!;
             var currentUser = await _context.Users.FirstAsync(u => u.Email == currentUserName);            
             Ticket newTicket = new()
             {
-                ActivityId = activityId,
+                ActivityId = createTicketDto.ActivityId,
                 UserId = currentUser.Id,
-                TicketNo = $"{currentUser.Id}-{activityId}",                
+                TicketNo = $"{currentUser.Id}-{createTicketDto.ActivityId}",                
             };
             var isTicketExists = await _context.Tickets.AnyAsync(t => t.TicketNo == newTicket.TicketNo);
             if (isTicketExists)
@@ -196,7 +201,7 @@ namespace KonfidesCase.BLL.Services.Concretes
             }
             AppUserActivity userActivity = new()
             {
-                ActivityId = activityId,
+                ActivityId = createTicketDto.ActivityId,
                 UserId = currentUser.Id,
             };
             await _context.Tickets.AddAsync(newTicket);

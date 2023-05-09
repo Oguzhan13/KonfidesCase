@@ -4,8 +4,8 @@
     {
         #region Properties
         public string TicketNo => $"{UserId}-{ActivityId}";
-        public Guid? UserId { get; set; }
-        public Guid? ActivityId { get; set; }
+        public Guid UserId { get; set; }
+        public Guid ActivityId { get; set; }
         #endregion
     }
 }

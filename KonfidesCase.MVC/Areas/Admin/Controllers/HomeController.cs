@@ -6,6 +6,8 @@ using KonfidesCase.MVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net;
+using System.Text;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace KonfidesCase.MVC.Areas.Admin.Controllers
 {
@@ -68,10 +70,10 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
             return View();
         }
         [HttpPost("CreateCategory")]
-        public async Task<IActionResult> CreateCategory(string categoryName)
+        public async Task<IActionResult> CreateCategory(CreateCategoryVM createCategoryVM)
         {
             ViewData["CreateCategoryMessage"] = null;
-            var resultApi = await _apiService.ApiPostResponse(categoryName, "admin-url", "Admin", "create-category");
+            var resultApi = await _apiService.ApiPostResponse(createCategoryVM, "admin-url", "Admin", "create-category");
             DataResult<CategoryVM> responseData = JsonConvert.DeserializeObject<DataResult<CategoryVM>>(resultApi)!;
             if (!responseData.IsSuccess)
             {
@@ -95,17 +97,9 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
         }
 
         [HttpGet("UpdateCategory")]
-        public async Task<IActionResult> UpdateCategory(int categoryId)
+        public IActionResult UpdateCategory([FromQuery] int categoryId)
         {
-            var resultApi = await _apiService.ApiPostResponse(categoryId, "admin-url", "Home", "update-category");
-            DataResult<UpdateCategoryVM> responseData = JsonConvert.DeserializeObject<DataResult<UpdateCategoryVM>>(resultApi)!;
-            if (!responseData.IsSuccess)
-            {
-                ViewData["UpdateCategoryMessage"] = responseData.Message;
-                return View();
-            }
-            return View(responseData.Data);
-            //return View();
+            return View(new CategoryVM() { Id = categoryId });
         }
         [HttpPost("UpdateCategory")]
         public async Task<IActionResult> UpdateCategory(UpdateCategoryVM updateCategoryVM)
@@ -154,20 +148,13 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
             }
             return View(responseData.Data);
         }
-        [HttpGet("UpdateCity")]
-        public async Task<IActionResult> UpdateCity([FromQuery(Name ="id")]int categoryId)
-        {
-            var resultApi = await _apiService.ApiPostResponse(categoryId, "admin-url", "Home", "update-city");
-            DataResult<CityVM> responseData = JsonConvert.DeserializeObject<DataResult<CityVM>>(resultApi)!;
-            if (!responseData.IsSuccess)
-            {
-                ViewData["UpdateCityMessage"] = responseData.Message;
-                return View();
-            }
-            return View(responseData.Data);            
+        [HttpGet("UpdateCity")]        
+        public IActionResult UpdateCity([FromQuery(Name ="id")]int cityId)
+        {                   
+            return View(new CityVM() { Id = cityId });
         }
         [HttpPost("UpdateCity")]
-        public async Task<IActionResult> UpdateCategory(CityVM updateCityVM)
+        public async Task<IActionResult> UpdateCity(CityVM updateCityVM)
         {
             ViewData["UpdateCityMessage"] = null;
             var resultApi = await _apiService.ApiPutResponse(updateCityVM, "admin-url", "Admin", "update-city");

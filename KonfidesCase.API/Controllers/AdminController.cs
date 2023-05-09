@@ -1,4 +1,5 @@
 ﻿using KonfidesCase.BLL.Services.Interfaces;
+using KonfidesCase.DTO.Activity;
 using KonfidesCase.DTO.Category;
 using KonfidesCase.DTO.City;
 using Microsoft.AspNetCore.Mvc;
@@ -27,13 +28,7 @@ namespace KonfidesCase.API.Controllers
             }
             var response = await _adminService.CreateCategory(createCategoryDto);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
-        }
-        [HttpPost("get-category")]
-        public async Task<IActionResult> GetCategory(int categoryId)
-        {
-            var response = await _adminService.GetCategory(categoryId);
-            return response.IsSuccess ? Ok(response) : BadRequest(response);
-        }
+        }        
         [HttpPut("update-category")]
         public async Task<IActionResult> UpdateCategory(UpdateCategoryDto updateCategoryDto)
         {
@@ -57,16 +52,7 @@ namespace KonfidesCase.API.Controllers
             var response = await _adminService.CreateCity(createCityDto);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
-        [HttpPost("get-city")]
-        public async Task<IActionResult> GetCity(int cityId)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var response = await _adminService.GetCity(cityId);
-            return response.IsSuccess ? Ok(response) : BadRequest(response);
-        }
+        
         [HttpPut("update-city")]
         public async Task<IActionResult> UpdateCity(UpdateCityDto updateCityDto)
         {
@@ -81,13 +67,13 @@ namespace KonfidesCase.API.Controllers
 
         #region Activity Action
         [HttpPut("confirm-activity")]
-        public async Task<IActionResult> ConfirmActivity(Guid activityId, bool confirmActivity)
+        public async Task<IActionResult> ConfirmActivity(ConfirmActivityDto confirmActivityDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var response = await _adminService.ConfirmActivity(activityId, confirmActivity);
+            var response = await _adminService.ConfirmActivity(confirmActivityDto);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
         #endregion
