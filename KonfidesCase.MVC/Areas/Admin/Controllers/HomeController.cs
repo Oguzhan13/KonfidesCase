@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using KonfidesCase.MVC.Areas.Admin.Models;
 using KonfidesCase.MVC.Areas.Admin.ViewModels;
 using KonfidesCase.MVC.BusinessLogic.Services;
 using KonfidesCase.MVC.Models;
+using KonfidesCase.MVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Net;
@@ -32,8 +32,7 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
         #region Index Action       
         [HttpGet("Index")]
         public async Task<IActionResult> Index()
-        {
-            //indexData = TempData["IndexData"] != null ? TempData["IndexData"]! : indexData!;
+        {            
             var tempData = TempData["IndexData"];
             if (tempData is null)
             {
@@ -41,13 +40,12 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
                 if (string.IsNullOrEmpty(resultApi))
                 {
                     return RedirectToAction("Login", "Home", new { area = "" });
-                }
-                //string responseData = JsonConvert.DeserializeObject<string>(resultApi)!;
+                }                
                 var sessionData = _contextAccessor.HttpContext!.Session.GetString(resultApi);
-                DataResult<UserInfo> userInfoSession = JsonConvert.DeserializeObject<DataResult<UserInfo>>(sessionData!)!;
+                DataResult<UserInfoVM> userInfoSession = JsonConvert.DeserializeObject<DataResult<UserInfoVM>>(sessionData!)!;
                 return View(userInfoSession);
             }
-            DataResult<UserInfo> userInfo = JsonConvert.DeserializeObject<DataResult<UserInfo>>((string)tempData!)!;
+            DataResult<UserInfoVM> userInfo = JsonConvert.DeserializeObject<DataResult<UserInfoVM>>((string)tempData!)!;
             return View(userInfo);
         }
         #endregion
@@ -57,7 +55,7 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
         public async Task<IActionResult> Logout()
         {
             var resultApi = await _apiService.ApiGetResponse("url", "Home", "logout");
-            _apiService.ApiDeserializeResult(resultApi, out DataResult<string> responseData);
+            DataResult<string> responseData = JsonConvert.DeserializeObject<DataResult<string>>(resultApi)!;            
             TempData["LogoutData"] = JsonConvert.SerializeObject(responseData);
             return RedirectToAction("Login", "Home");
         }
@@ -74,13 +72,25 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
         {
             ViewData["CreateCategoryMessage"] = null;
             var resultApi = await _apiService.ApiPostResponse(categoryName, "admin-url", "Home", "create-category");
-            DataResult<Category> responseData = JsonConvert.DeserializeObject<DataResult<Category>>(resultApi)!;
+            DataResult<CategoryVM> responseData = JsonConvert.DeserializeObject<DataResult<CategoryVM>>(resultApi)!;
             if (!responseData.IsSuccess)
             {
                 ViewData["CreateCategoryMessage"] = responseData.Message;
                 return View();
             }
             return RedirectToAction("Index", "Home", new { area = "admin" });
+        }
+        [HttpGet("GetCategories")]
+        public async Task<IActionResult> GetCategories()
+        {
+            var resultApi = await _apiService.ApiGetResponse("url", "Home", "get-categories");
+            DataResult<ICollection<CategoryVM>> responseData = JsonConvert.DeserializeObject<DataResult<ICollection<CategoryVM>>>(resultApi)!;
+            if (!responseData.IsSuccess)
+            {
+                ViewData["CreateCategoryMessage"] = responseData.Message;
+                return View();
+            }
+            return View(responseData.Data);
         }
 
         //[HttpGet("UpdateCategory")]
@@ -107,7 +117,7 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
         {
             ViewData["CreateCityMessage"] = null;
             var resultApi = await _apiService.ApiPostResponse(categoryName, "admin-url", "Home", "create-city");
-            DataResult<Category> responseData = JsonConvert.DeserializeObject<DataResult<Category>>(resultApi)!;
+            DataResult<CategoryVM> responseData = JsonConvert.DeserializeObject<DataResult<CategoryVM>>(resultApi)!;
             if (!responseData.IsSuccess)
             {
                 ViewData["CreateCityMessage"] = responseData.Message;
@@ -123,15 +133,15 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
         public async Task<IActionResult> GetActivities()
         {
             var resultCategories = await _apiService.ApiGetResponse("url", "Home", "get-categories");
-            DataResult<ICollection<Category>> responseCategories = JsonConvert.DeserializeObject<DataResult<ICollection<Category>>>(resultCategories)!;
+            DataResult<ICollection<CategoryVM>> responseCategories = JsonConvert.DeserializeObject<DataResult<ICollection<CategoryVM>>>(resultCategories)!;
             var resultCities = await _apiService.ApiGetResponse("url", "Home", "get-cities");
-            DataResult<ICollection<City>> responseCities = JsonConvert.DeserializeObject<DataResult<ICollection<City>>>(resultCities)!;
+            DataResult<ICollection<CityVM>> responseCities = JsonConvert.DeserializeObject<DataResult<ICollection<CityVM>>>(resultCities)!;
 
             var resultApi = await _apiService.ApiGetResponse("url", "Home", "get-activities");
-            DataResult<ICollection<Activity>> activities = JsonConvert.DeserializeObject<DataResult<ICollection<Activity>>>(resultApi)!;
+            DataResult<ICollection<ActivityVM>> activities = JsonConvert.DeserializeObject<DataResult<ICollection<ActivityVM>>>(resultApi)!;
 
             List<ConfirmActivityVM> activityList = new();
-            foreach (Activity activity in activities.Data!)
+            foreach (ActivityVM activity in activities.Data!)
             {
                 ConfirmActivityVM activityDetailVM = new();
                 _mapper.Map(activity, activityDetailVM);

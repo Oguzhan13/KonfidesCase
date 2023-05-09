@@ -36,10 +36,5 @@ namespace KonfidesCase.MVC.BusinessLogic.Services
             var responseApi = await client.PutAsync($"{controllerName}/{actionName}", data);
             return await responseApi.Content.ReadAsStringAsync();
         }
-
-        public void ApiDeserializeResult<TEntity>( string result, out TEntity deserializeModel)
-        {
-            deserializeModel = JsonConvert.DeserializeObject<TEntity>(result)!;
-        }
     }
 }

@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace KonfidesCase.MVC.Models
+namespace KonfidesCase.MVC.ViewModels
 {
-    public class UserInfo
+    public class UserInfoVM
     {
         #region Properties
-        public Guid Id { get; set; }        
+        public Guid Id { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         [EmailAddress]

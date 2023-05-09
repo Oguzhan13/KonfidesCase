@@ -75,7 +75,7 @@ namespace KonfidesCase.BLL.Services.Concretes
         }
         #endregion
 
-        #region Activity Methods
+        #region Activity Methods 
         public async Task<DataResult<Activity>> CreateActivity(CreateActivityDto createActivityDto)
         {
             bool isActivityExists = await _context.Activities.AnyAsync(a => a.Name == createActivityDto.Name);

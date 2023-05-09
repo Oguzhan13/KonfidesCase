@@ -3,6 +3,7 @@ using KonfidesCase.MVC.Areas.User.Models;
 using KonfidesCase.MVC.Areas.User.ViewModels;
 using KonfidesCase.MVC.BusinessLogic.Services;
 using KonfidesCase.MVC.Models;
+using KonfidesCase.MVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -36,7 +37,7 @@ namespace KonfidesCase.MVC.Areas.User.Controllers
             {
                 return RedirectToAction("Login", "Home", new { area = "" });
             }            
-            DataResult<UserInfo>userInfo = JsonConvert.DeserializeObject<DataResult<UserInfo>>((string)indexData)!;
+            DataResult<UserInfoVM>userInfo = JsonConvert.DeserializeObject<DataResult<UserInfoVM>>((string)indexData)!;
             return View(userInfo);
         }
         #endregion
@@ -51,7 +52,7 @@ namespace KonfidesCase.MVC.Areas.User.Controllers
         public async Task<IActionResult> ChangePassword(ChangePasswordVM changePasswordVM)
         {
             var resultApi = await _apiService.ApiPutResponse(changePasswordVM, "url", "Home", "change-password");
-            DataResult<UserInfo> responseData = JsonConvert.DeserializeObject<DataResult<UserInfo>>(resultApi)!;
+            DataResult<UserInfoVM> responseData = JsonConvert.DeserializeObject<DataResult<UserInfoVM>>(resultApi)!;
             return RedirectToAction("Index", "Home", new { area = "user" });
         }
         #endregion
@@ -60,8 +61,8 @@ namespace KonfidesCase.MVC.Areas.User.Controllers
         [HttpGet("Logout")]
         public async Task<IActionResult> Logout()
         {
-            var resultApi = await _apiService.ApiGetResponse("url", "Home", "logout");
-            _apiService.ApiDeserializeResult(resultApi, out DataResult<string> responseData);
+            var resultApi = await _apiService.ApiGetResponse("url", "Home", "logout");            
+            DataResult<string> responseData = JsonConvert.DeserializeObject<DataResult<string>>(resultApi)!;
             TempData["LogoutData"] = JsonConvert.SerializeObject(responseData);
             indexData = null!;
             return RedirectToAction("Login", "Home");

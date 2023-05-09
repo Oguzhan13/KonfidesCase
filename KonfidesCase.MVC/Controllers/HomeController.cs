@@ -23,7 +23,7 @@ namespace KonfidesCase.MVC.Controllers
         }
         #endregion
 
-        #region Actions
+        #region Login Action
         [HttpGet]
         public IActionResult Login()
         {
@@ -40,7 +40,7 @@ namespace KonfidesCase.MVC.Controllers
         {
             ViewData["LogoutMessage"] = null;
             var resultApi = await _apiService.ApiPostResponse(loginVM, "url", "Home", "login");            
-            DataResult<UserInfo> responseData =  JsonConvert.DeserializeObject<DataResult<UserInfo>>(resultApi)!;            
+            DataResult<UserInfoVM> responseData =  JsonConvert.DeserializeObject<DataResult<UserInfoVM>>(resultApi)!;            
             if (!responseData.IsSuccess)
             {
                 ViewData["LoginMessage"] = responseData.Message;
@@ -52,7 +52,9 @@ namespace KonfidesCase.MVC.Controllers
             _contextAccessor.HttpContext!.Session.SetString(currentUserEmail, userInfo);
             return RedirectToAction("Index", "Home", new { area = responseData.Data!.RoleName });
         }
+        #endregion
 
+        #region Register Action
         [HttpGet]
         public IActionResult Register()
         {
@@ -63,15 +65,14 @@ namespace KonfidesCase.MVC.Controllers
         {
             ViewData["RegisterMessage"] = null;
             var resultApi = await _apiService.ApiPostResponse(registerVM, "url", "Home", "register");            
-            DataResult<UserInfo> responseData = JsonConvert.DeserializeObject<DataResult<UserInfo>>(resultApi)!;
+            DataResult<UserInfoVM> responseData = JsonConvert.DeserializeObject<DataResult<UserInfoVM>>(resultApi)!;
             if (!responseData.IsSuccess)
             {
                 ViewData["RegisterMessage"] = responseData.Message;
                 return View();
             }
             return RedirectToAction(nameof(Login), responseData.Data);            
-        }
-                
+        }                
         #endregion
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
