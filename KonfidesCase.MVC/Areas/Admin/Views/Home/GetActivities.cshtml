@@ -62,10 +62,9 @@
             <td>
                 @Html.DisplayFor(modelItem => item.City)
             </td>
-            <td>
+            <td class="editor-field">
                 @Html.DisplayFor(modelItem => item.IsConfirm)
             </td>
-
             <td class="link-dark">
                 @Html.ActionLink("İncele", "ConfirmActivity", new { id=item.Id })                
             </td>

@@ -71,39 +71,55 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
         public async Task<IActionResult> CreateCategory(string categoryName)
         {
             ViewData["CreateCategoryMessage"] = null;
-            var resultApi = await _apiService.ApiPostResponse(categoryName, "admin-url", "Home", "create-category");
+            var resultApi = await _apiService.ApiPostResponse(categoryName, "admin-url", "Admin", "create-category");
             DataResult<CategoryVM> responseData = JsonConvert.DeserializeObject<DataResult<CategoryVM>>(resultApi)!;
             if (!responseData.IsSuccess)
             {
                 ViewData["CreateCategoryMessage"] = responseData.Message;
                 return View();
             }
-            return RedirectToAction("Index", "Home", new { area = "admin" });
+            return RedirectToAction("GetCategories", "Home", new { area = "admin" });
         }
         [HttpGet("GetCategories")]
         public async Task<IActionResult> GetCategories()
         {
+            ViewData["GetCategoryMessage"] = null;
             var resultApi = await _apiService.ApiGetResponse("url", "Home", "get-categories");
             DataResult<ICollection<CategoryVM>> responseData = JsonConvert.DeserializeObject<DataResult<ICollection<CategoryVM>>>(resultApi)!;
             if (!responseData.IsSuccess)
             {
-                ViewData["CreateCategoryMessage"] = responseData.Message;
+                ViewData["GetCategoryMessage"] = responseData.Message;
                 return View();
             }
             return View(responseData.Data);
         }
 
-        //[HttpGet("UpdateCategory")]
-        //public async Task<IActionResult> UpdateCategory()
-        //{
-        //    return View();
-        //}
-        //[HttpPut("UpdateCategory")]
-        //public async Task<IActionResult> UpdateCategory()
-        //{
-
-        //    return RedirectToAction("Index", "Home", new { area = "admin" });
-        //}
+        [HttpGet("UpdateCategory")]
+        public async Task<IActionResult> UpdateCategory(int categoryId)
+        {
+            var resultApi = await _apiService.ApiPostResponse(categoryId, "admin-url", "Home", "update-category");
+            DataResult<UpdateCategoryVM> responseData = JsonConvert.DeserializeObject<DataResult<UpdateCategoryVM>>(resultApi)!;
+            if (!responseData.IsSuccess)
+            {
+                ViewData["UpdateCategoryMessage"] = responseData.Message;
+                return View();
+            }
+            return View(responseData.Data);
+            //return View();
+        }
+        [HttpPost("UpdateCategory")]
+        public async Task<IActionResult> UpdateCategory(UpdateCategoryVM updateCategoryVM)
+        {
+            ViewData["UpdateCategoryMessage"] = null;
+            var resultApi = await _apiService.ApiPutResponse(updateCategoryVM, "admin-url", "Admin", "update-category");
+            DataResult<CategoryVM> responseData = JsonConvert.DeserializeObject<DataResult<CategoryVM>>(resultApi)!;
+            if (!responseData.IsSuccess)
+            {
+                ViewData["UpdateCategoryMessage"] = responseData.Message;
+                return View();
+            }            
+            return RedirectToAction("GetCategories", "Home", new { area = "admin" });
+        }
         #endregion
 
         #region City Actions
@@ -125,7 +141,44 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
             }
             return RedirectToAction("Index", "Home", new { area = "admin" });
         }
-
+        [HttpGet("GetCities")]
+        public async Task<IActionResult> GetCities()
+        {
+            ViewData["GetCityMessage"] = null;
+            var resultApi = await _apiService.ApiGetResponse("url", "Home", "get-cities");
+            DataResult<ICollection<CityVM>> responseData = JsonConvert.DeserializeObject<DataResult<ICollection<CityVM>>>(resultApi)!;
+            if (!responseData.IsSuccess)
+            {
+                ViewData["GetCityMessage"] = responseData.Message;
+                return View();
+            }
+            return View(responseData.Data);
+        }
+        [HttpGet("UpdateCity")]
+        public async Task<IActionResult> UpdateCity(int categoryId)
+        {
+            var resultApi = await _apiService.ApiPostResponse(categoryId, "admin-url", "Home", "update-city");
+            DataResult<CityVM> responseData = JsonConvert.DeserializeObject<DataResult<CityVM>>(resultApi)!;
+            if (!responseData.IsSuccess)
+            {
+                ViewData["UpdateCityMessage"] = responseData.Message;
+                return View();
+            }
+            return View(responseData.Data);            
+        }
+        [HttpPost("UpdateCity")]
+        public async Task<IActionResult> UpdateCategory(CityVM updateCityVM)
+        {
+            ViewData["UpdateCityMessage"] = null;
+            var resultApi = await _apiService.ApiPutResponse(updateCityVM, "admin-url", "Admin", "update-city");
+            DataResult< CityVM > responseData = JsonConvert.DeserializeObject<DataResult<CityVM>>(resultApi)!;
+            if (!responseData.IsSuccess)
+            {
+                ViewData["UpdateCityMessage"] = responseData.Message;
+                return View();
+            }
+            return RedirectToAction("GetCities", "Home", new { area = "admin" });
+        }
         #endregion
 
         #region ActivityActions
@@ -151,18 +204,34 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
             }
             return View(activityList);
         }
+        [HttpGet("ConfirmActivity")]
+        public async Task<IActionResult> ConfirmActivity(Guid activityId)
+        {
+            var resultApi = await _apiService.ApiPostResponse(activityId, "admin-url", "Home", "update-category");
+            DataResult<ActivityVM> responseData = JsonConvert.DeserializeObject<DataResult<ActivityVM>>(resultApi)!;
+            if (!responseData.IsSuccess)
+            {
+                ViewData["ConfirmActivityMessage"] = responseData.Message;
+                return View();
+            }
+            return View(responseData.Data);            
+        }
+        [HttpPost]
+        public async Task<IActionResult> ConfirmActivity(ConfirmActivityVM confirmActivityVM)
+        {
+            ViewData["ConfirmActivityMessage"] = null;
+            var resultApi = await _apiService.ApiPutResponse(confirmActivityVM, "admin-url", "Admin", "confirm-activity");
+            DataResult<ActivityVM> responseData = JsonConvert.DeserializeObject<DataResult<ActivityVM>>(resultApi)!;
+            if (!responseData.IsSuccess)
+            {
+                ViewData["ConfirmActivityMessage"] = responseData.Message;
+                return View();
+            }
+            return RedirectToAction("GetActivities", "Home", new { area = "admin" });
+        }
         #endregion
 
-        //[HttpGet("get-categories")]
-        //public async Task<IActionResult> GetCategories()
-        //{
-        //    HttpClient client = _httpClientFactory.CreateClient("url");
-        //    var response = await client.GetAsync("Home/get-categories");
-        //    var result = await response.Content.ReadAsStringAsync();
-        //    DataResult<IList<CategoriesVM>> responseGetCategories = JsonConvert.DeserializeObject<DataResult<IList<CategoriesVM>>>(result)!;            
-        //    return View(responseGetCategories.Data);
-        //}
-
+        
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

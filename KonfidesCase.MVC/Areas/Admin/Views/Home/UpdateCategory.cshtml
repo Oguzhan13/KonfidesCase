@@ -1,0 +1,33 @@
+﻿@model KonfidesCase.MVC.Areas.Admin.ViewModels.UpdateCategoryVM
+
+<h1>Kategori Güncelle</h1>
+<p>@ViewData["UpdateCategoryMessage"]</p>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="UpdateCategory">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" readonly />                
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Güncelle" class="btn btn-dark" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a class="link-dark" asp-area="admin" asp-action="GetCategories">Kategorilere Geri Dön</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

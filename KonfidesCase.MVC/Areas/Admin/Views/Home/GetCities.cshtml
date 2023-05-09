@@ -1,0 +1,35 @@
+﻿@model IEnumerable<KonfidesCase.MVC.Areas.Admin.ViewModels.CityVM>
+
+<h1>Şehirler</h1>
+<p>@ViewData["GetCityMessage"]</p>
+<p>
+    <a asp-action="CreateCity">Yeni Şehir Oluştur</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.ActionLink("Güncelle", "UpdateCity", "Home", new { id=item.Id }) |                
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
