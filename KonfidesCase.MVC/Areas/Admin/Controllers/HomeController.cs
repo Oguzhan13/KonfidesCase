@@ -155,7 +155,7 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
             return View(responseData.Data);
         }
         [HttpGet("UpdateCity")]
-        public async Task<IActionResult> UpdateCity(int categoryId)
+        public async Task<IActionResult> UpdateCity([FromQuery(Name ="id")]int categoryId)
         {
             var resultApi = await _apiService.ApiPostResponse(categoryId, "admin-url", "Home", "update-city");
             DataResult<CityVM> responseData = JsonConvert.DeserializeObject<DataResult<CityVM>>(resultApi)!;
