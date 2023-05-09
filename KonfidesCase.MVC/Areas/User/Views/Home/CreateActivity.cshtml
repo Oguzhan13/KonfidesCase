@@ -1,13 +1,9 @@
 ﻿@using KonfidesCase.MVC.Areas.User.Models;
 @model KonfidesCase.MVC.Areas.User.ViewModels.CreateActivityVM
 
-@{
-    ViewData["Title"] = "CreateActivity";
-}
+<h1>Aktivite Oluştur</h1>
 
-<h1>CreateActivity</h1>
-
-<h4>CreateActivityVM</h4>
+<h4>@ViewData["CreateActivityMessage"]</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -66,7 +62,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-area="user" asp-controller="Home" asp-action="Index">Back to List</a>
 </div>
 
 

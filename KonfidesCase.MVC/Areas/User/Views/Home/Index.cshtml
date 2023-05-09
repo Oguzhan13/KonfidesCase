@@ -1,9 +1,5 @@
 ﻿@model KonfidesCase.MVC.Models.DataResult<UserInfo>
 
-@{
-    ViewData["Title"] = "Home Page";
-}
-
 <div class="text-center">
     <h1 class="display-4">Hoşgeldiniz @Model.Data!.FirstName @Model.Data!.LastName</h1>
     <p> @Model.Message </p>
@@ -44,6 +40,12 @@
     </tbody>
 </table>
 <div>
-    <a class="link-dark" asp-area="User" asp-controller="Home" asp-action="CreateActivity">Etkinlik Oluştur</a>
+    <a class="link-dark" asp-area="user" asp-controller="Home" asp-action="ChangePassword">Şifre Değiştir</a>
+</div>
+<div>
+    <a class="link-dark" asp-area="user" asp-controller="Home" asp-action="CreateActivity">Etkinlik Oluştur</a>
+</div>
+<div>
+    <a class="link-dark" asp-area="user" asp-controller="Home" asp-action="GetActivities">Etkinlikleri Görüntüle</a>
 </div>
 

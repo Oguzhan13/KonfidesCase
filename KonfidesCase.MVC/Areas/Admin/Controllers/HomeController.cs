@@ -1,4 +1,6 @@
-﻿using KonfidesCase.MVC.Areas.User.Models;
+﻿using AutoMapper;
+using KonfidesCase.MVC.Areas.Admin.Models;
+using KonfidesCase.MVC.Areas.Admin.ViewModels;
 using KonfidesCase.MVC.BusinessLogic.Services;
 using KonfidesCase.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -14,31 +16,32 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IApiService _apiService;
-        public HomeController(IHttpClientFactory httpClientFactory, ILogger<HomeController> logger, IApiService apiService)
+        private readonly IMapper _mapper;
+        public HomeController(IHttpClientFactory httpClientFactory, ILogger<HomeController> logger, IApiService apiService, IMapper mapper)
         {
             _httpClientFactory = httpClientFactory;
             _logger = logger;
             _apiService = apiService;
+            _mapper = mapper;
         }
         #endregion
 
-        #region Index Action
+        internal static object indexData = new();
+
+        #region Index Action       
         [HttpGet("Index")]
-        public IActionResult Index(DataResult<UserInfo> userInfo)
+        public IActionResult Index()
         {
-            if (userInfo.Data is null)
+            indexData = TempData["IndexData"] != null ? TempData["IndexData"]! : indexData!;
+            if (indexData is null)
             {
-                var tempData = TempData["IndexData"];
-                if (tempData is null)
-                {
-                    return RedirectToAction("Login", "Home", new { area = "" });
-                }
-                userInfo = JsonConvert.DeserializeObject<DataResult<UserInfo>>((string)tempData)!;
+                return RedirectToAction("Login", "Home", new { area = "" });
             }
+            DataResult<UserInfo> userInfo = JsonConvert.DeserializeObject<DataResult<UserInfo>>((string)indexData)!;
             return View(userInfo);
         }
         #endregion
-
+                
         #region Logout Action
         [HttpGet("Logout")]
         public async Task<IActionResult> Logout()
@@ -104,40 +107,32 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
         }
 
         #endregion
-        //[HttpGet("change-password")]
-        //public IActionResult ChangePassword()
-        //{
-        //    return View();
-        //}
-        //[HttpPost("change-password")]
-        //public async Task<IActionResult> ChangePassword(ChangePasswordVM changePasswordVM)
-        //{
-        //    var jsonPassword = JsonConvert.SerializeObject(changePasswordVM);
-        //    HttpClient client = _httpClientFactory.CreateClient("url");
-        //    var data = new StringContent(jsonPassword, Encoding.UTF8, "application/json");
-        //    var response = await client.PutAsync("Home/change-password", data);
-        //    var result = await response.Content.ReadAsStringAsync();
-        //    DataResult<UserInfo> responseChangePassword = JsonConvert.DeserializeObject<DataResult<UserInfo>>(result)!;
 
-        //    return RedirectToAction(nameof(Index), responseChangePassword.Data);
-        //}
+        #region ActivityActions
+        [HttpGet("GetActivities")]
+        public async Task<IActionResult> GetActivities()
+        {
+            var resultCategories = await _apiService.ApiGetResponse("url", "Home", "get-categories");
+            DataResult<ICollection<Category>> responseCategories = JsonConvert.DeserializeObject<DataResult<ICollection<Category>>>(resultCategories)!;
+            var resultCities = await _apiService.ApiGetResponse("url", "Home", "get-cities");
+            DataResult<ICollection<City>> responseCities = JsonConvert.DeserializeObject<DataResult<ICollection<City>>>(resultCities)!;
 
+            var resultApi = await _apiService.ApiGetResponse("url", "Home", "get-activities");
+            DataResult<ICollection<Activity>> activities = JsonConvert.DeserializeObject<DataResult<ICollection<Activity>>>(resultApi)!;
 
-        //[HttpGet("create-category")]
-        //public IActionResult CreateCategory()
-        //{
-        //    return View();
-        //}
-        //[HttpPost("create-category")]
-        //public async Task<IActionResult> CreateCategory(NewCategoryVM newCategoryVM)
-        //{
-        //    var jsonPassword = JsonConvert.SerializeObject(newCategoryVM);
-        //    HttpClient client = _httpClientFactory.CreateClient("admin-url");
-        //    var data = new StringContent(jsonPassword, Encoding.UTF8, "application/json");
-        //    var response = await client.PostAsync("Admin/create-category", data);
-        //    var result = await response.Content.ReadAsStringAsync();
-        //    return RedirectToAction(nameof(Index), "Home");
-        //}
+            List<ConfirmActivityVM> activityList = new();
+            foreach (Activity activity in activities.Data!)
+            {
+                ConfirmActivityVM activityDetailVM = new();
+                _mapper.Map(activity, activityDetailVM);
+                activityDetailVM.Category = responseCategories.Data!.First(c => c.Id == activity.CategoryId).Name;
+                activityDetailVM.City = responseCities.Data!.First(c => c.Id == activity.CityId).Name;
+                activityList.Add(activityDetailVM);
+            }
+            return View(activityList);
+        }
+        #endregion
+
         //[HttpGet("get-categories")]
         //public async Task<IActionResult> GetCategories()
         //{
