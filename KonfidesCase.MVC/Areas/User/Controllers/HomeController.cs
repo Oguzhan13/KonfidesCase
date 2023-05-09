@@ -1,4 +1,5 @@
-﻿using KonfidesCase.MVC.Models;
+﻿using KonfidesCase.MVC.BusinessLogic.Services;
+using KonfidesCase.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -10,9 +11,11 @@ namespace KonfidesCase.MVC.Areas.User.Controllers
     {
         #region Fields & Constructor
         private readonly IHttpClientFactory _httpClientFactory;
-        public HomeController(IHttpClientFactory httpClientFactory)
+        private readonly IApiService _apiService;
+        public HomeController(IHttpClientFactory httpClientFactory, IApiService apiService)
         {
             _httpClientFactory = httpClientFactory;
+            _apiService = apiService;
         }
         #endregion
 
@@ -29,6 +32,15 @@ namespace KonfidesCase.MVC.Areas.User.Controllers
                 userInfo = JsonConvert.DeserializeObject<DataResult<UserInfo>>((string)tempData)!;
             }
             return View(userInfo);
+        }
+
+        [HttpGet("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            var resultApi = await _apiService.ApiGetResponse("url", "Home", "logout");
+            _apiService.ApiDeserializeResult(resultApi, out DataResult<string> responseData);
+            TempData["LogoutData"] = JsonConvert.SerializeObject(responseData);            
+            return RedirectToAction("Login", "Home");
         }
     }
 }

@@ -38,8 +38,8 @@ namespace KonfidesCase.MVC.Controllers
         public async Task<IActionResult> Login(LoginVM loginVM)
         {
             ViewData["LogoutMessage"] = null;
-            var resultApi = await _apiService.ApiPostResponse(loginVM, "url", "Home", "login");
-            _apiService.ApiDeserializeResult(resultApi, out DataResult<UserInfo> responseData);            
+            var resultApi = await _apiService.ApiPostResponse(loginVM, "url", "Home", "login");            
+            DataResult<UserInfo> responseData =  JsonConvert.DeserializeObject<DataResult<UserInfo>>(resultApi)!;
             if (!responseData.IsSuccess)
             {
                 ViewData["LoginMessage"] = responseData.Message;
@@ -57,29 +57,17 @@ namespace KonfidesCase.MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterVM registerVM)
         {
-            var jsonUser = JsonConvert.SerializeObject(registerVM);
-            HttpClient client = _httpClientFactory.CreateClient("url");
-            var data = new StringContent(jsonUser, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync("Home/register", data);
-            var result = await response.Content.ReadAsStringAsync();
-            DataResult<UserInfo> responseRegister = JsonConvert.DeserializeObject<DataResult<UserInfo>>(result)!;            
-            return RedirectToAction(nameof(Login), responseRegister.Data);            
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Logout()
-        {
-            HttpClient client = _httpClientFactory.CreateClient("url");
-            var response = await client.GetAsync("Home/Logout");
-            var result = await response.Content.ReadAsStringAsync();
-            DataResult<string> responseLogin = JsonConvert.DeserializeObject<DataResult<string>>(result)!;
-            if (!responseLogin.IsSuccess)
+            ViewData["RegisterMessage"] = null;
+            var resultApi = await _apiService.ApiPostResponse(registerVM, "url", "Home", "register");            
+            DataResult<UserInfo> responseData = JsonConvert.DeserializeObject<DataResult<UserInfo>>(resultApi)!;
+            if (!responseData.IsSuccess)
             {
-                return RedirectToAction(nameof(Register), "Home", response);
+                ViewData["RegisterMessage"] = responseData.Message;
+                return View();
             }
-            return RedirectToAction(nameof(Login));
+            return RedirectToAction(nameof(Login), responseData.Data);            
         }
-
+                
         #endregion
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -45,7 +45,7 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
             var resultApi = await _apiService.ApiGetResponse("url", "Home", "logout");
             _apiService.ApiDeserializeResult(resultApi, out DataResult<string> responseData);
             TempData["LogoutData"] = JsonConvert.SerializeObject(responseData);
-            return RedirectToAction("Login", "Home", new { area = "" });
+            return RedirectToAction("Login", "Home");
         }
 
         //[HttpGet("change-password")]

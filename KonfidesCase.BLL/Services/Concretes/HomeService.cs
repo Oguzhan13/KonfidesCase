@@ -129,7 +129,7 @@ namespace KonfidesCase.BLL.Services.Concretes
             }
             Activity cancelActivity = await _context.Activities.FirstAsync(a => a.Id == activityId);
             if (cancelActivity.ActivityDate <= DateTime.Now.AddDays(5))
-            {
+            {                
                 return new DataResult<Activity>() { IsSuccess = false, Message = "Etkinliğe 5 gün kala iptal edemezsiniz!" };
             }
             _context.Activities.Remove(cancelActivity);
