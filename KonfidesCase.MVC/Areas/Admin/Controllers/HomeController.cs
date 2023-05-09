@@ -70,17 +70,17 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
             return RedirectToAction("Index", "Home", new { area = "admin" });
         }
 
-        [HttpGet("UpdateCategory")]
-        public async Task<IActionResult> UpdateCategory()
-        {
-            return View();
-        }
-        [HttpPut("UpdateCategory")]
-        public async Task<IActionResult> UpdateCategory()
-        {
+        //[HttpGet("UpdateCategory")]
+        //public async Task<IActionResult> UpdateCategory()
+        //{
+        //    return View();
+        //}
+        //[HttpPut("UpdateCategory")]
+        //public async Task<IActionResult> UpdateCategory()
+        //{
 
-            return RedirectToAction("Index", "Home", new { area = "admin" });
-        }
+        //    return RedirectToAction("Index", "Home", new { area = "admin" });
+        //}
         #endregion
 
         #region City Actions
