@@ -4,31 +4,32 @@
 }
 
 <h1>Giriş</h1>
+<p>@ViewData["LogoutMessage"]</p>
 <p>@ViewData["LoginMessage"]</p>
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Login">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+                <abbr title="Mail adresi türkçe karakter bulundurmamalıdır ve küçük harf girilmelidir!"><label asp-for="Email" class="control-label"></label></abbr>
+                <input asp-for="Email" class="form-control" placeholder="email@example.com" />
+                <span asp-validation-for="Email" class="text-warning"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input id="txtPass" class="form-control" type="password" asp-for="Password" />
+                <abbr title="Şifre en az 6 karakterden oluşmalıdır ve en az birer karakter büyük-küçük harf, rakam ve sembol olmalıdır!"><label asp-for="Password" class="control-label"></label></abbr>
+                <input id="txtPass" class="form-control" type="password" asp-for="Password" placeholder="Exam.1" />
                 <input type="checkbox" name="mycheckbox" id="ckShowPass" onclick="myshowp(this)" />
-                <label>Şifreyi Göster</label>                
-                <span asp-validation-for="Password" class="text-danger"></span>
+                <label class="font-monospace">Şifreyi Göster</label>                
+                <span asp-validation-for="Password" class="text-warning"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Giriş Yap" class="btn btn-primary" />
+                <input type="submit" value="Giriş Yap" class="btn btn-dark" />
             </div>
         </form>
     </div>
 </div>
 <div>
-    <a asp-controller="Home" asp-action="Register">Kayıt Ol</a>
+    <a class="link-dark " asp-controller="Home" asp-action="Register">Kayıt Ol</a>
 </div>
 
 @section Scripts {

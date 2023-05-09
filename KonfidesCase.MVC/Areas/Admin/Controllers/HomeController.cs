@@ -1,4 +1,5 @@
-﻿using KonfidesCase.MVC.Models;
+﻿using KonfidesCase.MVC.BusinessLogic.Services;
+using KonfidesCase.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -13,10 +14,12 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
         #region Fields & Constructor
         private readonly ILogger<HomeController> _logger;
         private readonly IHttpClientFactory _httpClientFactory;
-        public HomeController(IHttpClientFactory httpClientFactory, ILogger<HomeController> logger)
+        private readonly IApiService _apiService;
+        public HomeController(IHttpClientFactory httpClientFactory, ILogger<HomeController> logger, IApiService apiService)
         {
             _httpClientFactory = httpClientFactory;
             _logger = logger;
+            _apiService = apiService;
         }
         #endregion
 
@@ -34,6 +37,15 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
                 userInfo = JsonConvert.DeserializeObject<DataResult<UserInfo>>((string)tempData)!;
             }
             return View(userInfo);
+        }
+
+        [HttpGet("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            var resultApi = await _apiService.ApiGetResponse("url", "Home", "logout");
+            _apiService.ApiDeserializeResult(resultApi, out DataResult<string> responseData);
+            TempData["LogoutData"] = JsonConvert.SerializeObject(responseData);
+            return RedirectToAction("Login", "Home", new { area = "" });
         }
 
         //[HttpGet("change-password")]

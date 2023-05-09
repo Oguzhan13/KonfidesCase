@@ -84,11 +84,7 @@ namespace KonfidesCase.API.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return Ok(new AuthDataResult<string>() { IsSuccess = true, Message = "Çıkış işlemi başarılı" });
-            //var currentUserName = _httpContextAccessor.HttpContext!.User.Identity!.Name;
-            //return string.IsNullOrEmpty(currentUserName) ?
-            //    Ok(new AuthDataResult<string>() { IsSuccess = true, Message = "Çıkış işlemi başarılı" }) :
-            //    BadRequest(new AuthDataResult<string>() { IsSuccess = true, Message = "Çıkış işlemi başarısız!", Data = currentUserName });
+            return Ok(new AuthDataResult<string>() { IsSuccess = true, Message = "Çıkış işlemi başarılı" });            
         }
 
         [HttpGet("get-categories")]

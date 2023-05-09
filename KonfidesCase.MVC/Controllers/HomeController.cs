@@ -26,12 +26,19 @@ namespace KonfidesCase.MVC.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            var tempData = TempData["LogoutData"];
+            if (tempData is null)
+            {
+                return View();
+            }
+            ViewData["LogoutMessage"] = JsonConvert.DeserializeObject<DataResult<string>>((string)tempData)!.Message;            
             return View();
         }
         [HttpPost]
         public async Task<IActionResult> Login(LoginVM loginVM)
-        {            
-            var resultApi = await _apiService.ApiPostResponse<LoginVM>(loginVM, "url", "Home", "login");
+        {
+            ViewData["LogoutMessage"] = null;
+            var resultApi = await _apiService.ApiPostResponse(loginVM, "url", "Home", "login");
             _apiService.ApiDeserializeResult(resultApi, out DataResult<UserInfo> responseData);            
             if (!responseData.IsSuccess)
             {

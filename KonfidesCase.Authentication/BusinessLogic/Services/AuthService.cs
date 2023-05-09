@@ -56,7 +56,7 @@ namespace KonfidesCase.Authentication.BusinessLogic.Services
             var user = await _userManager.FindByEmailAsync(loginDto.Email);
             if (user is null)
             {
-                return new AuthDataResult<AuthUser>() { IsSuccess = false, Message = "Aktif kullanıcı bulunamadı!" };
+                return new AuthDataResult<AuthUser>() { IsSuccess = false, Message = "Email adresiniz veya şifreniz hatalı!" };
             }
             var result = await _userManager.CheckPasswordAsync(user, loginDto.Password);
             if (!result)
