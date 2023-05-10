@@ -14,41 +14,34 @@ namespace KonfidesCase.BLL.Services.Concretes
     public class AdminService : IAdminService
     {
         #region Fields & Constructor
-        private readonly KonfidesCaseDbContext _context;
-        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly KonfidesCaseDbContext _context;        
         private readonly IMapper _mapper;
-        public AdminService(KonfidesCaseDbContext context, IHttpContextAccessor contextAccessor, IMapper mapper)
+        public AdminService(KonfidesCaseDbContext context, IMapper mapper)
         {
-            _context = context;
-            _contextAccessor = contextAccessor;
+            _context = context;            
             _mapper = mapper;
         }
         #endregion
 
-        public async Task<bool> IsAdmin()
-        {            
-            var currentUserName = _contextAccessor.HttpContext!.User.Identity!.Name!;
-            if (string.IsNullOrEmpty(currentUserName))
-            {
-                return false;
-            }
-            var currentUser = await _context.Users.FirstAsync(u => u.Email == currentUserName);
+        public async Task<bool> IsAdmin(string currentUserName)
+        {               
+            var currentUser = string.IsNullOrEmpty(currentUserName) ? await _context.Users.FirstAsync(u => u.Email == currentUserName) : null;
             if (currentUser is null)
             {
                 return false;
             }
-            return currentUser.RoleName.Equals("admin") ? true : false;            
+            return currentUser.RoleName.Equals("admin") ? true : false;
         }
 
         #region Category Methods
-        public async Task<DataResult<Category>> CreateCategory(CreateCategoryDto createCategoryDto)
+        public async Task<DataResult<Category>> CreateCategory(CreateCategoryDto createCategoryDto, string currentUserName)
         {
             bool isCategoryExists = await _context.Categories.AnyAsync(c => c.Name == createCategoryDto.Name);
             if (isCategoryExists)
             {
                 return new DataResult<Category>() { IsSuccess = false, Message = "Kategori sistemde kayıtlı" };
             }
-            bool isAuthorize = await IsAdmin();
+            bool isAuthorize = await IsAdmin(currentUserName);
             if (!isAuthorize)
             {
                 return new DataResult<Category>() { IsSuccess = false, Message = "Yetkili değilsiniz" };
@@ -58,14 +51,14 @@ namespace KonfidesCase.BLL.Services.Concretes
             await _context.SaveChangesAsync();
             return new DataResult<Category>() { IsSuccess = true, Message = "Kategori ekleme işlemi başarılı", Data = newCategory };
         }        
-        public async Task<DataResult<Category>> UpdateCategory(UpdateCategoryDto updateCategoryDto)
+        public async Task<DataResult<Category>> UpdateCategory(UpdateCategoryDto updateCategoryDto, string currentUserName)
         {
             bool isCategoryExists = await _context.Categories.AnyAsync(c => c.Name == updateCategoryDto.Name);
             if (isCategoryExists)
             {
                 return new DataResult<Category>() { IsSuccess = false, Message = "Kategori sistemde kayıtlı" };
             }
-            bool isAuthorize = await IsAdmin();
+            bool isAuthorize = await IsAdmin(currentUserName);
             if (!isAuthorize)
             {
                 return new DataResult<Category>() { IsSuccess = false, Message = "Yetkili değilsiniz" };
@@ -79,14 +72,14 @@ namespace KonfidesCase.BLL.Services.Concretes
         #endregion
 
         #region City Methods
-        public async Task<DataResult<City>> CreateCity(CreateCityDto createCityDto)
+        public async Task<DataResult<City>> CreateCity(CreateCityDto createCityDto, string currentUserName)
         {
             bool isCityExists = await _context.Cities.AnyAsync(c => c.Name == createCityDto.Name);
             if (isCityExists)
             {
                 return new DataResult<City>() { IsSuccess = false, Message = "Şehir sistemde kayıtlı" };
             }
-            bool isAuthorize = await IsAdmin();
+            bool isAuthorize = await IsAdmin(currentUserName);
             if (!isAuthorize)
             {
                 return new DataResult<City>() { IsSuccess = false, Message = "Yetkili değilsiniz" };
@@ -96,14 +89,14 @@ namespace KonfidesCase.BLL.Services.Concretes
             await _context.SaveChangesAsync();
             return new DataResult<City>() { IsSuccess = true, Message = "Şehir ekleme işlemi başarılı", Data = newCity };
         }        
-        public async Task<DataResult<City>> UpdateCity(UpdateCityDto updateCityDto)
+        public async Task<DataResult<City>> UpdateCity(UpdateCityDto updateCityDto, string currentUserName)
         {
             bool isCityExists = await _context.Cities.AnyAsync(c => c.Name == updateCityDto.Name);
             if (isCityExists)
             {
                 return new DataResult<City>() { IsSuccess = false, Message = "Şehir sistemde kayıtlı" };
             }
-            bool isAuthorize = await IsAdmin();
+            bool isAuthorize = await IsAdmin(currentUserName);
             if (!isAuthorize)
             {
                 return new DataResult<City>() { IsSuccess = false, Message = "Yetkili değilsiniz" };
@@ -117,9 +110,9 @@ namespace KonfidesCase.BLL.Services.Concretes
         #endregion
 
         #region Activity Method
-        public async Task<DataResult<Activity>> ConfirmActivity(ConfirmActivityDto confirmActivityDto)
+        public async Task<DataResult<Activity>> ConfirmActivity(ConfirmActivityDto confirmActivityDto, string currentUserName)
         {
-            bool isAuthorize = await IsAdmin();
+            bool isAuthorize = await IsAdmin(currentUserName);
             if (!isAuthorize)
             {
                 return new DataResult<Activity>() { IsSuccess = false, Message = "Yetkili değilsiniz" };

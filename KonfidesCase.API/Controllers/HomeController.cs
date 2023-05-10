@@ -2,9 +2,14 @@
 using KonfidesCase.Authentication.Dtos;
 using KonfidesCase.Authentication.Entities;
 using KonfidesCase.Authentication.Utilities;
+using KonfidesCase.BLL.Services.Concretes;
 using KonfidesCase.BLL.Services.Interfaces;
+using KonfidesCase.BLL.Utilities;
 using KonfidesCase.DTO.Activity;
+using KonfidesCase.DTO.Category;
+using KonfidesCase.DTO.City;
 using KonfidesCase.DTO.Ticket;
+using KonfidesCase.Entity.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,14 +24,24 @@ namespace KonfidesCase.API.Controllers
         private readonly IHomeService _homeService;         
         private readonly SignInManager<AuthUser> _signInManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public HomeController(IAuthService authService, IHomeService homeService, SignInManager<AuthUser> signInManager, IHttpContextAccessor httpContextAccessor)
+        private readonly IAdminService _adminService;
+        public HomeController(IAuthService authService, IHomeService homeService, SignInManager<AuthUser> signInManager, IHttpContextAccessor httpContextAccessor, IAdminService adminService)
         {
             _authService = authService;
-            _homeService = homeService;            
-            _signInManager = signInManager;            
+            _homeService = homeService;
+            _signInManager = signInManager;
             _httpContextAccessor = httpContextAccessor;
+            _adminService = adminService;
         }
         #endregion
+
+        #region Helper Methods
+        public string HasCurrentUser()
+        {
+            return _httpContextAccessor.HttpContext!.User.Identity!.Name!;
+        }        
+        #endregion
+
 
         #region Login Action                
         [HttpPost("login")]
@@ -51,7 +66,7 @@ namespace KonfidesCase.API.Controllers
         [HttpGet("get-current-user")]
         public IActionResult GetCurrentUser()
         {
-            string currentUserName = _httpContextAccessor.HttpContext!.User.Identity!.Name!;            
+            string currentUserName = HasCurrentUser();
             return string.IsNullOrEmpty(currentUserName) ? BadRequest("Aktif kullanıcı bulunamadı") : Ok(currentUserName);
 
         }
@@ -65,6 +80,7 @@ namespace KonfidesCase.API.Controllers
             {
                 return BadRequest(ModelState);
             }
+            string currentUserName = HasCurrentUser();
             var response = await _authService.Register(registerDto);            
             var createAppUser = await _homeService.CreateAppUser(response.Data!);
             if (!createAppUser.IsSuccess)
@@ -76,13 +92,13 @@ namespace KonfidesCase.API.Controllers
         }
         #endregion
 
-        #region Logout Method
+        #region Logout Action
         [HttpGet("logout")]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            string currentUserName = _httpContextAccessor.HttpContext!.User.Identity!.Name!;            
-            return Ok(new AuthDataResult<string>() { IsSuccess = true, Message = "Çıkış işlemi başarılı" });            
+            string currentUserName = HasCurrentUser();
+            return Ok(new AuthDataResult<string>() { IsSuccess = true, Message = "Çıkış işlemi başarılı" });
         }
         #endregion
 
@@ -94,7 +110,7 @@ namespace KonfidesCase.API.Controllers
             {
                 return BadRequest(ModelState);
             }
-            string currentUserName = _httpContextAccessor.HttpContext!.User.Identity!.Name!;
+            string currentUserName = HasCurrentUser();
             if (string.IsNullOrEmpty(currentUserName))
             {
                 AuthDataResult<UserInfoDto> errorResponse = new() { IsSuccess = false, Message = "Aktif kullanıcı bulunamadı" };
@@ -109,7 +125,13 @@ namespace KonfidesCase.API.Controllers
         [HttpGet("get-categories")]
         public async Task<IActionResult> GetCategories()
         {
-            var response = await _homeService.GetCategories();
+            string currentUserName = HasCurrentUser();
+            if (string.IsNullOrEmpty(currentUserName))
+            {
+                DataResult<ICollection<Category>> errorResponse = new() { IsSuccess = false, Message = "Aktif kullanıcı bulunamadı" };
+                return BadRequest(errorResponse);
+            }
+            var response = await _homeService.GetCategories(currentUserName);
             return response.IsSuccess ? Ok(response) : NotFound(response);
         }        
         #endregion
@@ -118,7 +140,13 @@ namespace KonfidesCase.API.Controllers
         [HttpGet("get-cities")]
         public async Task<IActionResult> GetCities()
         {
-            var response = await _homeService.GetCities();
+            string currentUserName = HasCurrentUser();
+            if (string.IsNullOrEmpty(currentUserName))
+            {
+                DataResult<ICollection<City>> errorResponse = new() { IsSuccess = false, Message = "Aktif kullanıcı bulunamadı" };
+                return BadRequest(errorResponse);
+            }
+            var response = await _homeService.GetCities(currentUserName);
             return response.IsSuccess ? Ok(response) : NotFound(response);
         }
         #endregion
@@ -131,13 +159,25 @@ namespace KonfidesCase.API.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var response = await _homeService.CreateActivity(createActivityDto);
+            string currentUserName = HasCurrentUser();
+            if (string.IsNullOrEmpty(currentUserName))
+            {
+                DataResult<Activity> errorResponse = new() { IsSuccess = false, Message = "Aktif kullanıcı bulunamadı" };
+                return BadRequest(errorResponse);
+            }
+            var response = await _homeService.CreateActivity(createActivityDto, currentUserName);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
         [HttpGet("get-activities")]
         public async Task<IActionResult> GetActivities()
         {
-            var response = await _homeService.GetActivities();
+            string currentUserName = HasCurrentUser();
+            if (string.IsNullOrEmpty(currentUserName))
+            {
+                DataResult<ICollection<Activity>> errorResponse = new() { IsSuccess = false, Message = "Aktif kullanıcı bulunamadı" };
+                return BadRequest(errorResponse);
+            }
+            var response = await _homeService.GetActivities(currentUserName);
             return response.IsSuccess ? Ok(response) : NotFound(response);
         }
         [HttpPut("update-activity")]
@@ -147,7 +187,13 @@ namespace KonfidesCase.API.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var response = await _homeService.UpdateActivity(updateActivityDto);
+            string currentUserName = HasCurrentUser();
+            if (string.IsNullOrEmpty(currentUserName))
+            {
+                DataResult<Activity> errorResponse = new() { IsSuccess = false, Message = "Aktif kullanıcı bulunamadı" };
+                return BadRequest(errorResponse);
+            }
+            var response = await _homeService.UpdateActivity(updateActivityDto, currentUserName);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
         [HttpPost("cancel-activity")]
@@ -157,19 +203,37 @@ namespace KonfidesCase.API.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var response = await _homeService.CancelActivity(cancelActivityDto);
+            string currentUserName = HasCurrentUser();
+            if (string.IsNullOrEmpty(currentUserName))
+            {
+                DataResult<Activity> errorResponse = new() { IsSuccess = false, Message = "Aktif kullanıcı bulunamadı" };
+                return BadRequest(errorResponse);
+            }
+            var response = await _homeService.CancelActivity(cancelActivityDto, currentUserName);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
         [HttpGet("created-activities")]
         public async Task<IActionResult> GetMyCreatedActivities()
         {
-            var response = await _homeService.GetMyCreatedActivities();
+            string currentUserName = HasCurrentUser();
+            if (string.IsNullOrEmpty(currentUserName))
+            {
+                DataResult<ICollection<Activity>> errorResponse = new() { IsSuccess = false, Message = "Aktif kullanıcı bulunamadı" };
+                return BadRequest(errorResponse);
+            }
+            var response = await _homeService.GetMyCreatedActivities(currentUserName);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
         [HttpGet("attended-activities")]
         public async Task<IActionResult> GetAttendedActivities()
         {
-            var response = await _homeService.GetAttendedActivities();
+            string currentUserName = HasCurrentUser();
+            if (string.IsNullOrEmpty(currentUserName))
+            {
+                DataResult<ICollection<Activity>> errorResponse = new() { IsSuccess = false, Message = "Aktif kullanıcı bulunamadı" };
+                return BadRequest(errorResponse);
+            }
+            var response = await _homeService.GetAttendedActivities(currentUserName);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
         #endregion
@@ -182,9 +246,84 @@ namespace KonfidesCase.API.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var response = await _homeService.BuyTicket(createTicketDto);
+            string currentUserName = HasCurrentUser();
+            if (string.IsNullOrEmpty(currentUserName))
+            {
+                DataResult<Activity> errorResponse = new() { IsSuccess = false, Message = "Aktif kullanıcı bulunamadı" };
+                return BadRequest(errorResponse);
+            }
+            var response = await _homeService.BuyTicket(createTicketDto, currentUserName);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
+        #endregion
+
+        #region Admin Actions
+
+        #region Category Actions
+        [HttpPost("create-category")]
+        public async Task<IActionResult> CreateCategory(CreateCategoryDto createCategoryDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            string currentUserName = HasCurrentUser();
+            var response = await _adminService.CreateCategory(createCategoryDto, currentUserName);
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
+        }
+        [HttpPut("update-category")]
+        public async Task<IActionResult> UpdateCategory(UpdateCategoryDto updateCategoryDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            string currentUserName = HasCurrentUser();
+            var response = await _adminService.UpdateCategory(updateCategoryDto, currentUserName);
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
+        }
+        #endregion
+
+        #region City Actions
+        [HttpPost("create-city")]
+        public async Task<IActionResult> CreateCity(CreateCityDto createCityDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            string currentUserName = HasCurrentUser();
+            var response = await _adminService.CreateCity(createCityDto, currentUserName);
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
+        }
+
+        [HttpPut("update-city")]
+        public async Task<IActionResult> UpdateCity(UpdateCityDto updateCityDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            string currentUserName = HasCurrentUser();
+            var response = await _adminService.UpdateCity(updateCityDto, currentUserName);
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
+        }
+        #endregion
+
+        #region Activity Action
+        [HttpPut("confirm-activity")]
+        public async Task<IActionResult> ConfirmActivity(ConfirmActivityDto confirmActivityDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            string currentUserName = HasCurrentUser();
+            var response = await _adminService.ConfirmActivity(confirmActivityDto, currentUserName);
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
+        }
+        #endregion
+
         #endregion
     }
 }

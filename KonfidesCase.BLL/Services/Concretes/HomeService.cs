@@ -14,31 +14,24 @@ namespace KonfidesCase.BLL.Services.Concretes
     public class HomeService : IHomeService
     {
         #region Fields & Constructor
-        private readonly KonfidesCaseDbContext _context;
-        private readonly IHttpContextAccessor _contextAccessor;
+        private readonly KonfidesCaseDbContext _context;        
         private readonly IMapper _mapper;
-        public HomeService(KonfidesCaseDbContext context, IHttpContextAccessor contextAccessor, IMapper mapper)
+        public HomeService(KonfidesCaseDbContext context, IMapper mapper)
         {
-            _context = context;
-            _contextAccessor = contextAccessor;
+            _context = context;            
             _mapper = mapper;
         }
         #endregion
                 
-        public bool IsAuthorize()
-        {
-            //string currentUserName = _contextAccessor.HttpContext!.User.Identity!.Name!;
-            //if (string.IsNullOrEmpty(currentUserName))
-            //{
-            //    return false;
-            //}           
+        public bool IsAuthorize(string currentUserName)
+        {            
+            if (string.IsNullOrEmpty(currentUserName))
+            {
+                return false;
+            }
             return true;
         }
-        public AppUser FindAppUser()
-        {
-            return new AppUser(); 
-        }
-
+        
         #region AppUser Methods
         public async Task<DataResult<AppUser>> CreateAppUser(UserInfoDto userInfo)
         {
@@ -55,9 +48,9 @@ namespace KonfidesCase.BLL.Services.Concretes
         #endregion
 
         #region Category Method
-        public async Task<DataResult<ICollection<Category>>> GetCategories()
+        public async Task<DataResult<ICollection<Category>>> GetCategories(string currentUserName)
         {
-            bool isAuthorize = IsAuthorize();
+            bool isAuthorize = IsAuthorize(currentUserName);
             if (!isAuthorize)
             {
                 return new DataResult<ICollection<Category>>() { IsSuccess = false, Message = "Yetkili değilsiniz" };
@@ -68,9 +61,9 @@ namespace KonfidesCase.BLL.Services.Concretes
         #endregion
 
         #region City Method
-        public async Task<DataResult<ICollection<City>>> GetCities()
+        public async Task<DataResult<ICollection<City>>> GetCities(string currentUserName)
         {
-            bool isAuthorize = IsAuthorize();
+            bool isAuthorize = IsAuthorize(currentUserName);
             if (!isAuthorize)
             {
                 return new DataResult<ICollection<City>>() { IsSuccess = false, Message = "Yetkili değilsiniz" };
@@ -81,14 +74,14 @@ namespace KonfidesCase.BLL.Services.Concretes
         #endregion
 
         #region Activity Methods 
-        public async Task<DataResult<Activity>> CreateActivity(CreateActivityDto createActivityDto)
+        public async Task<DataResult<Activity>> CreateActivity(CreateActivityDto createActivityDto, string currentUserName)
         {
             bool isActivityExists = await _context.Activities.AnyAsync(a => a.Name == createActivityDto.Name);
             if (isActivityExists)
             {
                 return new DataResult<Activity>() { IsSuccess = false, Message = "Etkinlik sistemde mevcut" };
             }
-            bool isAuthorize = IsAuthorize();
+            bool isAuthorize = IsAuthorize(currentUserName);
             if (!isAuthorize)
             {
                 return new DataResult<Activity>() { IsSuccess = false, Message = "Yetkili değilsiniz" };
@@ -97,16 +90,15 @@ namespace KonfidesCase.BLL.Services.Concretes
             {
                 return new DataResult<Activity>() { IsSuccess = false, Message = "Etkinlik tarihi en az 24 saat sonra olmalı" };
             }
-            Activity newActivity = _mapper.Map(createActivityDto, new Activity());            
-            string userEmail = _contextAccessor.HttpContext!.User.Identity!.Name!;            
-            newActivity.Organizer = userEmail;
+            Activity newActivity = _mapper.Map(createActivityDto, new Activity());                                   
+            newActivity.Organizer = currentUserName;
             await _context.Activities.AddAsync(newActivity);
             await _context.SaveChangesAsync();
             return new DataResult<Activity>() { IsSuccess = true, Message = "Etkinlik ekleme işlemi başarılı", Data = newActivity };
         }
-        public async Task<DataResult<ICollection<Activity>>> GetActivities()
+        public async Task<DataResult<ICollection<Activity>>> GetActivities(string currentUserName)
         {
-            bool isAuthorize = IsAuthorize();
+            bool isAuthorize = IsAuthorize(currentUserName);
             if (!isAuthorize)
             {
                 return new DataResult<ICollection<Activity>>() { IsSuccess = false, Message = "Yetkili değilsiniz" };
@@ -114,25 +106,23 @@ namespace KonfidesCase.BLL.Services.Concretes
             ICollection<Activity> activities = await _context.Activities.ToListAsync();
             return new DataResult<ICollection<Activity>>() { IsSuccess = true, Message = "Etkinlikleri listeleme işlemi başarılı", Data = activities };
         }
-        public async Task<DataResult<ICollection<Activity>>> GetMyCreatedActivities()
+        public async Task<DataResult<ICollection<Activity>>> GetMyCreatedActivities(string currentUserName)
         {
-            bool isAuthorize = IsAuthorize();
+            bool isAuthorize = IsAuthorize(currentUserName);
             if (!isAuthorize)
             {
                 return new DataResult<ICollection<Activity>>() { IsSuccess = false, Message = "Yetkili değilsiniz" };
-            }
-            string currentUserName = _contextAccessor.HttpContext!.User.Identity!.Name!;
+            }            
             var myCreatedActivities = await _context.Activities.Where(a => a.Organizer == currentUserName).ToListAsync();
             return new DataResult<ICollection<Activity>>() { IsSuccess = true, Message = "Oluşturduğunuz etkinlikler listelendi", Data = myCreatedActivities };
         }
-        public async Task<DataResult<ICollection<Activity>>> GetAttendedActivities()
+        public async Task<DataResult<ICollection<Activity>>> GetAttendedActivities(string currentUserName)
         {
-            bool isAuthorize = IsAuthorize();
+            bool isAuthorize = IsAuthorize(currentUserName);
             if (!isAuthorize)
             {
                 return new DataResult<ICollection<Activity>>() { IsSuccess = false, Message = "Yetkili değilsiniz" };
-            }
-            string currentUserName = _contextAccessor.HttpContext!.User.Identity!.Name!;
+            }            
             var currentUser = await _context.Users.FirstAsync(u => u.Email == currentUserName);
             var userActivityList = await _context.UserActivity.Where(a => a.UserId == currentUser.Id).ToListAsync();
             List<Activity> attendedActivities = new();
@@ -143,9 +133,9 @@ namespace KonfidesCase.BLL.Services.Concretes
             }
             return new DataResult<ICollection<Activity>>() { IsSuccess = true, Message = "Katıldığınız etkinlikler listelendi", Data = attendedActivities };
         }
-        public async Task<DataResult<Activity>> UpdateActivity(UpdateActivityDto updateActivityDto)
+        public async Task<DataResult<Activity>> UpdateActivity(UpdateActivityDto updateActivityDto,string currentUserName)
         {            
-            bool isAuthorize = IsAuthorize();
+            bool isAuthorize = IsAuthorize(currentUserName);
             if (!isAuthorize)
             {
                 return new DataResult<Activity>() { IsSuccess = false, Message = "Yetkili değilsiniz" };
@@ -160,9 +150,9 @@ namespace KonfidesCase.BLL.Services.Concretes
             await _context.SaveChangesAsync();
             return new DataResult<Activity>() { IsSuccess = true, Message = "Etkinlik güncellendi", Data = updateActivity };
         }
-        public async Task<DataResult<Activity>> CancelActivity(CancelActivityDto cancelActivityDto)
+        public async Task<DataResult<Activity>> CancelActivity(CancelActivityDto cancelActivityDto, string currentUserName)
         {
-            bool isAuthorize = IsAuthorize();
+            bool isAuthorize = IsAuthorize(currentUserName);
             if (!isAuthorize)
             {
                 return new DataResult<Activity>() { IsSuccess = false, Message = "Yetkili değilsiniz" };
@@ -179,14 +169,13 @@ namespace KonfidesCase.BLL.Services.Concretes
         #endregion
 
         #region Ticket Method
-        public async Task<DataResult<Ticket>> BuyTicket(CreateTicketDto createTicketDto)
+        public async Task<DataResult<Ticket>> BuyTicket(CreateTicketDto createTicketDto, string currentUserName)
         {
-            bool isAuthorize = IsAuthorize();
+            bool isAuthorize = IsAuthorize(currentUserName);
             if (!isAuthorize)
             {
                 return new DataResult<Ticket>() { IsSuccess = false, Message = "Yetkili değilsiniz" };
-            }            
-            string currentUserName = _contextAccessor.HttpContext!.User.Identity!.Name!;
+            }                        
             var currentUser = await _context.Users.FirstAsync(u => u.Email == currentUserName);            
             Ticket newTicket = new()
             {
