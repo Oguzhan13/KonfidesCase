@@ -8,7 +8,7 @@ namespace KonfidesCase.MVC.BusinessLogic.Profiles
     {
         public AdminProfile()
         {
-            CreateMap<ActivityVM, ConfirmActivityVM>();
+            CreateMap<ActivityVM, Areas.Admin.ViewModels.ActivityDetailVM>();
             
         }
     }

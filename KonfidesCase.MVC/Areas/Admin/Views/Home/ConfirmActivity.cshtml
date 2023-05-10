@@ -1,6 +1,7 @@
 ﻿@model KonfidesCase.MVC.Areas.Admin.ViewModels.ConfirmActivityVM
 
-<h1>Etkinlik Onayla</h1>
+
+<h1>ConfirmActivity</h1>
 <p>@ViewData["ConfirmActivityMessage"]</p>
 
 <hr />
@@ -9,57 +10,20 @@
         <form asp-action="ConfirmActivity">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
+                <label asp-for="Id" class="control-label"></label>     
                 <input asp-for="Id" class="form-control" />
-                <span asp-validation-for="Id" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Organizer" class="control-label"></label>
-                <input asp-for="Organizer" class="form-control" />
-                <span asp-validation-for="Organizer" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ActivityDate" class="control-label"></label>
-                <input asp-for="ActivityDate" class="form-control" />
-                <span asp-validation-for="ActivityDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Quota" class="control-label"></label>
-                <input asp-for="Quota" class="form-control" />
-                <span asp-validation-for="Quota" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="IsConfirm" class="control-label"></label>
-                <input asp-for="IsConfirm" class="form-control" />
-                <span asp-validation-for="IsConfirm" class="text-danger"></span>
+                <select asp-for="IsConfirm" class="form-control mt-1">                    
+                    <option value="true">Onayla</option>
+                    <option value="false">Reddet</option>
+                </select>
+                @*<input asp-for="IsConfirm" class="form-control" />
+                <span asp-validation-for="IsConfirm" class="text-danger"></span>  *@              
             </div>
             <div class="form-group">
-                <label asp-for="Category" class="control-label"></label>
-                <input asp-for="Category" class="form-control" />
-                <span asp-validation-for="Category" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="City" class="control-label"></label>
-                <input asp-for="City" class="form-control" />
-                <span asp-validation-for="City" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-dark" />
+                <input type="submit" value="Kaydet" class="btn btn-dark" />
             </div>
         </form>
     </div>
@@ -70,5 +34,5 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}    
 }

@@ -174,10 +174,10 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
             var resultApi = await _apiService.ApiGetResponse("url", "Home", "get-activities");
             DataResult<ICollection<ActivityVM>> activities = JsonConvert.DeserializeObject<DataResult<ICollection<ActivityVM>>>(resultApi)!;
 
-            List<ConfirmActivityVM> activityList = new();
+            List<ActivityDetailVM> activityList = new();
             foreach (ActivityVM activity in activities.Data!)
             {
-                ConfirmActivityVM activityDetailVM = new();
+                ActivityDetailVM activityDetailVM = new();
                 _mapper.Map(activity, activityDetailVM);
                 activityDetailVM.Category = responseCategories.Data!.First(c => c.Id == activity.CategoryId).Name;
                 activityDetailVM.City = responseCities.Data!.First(c => c.Id == activity.CityId).Name;
@@ -186,33 +186,26 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
             return View(activityList);
         }
         [HttpGet("ConfirmActivity")]
+        public IActionResult ConfirmActivity([FromQuery(Name = "id")] Guid activityId)        
+        {            
+            return View( new ConfirmActivityVM() { Id = activityId });              
+        }
+        [HttpPost("ConfirmActivity")]
         public async Task<IActionResult> ConfirmActivity(ConfirmActivityVM confirmActivityVM)
         {
-            var resultApi = await _apiService.ApiPostResponse(confirmActivityVM, "url", "Home", "update-category");
+            ViewData["ConfirmActivityMessage"] = null;
+            var resultApi = await _apiService.ApiPutResponse(confirmActivityVM, "url", "Home", "confirm-activity");
             DataResult<ActivityVM> responseData = JsonConvert.DeserializeObject<DataResult<ActivityVM>>(resultApi)!;
             if (!responseData.IsSuccess)
             {
                 ViewData["ConfirmActivityMessage"] = responseData.Message;
                 return View();
             }
-            return View(responseData.Data);            
+            return RedirectToAction("GetActivities", "Home", new { area = "admin" });
         }
-        //[HttpPost]
-        //public async Task<IActionResult> ConfirmActivity(ConfirmActivityVM confirmActivityVM)
-        //{
-        //    ViewData["ConfirmActivityMessage"] = null;
-        //    var resultApi = await _apiService.ApiPutResponse(confirmActivityVM, "url", "Home", "confirm-activity");
-        //    DataResult<ActivityVM> responseData = JsonConvert.DeserializeObject<DataResult<ActivityVM>>(resultApi)!;
-        //    if (!responseData.IsSuccess)
-        //    {
-        //        ViewData["ConfirmActivityMessage"] = responseData.Message;
-        //        return View();
-        //    }
-        //    return RedirectToAction("GetActivities", "Home", new { area = "admin" });
-        //}
         #endregion
 
-        
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
