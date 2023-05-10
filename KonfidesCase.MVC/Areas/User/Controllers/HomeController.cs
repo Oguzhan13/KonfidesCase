@@ -152,7 +152,7 @@ namespace KonfidesCase.MVC.Areas.User.Controllers
         [HttpPost("CancelActivity")]
         public async Task<IActionResult> CancelActivity(CancelActivityVM cancelActivityVM)
         {
-            var resultApi = await _apiService.ApiPostResponse(cancelActivityVM, "url", "Home", "cancel-activity");
+            var resultApi = await _apiService.ApiPostResponse(cancelActivityVM, "url", "Home", "cancel-activity");            
             DataResult<ActivityVM> responseData = JsonConvert.DeserializeObject<DataResult<ActivityVM>>(resultApi)!;
             if (!responseData.IsSuccess)
             {
