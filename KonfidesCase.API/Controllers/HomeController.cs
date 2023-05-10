@@ -36,12 +36,12 @@ namespace KonfidesCase.API.Controllers
         #endregion
 
         #region Helper Methods
+        [HttpGet("has-current-user")]
         public string HasCurrentUser()
         {
             return _httpContextAccessor.HttpContext!.User.Identity!.Name!;
-        }        
+        }
         #endregion
-
 
         #region Login Action                
         [HttpPost("login")]
@@ -258,7 +258,7 @@ namespace KonfidesCase.API.Controllers
         #endregion
 
         #region Admin Actions
-
+        
         #region Category Actions
         [HttpPost("create-category")]
         public async Task<IActionResult> CreateCategory(CreateCategoryDto createCategoryDto)
@@ -323,7 +323,7 @@ namespace KonfidesCase.API.Controllers
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
         #endregion
-
+        
         #endregion
     }
 }

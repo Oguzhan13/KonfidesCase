@@ -25,7 +25,7 @@ namespace KonfidesCase.BLL.Services.Concretes
 
         public async Task<bool> IsAdmin(string currentUserName)
         {               
-            var currentUser = string.IsNullOrEmpty(currentUserName) ? await _context.Users.FirstAsync(u => u.Email == currentUserName) : null;
+            var currentUser = string.IsNullOrEmpty(currentUserName) ? null : await _context.Users.FirstAsync(u => u.Email == currentUserName);
             if (currentUser is null)
             {
                 return false;

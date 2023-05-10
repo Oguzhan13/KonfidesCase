@@ -1,7 +1,4 @@
-﻿using KonfidesCase.Authentication.Dtos;
-using Microsoft.AspNetCore.Http;
-
-namespace KonfidesCase.Authentication.BusinessLogic.Services
+﻿namespace KonfidesCase.Authentication.BusinessLogic.Services
 {
     public class AuthService : IAuthService
     {
