@@ -144,23 +144,14 @@ namespace KonfidesCase.MVC.Areas.User.Controllers
             return RedirectToAction("GetMyCreatedActivities", "Home", new { area = "user" });
         }
 
-        [HttpGet("CancelActivity")]
-        public IActionResult CancelActivity([FromQuery(Name = "id")] Guid activityId)
+        [HttpGet("CancelActivity")]        
+        public async Task<IActionResult> CancelActivity([FromQuery(Name = "id")] Guid activityId)
         {
-            return View(new CancelActivityVM() { Id = activityId });
-        }
-        [HttpPost("CancelActivity")]
-        public async Task<IActionResult> CancelActivity(CancelActivityVM cancelActivityVM)
-        {
-            var resultApi = await _apiService.ApiPostResponse(cancelActivityVM, "url", "Home", "cancel-activity");            
+            //return View(new CancelActivityVM() { Id = activityId });
+            var resultApi = await _apiService.ApiPostResponse(new CancelActivityVM() { Id = activityId }, "url", "Home", "cancel-activity");
             DataResult<ActivityVM> responseData = JsonConvert.DeserializeObject<DataResult<ActivityVM>>(resultApi)!;
-            if (!responseData.IsSuccess)
-            {
-                ViewData["CancelActivityMessage"] = responseData.Message;
-                return View();
-            }
             return RedirectToAction("GetActivities", "Home", new { area = "user" });
-        }
+        }        
 
         [HttpGet("GetMyCreatedActivities")]
         public async Task<IActionResult> GetMyCreatedActivities()
