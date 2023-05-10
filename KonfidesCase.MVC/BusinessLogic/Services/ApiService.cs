@@ -24,7 +24,7 @@ namespace KonfidesCase.MVC.BusinessLogic.Services
             HttpClient client = _httpClientFactory.CreateClient(urlBaseAddress);
             var serializeModel = JsonConvert.SerializeObject(model);
             var data = new StringContent(serializeModel, Encoding.UTF8, "application/json");
-            var responseApi = await client.PostAsync($"{controllerName}/{actionName}", data);
+            var responseApi = await client.PostAsync($"{controllerName}/{actionName}", data);            
             return await responseApi.Content.ReadAsStringAsync();
         }
 
@@ -35,6 +35,6 @@ namespace KonfidesCase.MVC.BusinessLogic.Services
             var data = new StringContent(serializeModel, Encoding.UTF8, "application/json");
             var responseApi = await client.PutAsync($"{controllerName}/{actionName}", data);
             return await responseApi.Content.ReadAsStringAsync();
-        }
+        }        
     }
 }

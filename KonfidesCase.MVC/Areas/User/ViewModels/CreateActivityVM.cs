@@ -1,6 +1,4 @@
-﻿using KonfidesCase.MVC.Areas.User.Models;
-
-namespace KonfidesCase.MVC.Areas.User.ViewModels
+﻿namespace KonfidesCase.MVC.Areas.User.ViewModels
 {
     public class CreateActivityVM
     {
@@ -12,7 +10,7 @@ namespace KonfidesCase.MVC.Areas.User.ViewModels
         public int CategoryId { get; set; }
         public int CityId { get; set; }
 
-        public ICollection<Category>? Categories { get; set; }
-        public ICollection<City>? Cities { get; set; }
+        public ICollection<CategoryVM>? Categories { get; set; }
+        public ICollection<CityVM>? Cities { get; set; }
     }
 }

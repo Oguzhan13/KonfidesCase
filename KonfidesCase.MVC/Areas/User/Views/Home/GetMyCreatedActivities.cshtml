@@ -1,13 +1,16 @@
 ﻿@model IEnumerable<KonfidesCase.MVC.Areas.User.ViewModels.ActivityDetailVM>
 
-<h1>Etkinlikler</h1>
+<h1>Oluşturduğum Etkinlikler</h1>
 
 <p>
-    <a class="link-dark" asp-area="user" asp-controller="Home" asp-action="CreateActivity" >Yeni Etkinlik Oluştur</a>
+    <a action="link-dark" asp-area="user" asp-controller="Home" asp-action="CreateActivity">Yeni Etkinlik Oluştur</a>
 </p>
 <table class="table">
     <thead>
-        <tr>            
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Organizer)
             </th>
@@ -40,7 +43,10 @@
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>           
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Organizer)
             </td>
@@ -69,7 +75,8 @@
                 @Html.DisplayFor(modelItem => item.City)
             </td>
             <td>
-                @Html.ActionLink("Bilet Al", "BuyTicket", new { id=item.Id }) |                                
+                @Html.ActionLink("Güncelle", "UpdateActivity", new { id=item.Id }) |
+                @Html.ActionLink("İptal Et", "CancelActivity", new { id=item.Id }) |                
             </td>
         </tr>
 }

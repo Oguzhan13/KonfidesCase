@@ -196,7 +196,7 @@ namespace KonfidesCase.API.Controllers
             var response = await _homeService.UpdateActivity(updateActivityDto, currentUserName);
             return response.IsSuccess ? Ok(response) : BadRequest(response);
         }
-        [HttpPost("cancel-activity")]
+        [HttpDelete("cancel-activity")]
         public async Task<IActionResult> CancelActivity(CancelActivityDto cancelActivityDto)
         {
             if (!ModelState.IsValid)

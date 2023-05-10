@@ -1,6 +1,6 @@
-﻿namespace KonfidesCase.MVC.Areas.User.Models
+﻿namespace KonfidesCase.MVC.Areas.User.ViewModels
 {
-    public class Category
+    public class CityVM
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;

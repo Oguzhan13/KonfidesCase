@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using KonfidesCase.MVC.Areas.User.Models;
 using KonfidesCase.MVC.Areas.User.ViewModels;
 
 namespace KonfidesCase.MVC.BusinessLogic.Profiles
@@ -8,7 +7,7 @@ namespace KonfidesCase.MVC.BusinessLogic.Profiles
     {
         public UserProfile()
         {
-            CreateMap<Activity, ActivityDetailVM>();
+            CreateMap<ActivityVM, ActivityDetailVM>();
             
         }
     }

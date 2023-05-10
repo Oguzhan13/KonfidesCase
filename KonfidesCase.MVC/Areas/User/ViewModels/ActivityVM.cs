@@ -1,6 +1,6 @@
-﻿namespace KonfidesCase.MVC.Areas.User.Models
+﻿namespace KonfidesCase.MVC.Areas.User.ViewModels
 {
-    public class Activity
+    public class ActivityVM
     {
         public Guid Id { get; set; }
         public string Organizer { get; set; } = string.Empty;

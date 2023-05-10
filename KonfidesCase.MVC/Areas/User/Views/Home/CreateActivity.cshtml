@@ -1,4 +1,4 @@
-﻿@using KonfidesCase.MVC.Areas.User.Models;
+﻿@using KonfidesCase.MVC.Areas.User.ViewModels;
 @model KonfidesCase.MVC.Areas.User.ViewModels.CreateActivityVM
 
 <h1>Aktivite Oluştur</h1>
@@ -38,7 +38,7 @@
                 <label asp-for="CategoryId" class="control-label"></label>
                 <select asp-for="CategoryId" class="form-control mt-1">
                     <option>Lütfen Seçiniz</option>
-                    @foreach (Category item in Model.Categories!)
+                    @foreach (CategoryVM item in Model.Categories!)
                     {
                         <option value="@item.Id">@item.Name</option>
                     }
@@ -48,7 +48,7 @@
                 <label asp-for="CityId" class="control-label"></label>
                 <select asp-for="CityId" class="form-control mt-1">
                     <option>Lütfen Seçiniz</option>
-                    @foreach (City item in Model.Cities!)
+                    @foreach (CityVM item in Model.Cities!)
                     {
                         <option value="@item.Id">@item.Name</option>
                     }

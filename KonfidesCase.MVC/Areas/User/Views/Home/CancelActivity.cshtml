@@ -1,0 +1,26 @@
+﻿@model KonfidesCase.MVC.Areas.User.ViewModels.CancelActivityVM
+
+<h1>Etkinliği İptal Et</h1>
+
+<div>    
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+    </dl>
+    
+    <form asp-action="CancelActivity">
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a class="link-dark" asp-area="user" asp-controller="Home" asp-action="GetMyCreatedActivities">Oluşturduğum Etkinliklere Geri Dön</a>
+    </form>
+</div>

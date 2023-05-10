@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using KonfidesCase.MVC.Areas.Admin.ViewModels;
-using KonfidesCase.MVC.Areas.User.ViewModels;
 
 namespace KonfidesCase.MVC.BusinessLogic.Profiles
 {
@@ -8,7 +6,7 @@ namespace KonfidesCase.MVC.BusinessLogic.Profiles
     {
         public AdminProfile()
         {
-            CreateMap<ActivityVM, Areas.Admin.ViewModels.ActivityDetailVM>();
+            CreateMap<Areas.Admin.ViewModels.ActivityVM, Areas.Admin.ViewModels.ActivityDetailVM>();
             
         }
     }
