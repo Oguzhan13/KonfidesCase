@@ -6,7 +6,6 @@ using KonfidesCase.DAL.Contexts;
 using KonfidesCase.DTO.Activity;
 using KonfidesCase.DTO.Ticket;
 using KonfidesCase.Entity.Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace KonfidesCase.BLL.Services.Concretes

@@ -67,7 +67,7 @@ namespace KonfidesCase.API.Controllers
         public IActionResult GetCurrentUser()
         {
             string currentUserName = HasCurrentUser();
-            return string.IsNullOrEmpty(currentUserName) ? BadRequest("Aktif kullanıcı bulunamadı") : Ok(currentUserName);
+            return string.IsNullOrEmpty(currentUserName) ? BadRequest(new DataResult<string>() { IsSuccess = false, Message = "Oturum süreniz sona erdi. Lütfen tekrar giriş yapınız" }) : Ok(new DataResult<string>() { IsSuccess = true, Message = "Aktif kullanıcı bulundu", Data = currentUserName });
 
         }
         #endregion

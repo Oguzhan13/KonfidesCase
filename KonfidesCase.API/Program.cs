@@ -1,6 +1,8 @@
+using KonfidesCase.Authentication.Entities;
 using KonfidesCase.Authentication.Extensions;
 using KonfidesCase.BLL.Extensions;
 using KonfidesCase.DAL.Extensions;
+using Microsoft.AspNetCore.Identity;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +15,9 @@ builder.Services.AddKonfidesBllServices();
 #endregion
 
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddCors(options => options.AddPolicy("myCors", options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+builder.Services.AddScoped<SignInManager<AuthUser>>();
 
 builder.Services.AddControllers().AddControllersAsServices().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -37,5 +41,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseSession();
 
 app.Run();

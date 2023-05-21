@@ -63,7 +63,24 @@
                 @Html.DisplayFor(modelItem => item.Address)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IsConfirm)
+                    @{
+                        if (!item.IsConfirm.HasValue)
+                        {
+                            <text>Onay Bekliyor</text>
+
+                        }
+                        else
+                        {
+                            if (item.IsConfirm.Value == true)
+                            {
+                                <text>Onaylandı</text>
+                            }
+                            else
+                            {
+                                <text>Reddedildi</text>
+                            }
+                        }
+                    }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Category)

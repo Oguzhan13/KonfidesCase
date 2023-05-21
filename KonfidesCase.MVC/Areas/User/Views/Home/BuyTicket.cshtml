@@ -1,8 +1,7 @@
 ﻿@model KonfidesCase.MVC.Areas.User.ViewModels.BuyTicketVM
 
-<h1>BuyTicket</h1>
+<h1>Bilet Al</h1>
 
-<h4>BuyTicketVM</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -13,18 +12,18 @@
                 <input asp-for="TicketNo" class="form-control" readonly />
                 <span asp-validation-for="TicketNo" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" hidden>
                 <label asp-for="UserId" class="control-label"></label>
                 <input asp-for="UserId" class="form-control" readonly />
                 <span asp-validation-for="UserId" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" hidden >
                 <label asp-for="ActivityId" class="control-label"></label>
                 <input asp-for="ActivityId" class="form-control" readonly />
                 <span asp-validation-for="ActivityId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-dark" />
+                <input type="submit" value="Bilet Al" class="btn btn-dark" />
             </div>
         </form>
     </div>

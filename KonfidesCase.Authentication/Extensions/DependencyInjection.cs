@@ -1,5 +1,4 @@
 ﻿using KonfidesCase.Authentication.DataAccess.Contexts;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
@@ -15,8 +14,8 @@ namespace KonfidesCase.Authentication.Extensions
             services.AddAuthentication();                       
             
             services.AddIdentity<AuthUser, AuthRole>(options =>
-            {
-                options.SignIn.RequireConfirmedAccount = true;
+            {                
+                options.SignIn.RequireConfirmedAccount = true;                
                 options.User.RequireUniqueEmail = true;                
                 options.Password.RequireDigit = true;
                 options.Password.RequireLowercase = true;
@@ -28,15 +27,22 @@ namespace KonfidesCase.Authentication.Extensions
                 .AddEntityFrameworkStores<KonfidesCaseAuthDbContext>()
                 .AddDefaultTokenProviders();
 
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;                
+                options.Cookie.IsEssential = true;
+            });
             services.ConfigureApplicationCookie(options =>
             {
-                options.Cookie.HttpOnly = true;
+                options.Cookie.HttpOnly = true;                
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
 
                 options.LoginPath = "/Identity/Account/Login";
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
                 options.SlidingExpiration = true;
-            });
+            });            
 
             services.AddScoped<IAuthService, AuthService>();
 

@@ -5,9 +5,7 @@ using KonfidesCase.MVC.Models;
 using KonfidesCase.MVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System.Net;
 using System.Text;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace KonfidesCase.MVC.Areas.Admin.Controllers
 {
@@ -30,17 +28,26 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
             _contextAccessor = contextAccessor;
         }
         #endregion
-        
+
+        #region Helper Method
+        public async Task<DataResult<string>> HasCurrentUser()
+        {
+            var hasCurrentUser = await _apiService.ApiGetResponse("url", "Home", "get-current-user");
+            return JsonConvert.DeserializeObject<DataResult<string>>(hasCurrentUser)!;            
+        }
+        #endregion
+
         #region Index Action       
         [HttpGet("Index")]
         public async Task<IActionResult> Index()
-        {
-            var resultApi = await _apiService.ApiGetResponse("url", "Home", "get-current-user");
-            if (string.IsNullOrEmpty(resultApi))
+        {            
+            DataResult<string> responseCurrentUser = await HasCurrentUser();
+            if (!responseCurrentUser.IsSuccess)
             {
+                TempData["LogoutData"] = JsonConvert.SerializeObject(responseCurrentUser.Message);
                 return RedirectToAction("Login", "Home", new { area = "" });
             }
-            var sessionData = _contextAccessor.HttpContext!.Session.GetString(resultApi);
+            var sessionData = _contextAccessor.HttpContext!.Session.GetString(responseCurrentUser.Data!);
             DataResult<UserInfoVM> userInfoSession = JsonConvert.DeserializeObject<DataResult<UserInfoVM>>(sessionData!)!;
             return View(userInfoSession);            
         }
@@ -52,7 +59,7 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
         {
             var resultApi = await _apiService.ApiGetResponse("url", "Home", "logout");
             DataResult<string> responseData = JsonConvert.DeserializeObject<DataResult<string>>(resultApi)!;            
-            TempData["LogoutData"] = JsonConvert.SerializeObject(responseData);
+            TempData["LogoutData"] = JsonConvert.SerializeObject(responseData.Message);
             return RedirectToAction("Login", "Home");
         }
         #endregion
@@ -67,7 +74,13 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
         public async Task<IActionResult> CreateCategory(CreateCategoryVM createCategoryVM)
         {
             ViewData["CreateCategoryMessage"] = null;
-            var resultApi = await _apiService.ApiPostResponse(createCategoryVM, "url", "Home", "create-category");
+            var resultApi = await _apiService.ApiPostResponse(createCategoryVM, "url", "Home", "create-category");            
+            DataResult<string> responseCurrentUser = await HasCurrentUser();
+            if (!responseCurrentUser.IsSuccess)
+            {
+                TempData["LogoutData"] = JsonConvert.SerializeObject(responseCurrentUser.Message);
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }            
             DataResult<CategoryVM> responseData = JsonConvert.DeserializeObject<DataResult<CategoryVM>>(resultApi)!;
             if (!responseData.IsSuccess)
             {
@@ -81,6 +94,12 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
         {
             ViewData["GetCategoryMessage"] = null;
             var resultApi = await _apiService.ApiGetResponse("url", "Home", "get-categories");
+            DataResult<string> responseCurrentUser = await HasCurrentUser();
+            if (!responseCurrentUser.IsSuccess)
+            {
+                TempData["LogoutData"] = JsonConvert.SerializeObject(responseCurrentUser.Message);
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
             DataResult<ICollection<CategoryVM>> responseData = JsonConvert.DeserializeObject<DataResult<ICollection<CategoryVM>>>(resultApi)!;
             if (!responseData.IsSuccess)
             {
@@ -91,15 +110,21 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
         }
 
         [HttpGet("UpdateCategory")]
-        public IActionResult UpdateCategory([FromQuery(Name = "id")] int categoryId)
+        public IActionResult UpdateCategory([FromQuery(Name = "id")] int categoryId, [FromQuery(Name = "name")] string categoryName)
         {
-            return View(new CategoryVM() { Id = categoryId });
+            return View(new CategoryVM() { Id = categoryId, Name = categoryName });
         }
         [HttpPost("UpdateCategory")]
         public async Task<IActionResult> UpdateCategory(UpdateCategoryVM updateCategoryVM)
         {
             ViewData["UpdateCategoryMessage"] = null;
             var resultApi = await _apiService.ApiPutResponse(updateCategoryVM, "url", "Home", "update-category");
+            DataResult<string> responseCurrentUser = await HasCurrentUser();
+            if (!responseCurrentUser.IsSuccess)
+            {
+                TempData["LogoutData"] = JsonConvert.SerializeObject(responseCurrentUser.Message);
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
             DataResult<CategoryVM> responseData = JsonConvert.DeserializeObject<DataResult<CategoryVM>>(resultApi)!;
             if (!responseData.IsSuccess)
             {
@@ -121,6 +146,12 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
         {
             ViewData["CreateCityMessage"] = null;
             var resultApi = await _apiService.ApiPostResponse(createCityVM, "url", "Home", "create-city");
+            DataResult<string> responseCurrentUser = await HasCurrentUser();
+            if (!responseCurrentUser.IsSuccess)
+            {
+                TempData["LogoutData"] = JsonConvert.SerializeObject(responseCurrentUser.Message);
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
             DataResult<CityVM> responseData = JsonConvert.DeserializeObject<DataResult<CityVM>>(resultApi)!;
             if (!responseData.IsSuccess)
             {
@@ -134,6 +165,12 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
         {
             ViewData["GetCityMessage"] = null;
             var resultApi = await _apiService.ApiGetResponse("url", "Home", "get-cities");
+            DataResult<string> responseCurrentUser = await HasCurrentUser();
+            if (!responseCurrentUser.IsSuccess)
+            {
+                TempData["LogoutData"] = JsonConvert.SerializeObject(responseCurrentUser.Message);
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
             DataResult<ICollection<CityVM>> responseData = JsonConvert.DeserializeObject<DataResult<ICollection<CityVM>>>(resultApi)!;
             if (!responseData.IsSuccess)
             {
@@ -143,15 +180,21 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
             return View(responseData.Data);
         }
         [HttpGet("UpdateCity")]        
-        public IActionResult UpdateCity([FromQuery(Name ="id")]int cityId)
+        public IActionResult UpdateCity([FromQuery(Name ="id")]int cityId, [FromQuery(Name = "name")] string cityName)
         {                   
-            return View(new CityVM() { Id = cityId });
+            return View(new CityVM() { Id = cityId, Name = cityName });
         }
         [HttpPost("UpdateCity")]
         public async Task<IActionResult> UpdateCity(CityVM updateCityVM)
         {
             ViewData["UpdateCityMessage"] = null;
             var resultApi = await _apiService.ApiPutResponse(updateCityVM, "url", "Home", "update-city");
+            DataResult<string> responseCurrentUser = await HasCurrentUser();
+            if (!responseCurrentUser.IsSuccess)
+            {
+                TempData["LogoutData"] = JsonConvert.SerializeObject(responseCurrentUser.Message);
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
             DataResult< CityVM > responseData = JsonConvert.DeserializeObject<DataResult<CityVM>>(resultApi)!;
             if (!responseData.IsSuccess)
             {
@@ -167,11 +210,17 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
         public async Task<IActionResult> GetActivities()
         {
             var resultCategories = await _apiService.ApiGetResponse("url", "Home", "get-categories");
-            DataResult<ICollection<CategoryVM>> responseCategories = JsonConvert.DeserializeObject<DataResult<ICollection<CategoryVM>>>(resultCategories)!;
             var resultCities = await _apiService.ApiGetResponse("url", "Home", "get-cities");
+            var resultApi = await _apiService.ApiGetResponse("url", "Home", "get-activities");            
+            DataResult<string> responseCurrentUser = await HasCurrentUser();
+            if (!responseCurrentUser.IsSuccess)
+            {
+                TempData["LogoutData"] = JsonConvert.SerializeObject(responseCurrentUser.Message);
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
+            DataResult<ICollection<CategoryVM>> responseCategories = JsonConvert.DeserializeObject<DataResult<ICollection<CategoryVM>>>(resultCategories)!;
             DataResult<ICollection<CityVM>> responseCities = JsonConvert.DeserializeObject<DataResult<ICollection<CityVM>>>(resultCities)!;
 
-            var resultApi = await _apiService.ApiGetResponse("url", "Home", "get-activities");
             DataResult<ICollection<ActivityVM>> activities = JsonConvert.DeserializeObject<DataResult<ICollection<ActivityVM>>>(resultApi)!;
 
             List<ActivityDetailVM> activityList = new();
@@ -186,15 +235,33 @@ namespace KonfidesCase.MVC.Areas.Admin.Controllers
             return View(activityList);
         }
         [HttpGet("ConfirmActivity")]
-        public IActionResult ConfirmActivity([FromQuery(Name = "id")] Guid activityId)        
-        {            
-            return View( new ConfirmActivityVM() { Id = activityId });              
+        public IActionResult ConfirmActivity([FromQuery(Name = "id")] Guid id, [FromQuery(Name = "organizer")] string organizer, [FromQuery(Name = "name")] string name, [FromQuery(Name = "description")] string description, [FromQuery(Name = "date")] DateTime date, [FromQuery(Name = "quota")] int quota, [FromQuery(Name = "address")] string address, [FromQuery(Name = "category")] string category, [FromQuery(Name = "city")] string city)        
+        {
+            return View(new ActivityDetailVM()
+            {
+                Id = id,
+                Organizer = organizer,
+                Name = name,
+                Description = description,
+                ActivityDate = date,
+                Quota = quota,
+                Address = address,
+                Category = category,
+                City = city
+            });
         }
         [HttpPost("ConfirmActivity")]
-        public async Task<IActionResult> ConfirmActivity(ConfirmActivityVM confirmActivityVM)
+        public async Task<IActionResult> ConfirmActivity(ActivityDetailVM activityDetailVM)
         {
             ViewData["ConfirmActivityMessage"] = null;
+            ConfirmActivityVM confirmActivityVM = new() { Id = activityDetailVM.Id, IsConfirm = activityDetailVM.IsConfirm };
             var resultApi = await _apiService.ApiPutResponse(confirmActivityVM, "url", "Home", "confirm-activity");
+            DataResult<string> responseCurrentUser = await HasCurrentUser();
+            if (!responseCurrentUser.IsSuccess)
+            {
+                TempData["LogoutData"] = JsonConvert.SerializeObject(responseCurrentUser.Message);
+                return RedirectToAction("Login", "Home", new { area = "" });
+            }
             DataResult<ActivityVM> responseData = JsonConvert.DeserializeObject<DataResult<ActivityVM>>(resultApi)!;
             if (!responseData.IsSuccess)
             {

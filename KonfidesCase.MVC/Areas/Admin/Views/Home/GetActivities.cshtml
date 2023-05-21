@@ -62,11 +62,28 @@
             <td>
                 @Html.DisplayFor(modelItem => item.City)
             </td>
-            <td class="editor-field">
-                @Html.DisplayFor(modelItem => item.IsConfirm)
+            <td>
+                    @{
+                        if (!item.IsConfirm.HasValue)
+                        {
+                            <text>Onay Bekliyor</text>
+
+                        }
+                        else
+                        {
+                            if (item.IsConfirm.Value == true)
+                            {
+                                <text>Onaylandı</text>
+                            }
+                            else
+                            {
+                                <text>Reddedildi</text>
+                            }
+                        }
+                    }
             </td>
             <td>
-                @Html.ActionLink("İncele", "ConfirmActivity", new { id=item.Id })                
+                @Html.ActionLink("İncele", "ConfirmActivity", new { id=item.Id, organizer=item.Organizer, name=item.Name, description=item.Description, date=item.ActivityDate, quota=item.Quota, address=item.Address, category=item.Category, city=item.City })                
             </td>
         </tr>
 }

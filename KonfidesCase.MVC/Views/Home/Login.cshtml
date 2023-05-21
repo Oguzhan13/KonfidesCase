@@ -16,7 +16,7 @@
                 <abbr title="Şifre en az 6 karakterden oluşmalıdır ve en az birer karakter büyük-küçük harf, rakam ve sembol olmalıdır!"><label asp-for="Password" class="control-label"></label></abbr>
                 <input id="txtPass" class="form-control" type="password" asp-for="Password" placeholder="Exam.1" />
                 <input type="checkbox" name="mycheckbox" id="ckShowPass" onclick="myshowp(this)" />
-                <label class="font-monospace">Şifreyi Göster</label>                
+                <label for="ckShowPass" class="font-monospace">Şifreyi Göster</label>
                 <span asp-validation-for="Password" class="text-warning"></span>
             </div>
             <div class="form-group">

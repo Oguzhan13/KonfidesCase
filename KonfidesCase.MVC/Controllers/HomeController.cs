@@ -31,8 +31,8 @@ namespace KonfidesCase.MVC.Controllers
             if (tempData is null)
             {
                 return View();
-            }
-            ViewData["LogoutMessage"] = JsonConvert.DeserializeObject<DataResult<string>>((string)tempData)!.Message;            
+            }            
+            ViewData["LogoutMessage"] = tempData;
             return View();
         }
         [HttpPost]
