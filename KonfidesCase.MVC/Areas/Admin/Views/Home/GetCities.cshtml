@@ -5,6 +5,8 @@
 <p>
     <a class="link-dark" asp-action="CreateCity">Yeni Şehir Oluştur</a>
 </p>
+
+<input class="bg bg-dark text-white" type="text" id="searchInput" placeholder="Arama yapın...">
 <table class="table table-hover">
     <thead>
         <tr>
@@ -99,5 +101,26 @@
                 });
             });
         }
+
+        window.addEventListener('DOMContentLoaded', (event) => {
+            const searchInput = document.getElementById('searchInput');
+            const table = document.querySelector('.table');
+
+            searchInput.addEventListener('input', function () {
+                const searchText = searchInput.value.toLowerCase();
+                const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+
+                for (let i = 0; i < rows.length; i++) {
+                    const id = rows[i].getElementsByTagName('td')[0].textContent.toLowerCase();
+                    const name = rows[i].getElementsByTagName('td')[1].textContent.toLowerCase();
+
+                    if (id.includes(searchText) || name.includes(searchText)) {
+                        rows[i].style.display = '';
+                    } else {
+                        rows[i].style.display = 'none';
+                    }
+                }
+            });
+        });
     </script>
 }
