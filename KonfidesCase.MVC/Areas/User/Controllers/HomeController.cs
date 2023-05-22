@@ -65,6 +65,11 @@ namespace KonfidesCase.MVC.Areas.User.Controllers
                 return RedirectToAction("Login", "Home", new { area = "" });
             }
             DataResult<UserInfoVM> responseData = JsonConvert.DeserializeObject<DataResult<UserInfoVM>>(resultApi)!;
+            if (!responseData.IsSuccess)
+            {
+                ViewData["SamePassword"] = responseData.Message;
+                return View();
+            }
             responseData.Data!.Password = changePasswordVM.NewPassword;
             string userInfo = JsonConvert.SerializeObject(responseData);
             _contextAccessor.HttpContext!.Session.SetString(responseData.Data.Email, userInfo);
@@ -118,7 +123,28 @@ namespace KonfidesCase.MVC.Areas.User.Controllers
             if (!responseData.IsSuccess)
             {
                 ViewData["CreateActivityMessage"] = responseData.Message;
-                return View();
+                var resultCategories = await _apiService.ApiGetResponse("url", "Home", "get-categories");
+                var resultCities = await _apiService.ApiGetResponse("url", "Home", "get-cities");
+                responseCurrentUser = await HasCurrentUser();
+                if (!responseCurrentUser.IsSuccess)
+                {
+                    TempData["LogoutData"] = JsonConvert.SerializeObject(responseCurrentUser.Message);
+                    return RedirectToAction("Login", "Home", new { area = "" });
+                }
+                DataResult<ICollection<CategoryVM>> responseCategories = JsonConvert.DeserializeObject<DataResult<ICollection<CategoryVM>>>(resultCategories)!;
+                DataResult<ICollection<CityVM>> responseCities = JsonConvert.DeserializeObject<DataResult<ICollection<CityVM>>>(resultCities)!;
+                return View(new CreateActivityVM()
+                {
+                    Name = createActivityVM.Name,
+                    Quota = createActivityVM.Quota,
+                    Address = createActivityVM.Address,
+                    Description = createActivityVM.Description,
+                    ActivityDate = createActivityVM.ActivityDate,
+                    CategoryId = createActivityVM.CategoryId,
+                    CityId = createActivityVM.CityId,
+                    Categories = responseCategories.Data!,
+                    Cities = responseCities.Data!,
+                });
             }
             return RedirectToAction("GetActivities", "Home", new { area = "user" });
         }
