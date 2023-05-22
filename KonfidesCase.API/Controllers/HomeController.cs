@@ -66,7 +66,11 @@
                 return BadRequest(ModelState);
             }
             string currentUserName = HasCurrentUser();
-            var response = await _authService.Register(registerDto);            
+            var response = await _authService.Register(registerDto);
+            if (!response.IsSuccess)
+            {
+                return BadRequest(response);
+            }
             var createAppUser = await _homeService.CreateAppUser(response.Data!);
             if (!createAppUser.IsSuccess)
             {

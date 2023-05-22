@@ -20,7 +20,7 @@ namespace KonfidesCase.MVC.Controllers
 
         #region Login Action
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult Login(RegisterVM? registerVM)
         {
             var tempData = TempData["LogoutData"];
             if (tempData is null)
@@ -28,7 +28,7 @@ namespace KonfidesCase.MVC.Controllers
                 return View();
             }            
             ViewData["LogoutMessage"] = tempData;
-            return View();
+            return registerVM is null ? View() : View(new LoginVM() { Email = registerVM.Email!, Password = registerVM.Password! });
         }
         [HttpPost]
         public async Task<IActionResult> Login(LoginVM loginVM)
@@ -66,7 +66,7 @@ namespace KonfidesCase.MVC.Controllers
                 ViewData["RegisterMessage"] = responseData.Message;
                 return View();
             }
-            return RedirectToAction(nameof(Login), responseData.Data);            
+            return RedirectToAction(nameof(Login), registerVM);            
         }                
         #endregion
 
