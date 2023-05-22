@@ -2,72 +2,96 @@
 
 <h1>Etkinlikler</h1>
 
-<table class="table">
+<table class="table table-hover">
     <thead>
-        <tr>            
+        <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Organizer)
+                <span>&uarr;</span>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
+                <span>&uarr;</span>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Description)
+                <span>&uarr;</span>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ActivityDate)
+                <span>&uarr;</span>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Quota)
+                <span>&uarr;</span>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Address)
-            </th>            
+                <span>&uarr;</span>
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.Category)
+                <span>&uarr;</span>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.City)
+                <span>&uarr;</span>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.IsConfirm)
+                <span>&uarr;</span>
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>           
-            <td>
-                @Html.DisplayFor(modelItem => item.Organizer)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ActivityDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quota)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>            
-            <td>
-                @Html.DisplayFor(modelItem => item.Category)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.City)
-            </td>
-            <td>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Organizer)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @{
+                        var dateParts = item.ActivityDate.ToString().Split(' ')[0].Split('.');
+                        var timeParts = item.ActivityDate.ToString().Split(' ')[1].Split(':');
+
+                        var day = dateParts[0];
+                        var month = dateParts[1];
+                        var year = dateParts[2];
+                        var hour = timeParts[0];
+                        var minute = timeParts[1];
+                        var second = timeParts[2];
+
+                        var activityDate = new DateTime(int.Parse(year), int.Parse(month), int.Parse(day), int.Parse(hour), int.Parse(minute), int.Parse(second));
+                        var formattedDate = activityDate.ToString("yyyy-MM-dd HH:mm:ss");
+                    }
+
+                    @formattedDate
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quota)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.City)
+                </td>
+                <td>
                     @{
                         if (!item.IsConfirm.HasValue)
                         {
                             <text>Onay Bekliyor</text>
-
                         }
                         else
                         {
@@ -81,11 +105,75 @@
                             }
                         }
                     }
-            </td>
-            <td>
-                @Html.ActionLink("İncele", "ConfirmActivity", new { id=item.Id, organizer=item.Organizer, name=item.Name, description=item.Description, date=item.ActivityDate, quota=item.Quota, address=item.Address, category=item.Category, city=item.City })                
-            </td>
-        </tr>
-}
+                </td>
+                <td>
+                    @Html.ActionLink("İncele", "ConfirmActivity", new { id = item.Id, organizer = item.Organizer, name = item.Name, description = item.Description, date = item.ActivityDate, quota = item.Quota, address = item.Address, category = item.Category, city = item.City })
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        window.onload = function () {
+            document.querySelectorAll('th').forEach((element) => {
+                element.addEventListener('click', function () {
+                    let table = this.closest('table');
+                    if (this.querySelector('span')) {
+                        let order_icon = this.querySelector('span');
+                        let order = encodeURI(order_icon.innerHTML).includes('%E2%86%91') ? 'desc' : 'asc';
+                        let separator = '-----';
+                        let value_list = {};
+                        let obj_key = [];
+                        let string_count = 0;
+                        let number_count = 0;
+
+                        table.querySelectorAll('tbody tr').forEach((line, index_line) => {
+                            let key = line.children[element.cellIndex].textContent.toUpperCase();
+
+                            if (line.children[element.cellIndex].hasAttribute('data-timestamp')) {
+                                key = line.children[element.cellIndex].getAttribute('data-timestamp');
+                            } else if (key.replace('-', '').match(/^[0-9,.]*$/g)) {
+                                number_count++;
+                            } else {
+                                string_count++;
+                            }
+                            value_list[key + separator + index_line] = line.outerHTML.replace(/(\t)|(\n)/g, '');
+                            obj_key.push(key + separator + index_line);
+                        });
+
+                        if (string_count === 0) {
+                            obj_key.sort(function (a, b) {
+                                var numA = parseFloat(a.split(separator)[0]);
+                                var numB = parseFloat(b.split(separator)[0]);
+                                return numA - numB;
+                            });
+                        } else {
+                            obj_key.sort(function (a, b) {
+                                var strA = a.split(separator)[0];
+                                var strB = b.split(separator)[0];
+                                return strA.localeCompare(strB, 'en', { numeric: true });
+                            });
+                        }
+
+                        if (order === 'desc') {
+                            obj_key.reverse();
+                            order_icon.innerHTML = '&darr;';
+                        } else {
+                            order_icon.innerHTML = '&uarr;';
+                        }
+                        let html = '';
+                        obj_key.forEach(function (chave) {
+                            html += value_list[chave];
+                        });
+                        table.getElementsByTagName('tbody')[0].innerHTML = html;
+                    }
+                });
+            });
+        }
+    </script>
+}

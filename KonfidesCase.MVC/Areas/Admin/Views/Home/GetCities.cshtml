@@ -5,14 +5,16 @@
 <p>
     <a class="link-dark" asp-action="CreateCity">Yeni Şehir Oluştur</a>
 </p>
-<table class="table">
+<table class="table table-hover">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Id)
+                <span>&uarr;</span>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
+                <span>&uarr;</span>
             </th>
             <th></th>
         </tr>
@@ -33,3 +35,69 @@
 }
     </tbody>
 </table>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        window.onload = function () {
+            document.querySelectorAll('th').forEach((element) => {
+                element.addEventListener('click', function () {
+                    let table = this.closest('table');
+                    if (this.querySelector('span')) {
+                        let order_icon = this.querySelector('span');
+                        let order = encodeURI(order_icon.innerHTML).includes('%E2%86%91') ? 'desc' : 'asc';
+                        let separator = '-----';
+                        let value_list = {};
+                        let obj_key = [];
+                        let string_count = 0;
+                        let number_count = 0;
+
+                        table.querySelectorAll('tbody tr').forEach((line, index_line) => {
+                            let key = line.children[element.cellIndex].textContent.toUpperCase();
+
+                            if (line.children[element.cellIndex].hasAttribute('data-timestamp')) {
+                                key = line.children[element.cellIndex].getAttribute('data-timestamp');
+                            } else if (key.replace('-', '').match(/^[0-9,.]*$/g)) {
+                                number_count++;
+                            } else {
+                                string_count++;
+                            }
+                            value_list[key + separator + index_line] = line.outerHTML.replace(/(\t)|(\n)/g, '');
+                            obj_key.push(key + separator + index_line);
+                        });
+
+                        if (string_count === 0) {
+                            obj_key.sort(function (a, b) {
+                                var numA = parseFloat(a.split(separator)[0]);
+                                var numB = parseFloat(b.split(separator)[0]);
+                                return numA - numB;
+                            });
+                        }
+                        else {
+                            obj_key.sort(function (a, b) {
+                                var strA = a.split(separator)[0];
+                                var strB = b.split(separator)[0];
+                                return strA.localeCompare(strB, 'en', { numeric: true });
+                            });
+                        }
+
+                        if (order === 'desc') {
+                            obj_key.reverse();
+                            order_icon.innerHTML = '&darr;';
+                        }
+                        else {
+                            order_icon.innerHTML = '&uarr;';
+                        }
+                        let html = '';
+                        obj_key.forEach(function (chave) {
+                            html += value_list[chave];
+                        });
+                        table.getElementsByTagName('tbody')[0].innerHTML = html;
+                    }
+                });
+            });
+        }
+    </script>
+}
