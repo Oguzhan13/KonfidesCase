@@ -19,6 +19,10 @@
             if (currentUser is null)
             {                
                 return new AuthDataResult<UserInfoDto>() { IsSuccess = false, Message = "Kullanıcı bilgileri getirilirken bir hata oluştu..." };
+            }            
+            if (changePasswordDto.CurrentPassword == changePasswordDto.NewPassword)
+            {
+                return new AuthDataResult<UserInfoDto>() { IsSuccess = false, Message = "Yeni şifreniz mevcut şifrenizden farklı olmalı..." };
             }
             var result = await _userManager.ChangePasswordAsync(currentUser!, changePasswordDto.CurrentPassword, changePasswordDto.NewPassword);
             if (!result.Succeeded)

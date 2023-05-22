@@ -34,3 +34,7 @@ body {
     font-weight: 900;
 }
 
+abbr[title] {
+    text-decoration: none;
+}
+
