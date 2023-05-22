@@ -7,6 +7,7 @@ namespace KonfidesCase.Authentication.Extensions
 {
     public static class DependencyInjection
     {
+        #region AddKonfidesAuthServices method for Program.cs
         public static IServiceCollection AddKonfidesAuthServices(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<KonfidesCaseAuthDbContext>(options => options.UseSqlServer(configuration.GetConnectionString(KonfidesCaseAuthDbContext.ConnectionName)));
@@ -50,5 +51,6 @@ namespace KonfidesCase.Authentication.Extensions
 
             return services;
         }
+        #endregion
     }
 }

@@ -1,10 +1,8 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-
-namespace KonfidesCase.MVC.Areas.User.ViewModels
+﻿namespace KonfidesCase.MVC.Areas.User.ViewModels
 {
     public class CreateActivityVM
     {
+        #region Properties
         [DisplayName("Ad")]
         public string Name { get; set; } = string.Empty;
         [DisplayName("Açıklama")]
@@ -23,5 +21,6 @@ namespace KonfidesCase.MVC.Areas.User.ViewModels
 
         public ICollection<CategoryVM>? Categories { get; set; }
         public ICollection<CityVM>? Cities { get; set; }
+        #endregion
     }
 }

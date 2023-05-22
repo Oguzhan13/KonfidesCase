@@ -1,7 +1,4 @@
 ﻿using KonfidesCase.Authentication.Entities.Configurations;
-using KonfidesCase.Entity.Entities;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace KonfidesCase.Entity.EntityTypeConfigurations
 {

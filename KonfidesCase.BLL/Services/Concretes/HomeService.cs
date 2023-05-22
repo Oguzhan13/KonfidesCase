@@ -1,14 +1,4 @@
-﻿using AutoMapper;
-using KonfidesCase.Authentication.Dtos;
-using KonfidesCase.BLL.Services.Interfaces;
-using KonfidesCase.BLL.Utilities;
-using KonfidesCase.DAL.Contexts;
-using KonfidesCase.DTO.Activity;
-using KonfidesCase.DTO.Ticket;
-using KonfidesCase.Entity.Entities;
-using Microsoft.EntityFrameworkCore;
-
-namespace KonfidesCase.BLL.Services.Concretes
+﻿namespace KonfidesCase.BLL.Services.Concretes
 {
     public class HomeService : IHomeService
     {
@@ -21,7 +11,8 @@ namespace KonfidesCase.BLL.Services.Concretes
             _mapper = mapper;
         }
         #endregion
-                
+
+        #region Helper Method
         public bool IsAuthorize(string currentUserName)
         {            
             if (string.IsNullOrEmpty(currentUserName))
@@ -30,7 +21,8 @@ namespace KonfidesCase.BLL.Services.Concretes
             }
             return true;
         }
-        
+        #endregion
+
         #region AppUser Methods
         public async Task<DataResult<AppUser>> CreateAppUser(UserInfoDto userInfo)
         {

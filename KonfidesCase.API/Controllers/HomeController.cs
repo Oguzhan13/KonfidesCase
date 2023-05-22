@@ -1,19 +1,4 @@
-﻿using KonfidesCase.Authentication.BusinessLogic.Services;
-using KonfidesCase.Authentication.Dtos;
-using KonfidesCase.Authentication.Entities;
-using KonfidesCase.Authentication.Utilities;
-using KonfidesCase.BLL.Services.Concretes;
-using KonfidesCase.BLL.Services.Interfaces;
-using KonfidesCase.BLL.Utilities;
-using KonfidesCase.DTO.Activity;
-using KonfidesCase.DTO.Category;
-using KonfidesCase.DTO.City;
-using KonfidesCase.DTO.Ticket;
-using KonfidesCase.Entity.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-
-namespace KonfidesCase.API.Controllers
+﻿namespace KonfidesCase.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

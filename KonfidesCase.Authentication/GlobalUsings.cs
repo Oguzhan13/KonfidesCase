@@ -1,10 +1,10 @@
-﻿global using Microsoft.AspNetCore.Identity;
+﻿global using AutoMapper;
+global using KonfidesCase.Authentication.BusinessLogic.Services;
+global using KonfidesCase.Authentication.Dtos;
+global using KonfidesCase.Authentication.Entities;
+global using KonfidesCase.Authentication.Utilities;
+global using Microsoft.AspNetCore.Identity;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
 global using System.ComponentModel.DataAnnotations;
-global using KonfidesCase.Authentication.Entities;
 global using System.Globalization;
-global using KonfidesCase.Authentication.BusinessLogic.Services;
-global using KonfidesCase.Authentication.Dtos;
-global using KonfidesCase.Authentication.Utilities;
-global using AutoMapper;

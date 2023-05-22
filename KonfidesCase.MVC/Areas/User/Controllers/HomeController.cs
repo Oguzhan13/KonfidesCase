@@ -1,11 +1,4 @@
-﻿using AutoMapper;
-using KonfidesCase.MVC.Areas.User.ViewModels;
-using KonfidesCase.MVC.BusinessLogic.Services;
-using KonfidesCase.MVC.Models;
-using KonfidesCase.MVC.ViewModels;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+﻿using KonfidesCase.MVC.Areas.User.ViewModels;
 
 namespace KonfidesCase.MVC.Areas.User.Controllers
 {

@@ -1,0 +1,11 @@
+﻿global using AutoMapper;
+global using KonfidesCase.Authentication.Dtos;
+global using KonfidesCase.BLL.Services.Interfaces;
+global using KonfidesCase.BLL.Utilities;
+global using KonfidesCase.DAL.Contexts;
+global using KonfidesCase.DTO.Activity;
+global using KonfidesCase.DTO.Category;
+global using KonfidesCase.DTO.City;
+global using KonfidesCase.DTO.Ticket;
+global using KonfidesCase.Entity.Entities;
+global using Microsoft.EntityFrameworkCore;

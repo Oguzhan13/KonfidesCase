@@ -1,10 +1,8 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-
-namespace KonfidesCase.MVC.Areas.Admin.ViewModels
+﻿namespace KonfidesCase.MVC.Areas.Admin.ViewModels
 {
     public class ActivityDetailVM
     {
+        #region Properties
         public Guid Id { get; set; }
         [DisplayName("Organizatör")]
         public string Organizer { get; set; } = string.Empty;
@@ -25,5 +23,6 @@ namespace KonfidesCase.MVC.Areas.Admin.ViewModels
         public string Category { get; set; } = string.Empty;
         [DisplayName("Şehir")]
         public string City { get; set; } = string.Empty;
+        #endregion
     }
 }

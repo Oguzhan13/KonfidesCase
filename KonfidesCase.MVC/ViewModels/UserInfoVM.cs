@@ -1,7 +1,4 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-
-namespace KonfidesCase.MVC.ViewModels
+﻿namespace KonfidesCase.MVC.ViewModels
 {
     public class UserInfoVM
     {

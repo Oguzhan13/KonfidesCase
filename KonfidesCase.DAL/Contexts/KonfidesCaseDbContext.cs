@@ -1,6 +1,5 @@
 ﻿using KonfidesCase.Entity.Entities;
 using KonfidesCase.Entity.EntityTypeConfigurations;
-using Microsoft.EntityFrameworkCore;
 
 namespace KonfidesCase.DAL.Contexts
 {

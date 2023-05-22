@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace KonfidesCase.MVC.Areas.User.ViewModels
+﻿namespace KonfidesCase.MVC.Areas.User.ViewModels
 {
     public class ChangePasswordVM
     {

@@ -1,5 +1,4 @@
 ﻿using KonfidesCase.BLL.Services.Concretes;
-using KonfidesCase.BLL.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -7,6 +6,7 @@ namespace KonfidesCase.BLL.Extensions
 {
     public static class DependencyInjection
     {
+        #region AddConfidesBLLServices method for Program.cs
         public static IServiceCollection AddKonfidesBllServices(this IServiceCollection services)
         {
             services.AddScoped<IHomeService, HomeService>();
@@ -16,5 +16,6 @@ namespace KonfidesCase.BLL.Extensions
 
             return services;
         }
+        #endregion
     }
 }

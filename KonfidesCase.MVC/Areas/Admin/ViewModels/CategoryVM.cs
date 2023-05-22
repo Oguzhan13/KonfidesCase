@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace KonfidesCase.MVC.Areas.Admin.ViewModels
+﻿namespace KonfidesCase.MVC.Areas.Admin.ViewModels
 {
     public class CategoryVM
     {

@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel;
-
-namespace KonfidesCase.MVC.ViewModels
+﻿namespace KonfidesCase.MVC.ViewModels
 {
     public class LoginVM
     {

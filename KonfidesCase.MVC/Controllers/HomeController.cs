@@ -1,9 +1,4 @@
-﻿using KonfidesCase.MVC.BusinessLogic.Services;
-using KonfidesCase.MVC.Models;
-using KonfidesCase.MVC.ViewModels;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace KonfidesCase.MVC.Controllers
 {

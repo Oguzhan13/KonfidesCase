@@ -1,13 +1,8 @@
-﻿using KonfidesCase.Authentication.Dtos;
-using KonfidesCase.BLL.Utilities;
-using KonfidesCase.DTO.Activity;
-using KonfidesCase.DTO.Ticket;
-using KonfidesCase.Entity.Entities;
-
-namespace KonfidesCase.BLL.Services.Interfaces
+﻿namespace KonfidesCase.BLL.Services.Interfaces
 {
     public interface IHomeService
     {
+        #region Methods
         Task<DataResult<AppUser>> CreateAppUser(UserInfoDto userInfo);
         Task<DataResult<ICollection<Category>>> GetCategories(string currentUserName);
         Task<DataResult<ICollection<City>>> GetCities(string currentUserName);
@@ -18,5 +13,6 @@ namespace KonfidesCase.BLL.Services.Interfaces
         Task<DataResult<Activity>> UpdateActivity(UpdateActivityDto updateActivityDto, string currentUserName);
         Task<DataResult<Activity>> CancelActivity(CancelActivityDto cancelActivityDto, string currentUserName);
         Task<DataResult<Ticket>> BuyTicket(CreateTicketDto createTicketDto, string currentUserName);
+        #endregion
     }
 }

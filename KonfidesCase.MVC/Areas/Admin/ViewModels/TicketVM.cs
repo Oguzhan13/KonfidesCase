@@ -1,9 +1,8 @@
-﻿using System.ComponentModel;
-
-namespace KonfidesCase.MVC.Areas.Admin.ViewModels
+﻿namespace KonfidesCase.MVC.Areas.Admin.ViewModels
 {
     public class TicketVM
     {
+        #region Properties
         public Guid Id { get; set; }
         [DisplayName("Bilet No")]
         public string TicketNo { get; set; } = string.Empty;
@@ -11,5 +10,6 @@ namespace KonfidesCase.MVC.Areas.Admin.ViewModels
         public Guid UserId { get; set; }
         [DisplayName("Etkinlik Id")]
         public Guid ActivityId { get; set; }
+        #endregion
     }
 }

@@ -1,13 +1,8 @@
-﻿using AutoMapper;
-using KonfidesCase.DTO.Activity;
-using KonfidesCase.DTO.Category;
-using KonfidesCase.DTO.City;
-using KonfidesCase.Entity.Entities;
-
-namespace KonfidesCase.BLL.Profiles
+﻿namespace KonfidesCase.BLL.Profiles
 {
     public class AdminProfiles : Profile
     {
+        #region Constructor
         public AdminProfiles()
         {
             CreateMap<CreateCategoryDto, Category>();
@@ -17,5 +12,6 @@ namespace KonfidesCase.BLL.Profiles
             CreateMap<CreateActivityDto, Activity>();
             CreateMap<UpdateActivityDto, Activity>().ReverseMap();
         }
+        #endregion
     }
 }

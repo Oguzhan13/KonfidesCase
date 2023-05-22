@@ -1,15 +1,4 @@
-﻿using AutoMapper;
-using KonfidesCase.BLL.Services.Interfaces;
-using KonfidesCase.BLL.Utilities;
-using KonfidesCase.DAL.Contexts;
-using KonfidesCase.DTO.Activity;
-using KonfidesCase.DTO.Category;
-using KonfidesCase.DTO.City;
-using KonfidesCase.Entity.Entities;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-
-namespace KonfidesCase.BLL.Services.Concretes
+﻿namespace KonfidesCase.BLL.Services.Concretes
 {
     public class AdminService : IAdminService
     {
@@ -23,6 +12,7 @@ namespace KonfidesCase.BLL.Services.Concretes
         }
         #endregion
 
+        #region Helper Method
         public async Task<bool> IsAdmin(string currentUserName)
         {               
             var currentUser = string.IsNullOrEmpty(currentUserName) ? null : await _context.Users.FirstAsync(u => u.Email == currentUserName);
@@ -32,6 +22,7 @@ namespace KonfidesCase.BLL.Services.Concretes
             }
             return currentUser.RoleName.Equals("admin") ? true : false;
         }
+        #endregion
 
         #region Category Methods
         public async Task<DataResult<Category>> CreateCategory(CreateCategoryDto createCategoryDto, string currentUserName)
